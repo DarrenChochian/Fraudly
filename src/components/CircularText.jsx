@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { motion, useAnimation, useMotionValue } from 'motion/react';
-
 const getRotationTransition = (duration, from, loop = true) => ({
   from,
   to: from + 360,
@@ -87,7 +86,7 @@ const CircularText = ({ text, spinDuration = 20, onHover = 'speedUp', size = 'sm
 
   return (
     <motion.div
-      className={`m-0 mx-auto rounded-full relative text-white font-black text-center cursor-pointer origin-center ${containerSize} ${className}`}
+      className={`m-0 mx-auto rounded-full absolute text-white font-black text-center cursor-pointer origin-center ${containerSize} ${className}`}
       style={{ rotate: rotation }}
       initial={{ rotate: 0 }}
       animate={controls}
