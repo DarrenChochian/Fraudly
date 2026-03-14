@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import CircularText from './components/CircularText'
+import SettingsPanel from './components/SettingsPanel'
 
 function WaveformIcon({ className }) {
   return (
@@ -37,7 +38,15 @@ export default function App() {
   )
   const [input, setInput] = useState('')
   const [selectedChatId, setSelectedChatId] = useState(null)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [hotkey, setHotkey] = useState('Alt+K')
   const interactiveHoverCountRef = useRef(0)
+
+  useEffect(() => {
+    window.electronAPI?.getHotkey?.().then((res) => {
+      if (res?.accelerator) setHotkey(res.accelerator)
+    })
+  }, [])
 
   const setOverlayInteractivity = (interactive) => {
     window.electronAPI?.setOverlayInteractivity?.(interactive)
@@ -66,6 +75,14 @@ export default function App() {
     // Default to click-through; interactive regions opt in on hover.
     setOverlayInteractivity(false)
     return () => setOverlayInteractivity(false)
+  }, [])
+
+  useEffect(() => {
+    const unsub = window.electronAPI?.onOpenSettings?.(() => {
+      setSettingsOpen((v) => !v)
+      setOverlayInteractivity(true)
+    })
+    return () => unsub?.()
   }, [])
 
   const handleOverlayClose = () => {
@@ -124,6 +141,24 @@ export default function App() {
           spinDuration={20}
           className="custom-class"
         />
+      </button>
+
+      {/* Settings gear button - below FRAUDLY button */}
+      <button
+        type="button"
+        onClick={() => setSettingsOpen((v) => !v)}
+        onMouseEnter={handleInteractiveEnter}
+        onMouseLeave={handleInteractiveLeave}
+        className="overlay-interactive absolute right-6 top-[90px] w-8 h-8 flex items-center justify-center rounded-lg border cursor-pointer transition-all hover:scale-110 active:scale-95 z-20"
+        style={{
+          backgroundColor: settingsOpen ? 'rgba(255, 90, 168, 0.2)' : 'rgba(10, 10, 12, 0.5)',
+          borderColor: settingsOpen ? PINK : 'rgba(255, 90, 168, 0.4)',
+          color: PINK_LIGHT,
+          boxShadow: settingsOpen ? `0 0 10px ${PINK_GLOW}` : 'none',
+        }}
+        title={`Settings (${hotkey})`}
+      >
+        ⚙
       </button>
 
       {modalOpen && (
@@ -325,6 +360,15 @@ export default function App() {
             )}
           </div>
         </>
+      )}
+      {settingsOpen && (
+        <SettingsPanel
+          currentHotkey={hotkey}
+          onHotkeyChange={setHotkey}
+          onClose={() => setSettingsOpen(false)}
+          onInteractiveEnter={handleInteractiveEnter}
+          onInteractiveLeave={handleInteractiveLeave}
+        />
       )}
     </div>
   )

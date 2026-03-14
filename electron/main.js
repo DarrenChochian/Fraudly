@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen, ipcMain } = require('electron')
+const { app, BrowserWindow, screen, ipcMain, globalShortcut } = require('electron')
 const path = require('path')
 const { registerResearchAgentIpc } = require('./research-agent/ipc')
 
@@ -52,6 +52,19 @@ function createWindow() {
   }
 }
 
+let currentAccelerator = 'Alt+K'
+
+function registerHotkey(accelerator) {
+  globalShortcut.unregisterAll()
+  const ok = globalShortcut.register(accelerator, () => {
+    mainWindow?.webContents.send('settings:open')
+  })
+  if (ok) {
+    currentAccelerator = accelerator
+  }
+  return ok
+}
+
 app.whenReady().then(() => {
   registerResearchAgentIpc({
     ipcMain,
@@ -60,6 +73,14 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+  registerHotkey(currentAccelerator)
+})
+
+ipcMain.handle('settings:get-hotkey', () => ({ accelerator: currentAccelerator }))
+
+ipcMain.handle('settings:update-hotkey', (_, { accelerator }) => {
+  const ok = registerHotkey(accelerator)
+  return { ok, accelerator: currentAccelerator }
 })
 
 ipcMain.on('overlay:set-interactive', (_, interactive) => {
@@ -67,6 +88,10 @@ ipcMain.on('overlay:set-interactive', (_, interactive) => {
   const enabled = Boolean(interactive)
   // interactive=true => receive mouse; interactive=false => click-through.
   mainWindow.setIgnoreMouseEvents(!enabled, { forward: true })
+})
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll()
 })
 
 app.on('window-all-closed', () => {
