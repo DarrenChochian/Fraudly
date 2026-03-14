@@ -16,4 +16,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   getHotkey: () => ipcRenderer.invoke('settings:get-hotkey'),
   updateHotkey: (accelerator) => ipcRenderer.invoke('settings:update-hotkey', { accelerator }),
+  getMainPanelHotkey: () => ipcRenderer.invoke('main-panel:get-hotkey'),
+  updateMainPanelHotkey: (accelerator) => ipcRenderer.invoke('main-panel:update-hotkey', { accelerator }),
+  onMainPanelOpen: (callback) => {
+    const listener = () => callback()
+    ipcRenderer.on('main-panel:open', listener)
+    return () => ipcRenderer.removeListener('main-panel:open', listener)
+  },
 })

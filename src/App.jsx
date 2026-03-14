@@ -40,11 +40,15 @@ export default function App() {
   const [selectedChatId, setSelectedChatId] = useState(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [hotkey, setHotkey] = useState('Alt+K')
+  const [mainPanelHotkey, setMainPanelHotkey] = useState('Alt+L')
   const interactiveHoverCountRef = useRef(0)
 
   useEffect(() => {
     window.electronAPI?.getHotkey?.().then((res) => {
       if (res?.accelerator) setHotkey(res.accelerator)
+    })
+    window.electronAPI?.getMainPanelHotkey?.().then((res) => {
+      if (res?.accelerator) setMainPanelHotkey(res.accelerator)
     })
   }, [])
 
@@ -78,11 +82,29 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    const unsub = window.electronAPI?.onOpenSettings?.(() => {
-      setSettingsOpen((v) => !v)
-      setOverlayInteractivity(true)
+    const unsubSettings = window.electronAPI?.onOpenSettings?.(() => {
+      setSettingsOpen((v) => {
+        // When closing via hotkey, reset interactivity so the window goes back to click-through.
+        if (v) resetOverlayInteractivity()
+        return !v
+      })
     })
-    return () => unsub?.()
+    const unsubMainPanel = window.electronAPI?.onMainPanelOpen?.(() => {
+      setModalOpen((prev) => {
+        if (prev) {
+          // Closing — reset interactivity.
+          setSelectedChatId(null)
+          resetOverlayInteractivity()
+        } else {
+          setSelectedChatId(placeholderHistory[0]?.id ?? null)
+        }
+        return !prev
+      })
+    })
+    return () => {
+      unsubSettings?.()
+      unsubMainPanel?.()
+    }
   }, [])
 
   const handleOverlayClose = () => {
@@ -133,7 +155,7 @@ export default function App() {
           boxShadow: `0 4px 20px ${PINK_GLOW}`,
         }}
         className="overlay-interactive absolute top-5 right-5 text-sm font-semibold text-white border-0 rounded-xl cursor-pointer transition-transform hover:scale-105 active:scale-95 z-20"
-        title={modalOpen ? 'Close' : 'Open'}
+        title={modalOpen ? `Close (${mainPanelHotkey})` : `Open (${mainPanelHotkey})`}
       >
         <CircularText
           text="FRAUDLY"
@@ -146,7 +168,7 @@ export default function App() {
       {/* Settings gear button - below FRAUDLY button */}
       <button
         type="button"
-        onClick={() => setSettingsOpen((v) => !v)}
+        onClick={() => setSettingsOpen((v) => { if (v) resetOverlayInteractivity(); return !v })}
         onMouseEnter={handleInteractiveEnter}
         onMouseLeave={handleInteractiveLeave}
         className="overlay-interactive absolute right-6 top-[90px] w-8 h-8 flex items-center justify-center rounded-lg border cursor-pointer transition-all hover:scale-110 active:scale-95 z-20"
@@ -365,7 +387,9 @@ export default function App() {
         <SettingsPanel
           currentHotkey={hotkey}
           onHotkeyChange={setHotkey}
-          onClose={() => setSettingsOpen(false)}
+          mainPanelHotkey={mainPanelHotkey}
+          onMainPanelHotkeyChange={setMainPanelHotkey}
+          onClose={() => { setSettingsOpen(false); resetOverlayInteractivity() }}
           onInteractiveEnter={handleInteractiveEnter}
           onInteractiveLeave={handleInteractiveLeave}
         />

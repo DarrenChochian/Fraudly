@@ -52,17 +52,26 @@ function createWindow() {
   }
 }
 
-let currentAccelerator = 'Alt+K'
+let currentSettingsAccelerator = 'Alt+K'
+let currentMainPanelAccelerator = 'Alt+L'
 
-function registerHotkey(accelerator) {
+function registerAllHotkeys() {
   globalShortcut.unregisterAll()
-  const ok = globalShortcut.register(accelerator, () => {
-    mainWindow?.webContents.send('settings:open')
+  const settingsOk = globalShortcut.register(currentSettingsAccelerator, () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.show()
+      mainWindow.focus()
+      mainWindow.webContents.send('settings:open')
+    }
   })
-  if (ok) {
-    currentAccelerator = accelerator
-  }
-  return ok
+  const mainPanelOk = globalShortcut.register(currentMainPanelAccelerator, () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {  
+      mainWindow.show()
+      mainWindow.focus()
+      mainWindow.webContents.send('main-panel:open')
+    }
+  })
+  return { settingsOk, mainPanelOk }
 }
 
 app.whenReady().then(() => {
@@ -73,14 +82,35 @@ app.whenReady().then(() => {
   })
 
   createWindow()
-  registerHotkey(currentAccelerator)
+  registerAllHotkeys()
 })
 
-ipcMain.handle('settings:get-hotkey', () => ({ accelerator: currentAccelerator }))
+ipcMain.handle('settings:get-hotkey', () => ({ accelerator: currentSettingsAccelerator }))
 
 ipcMain.handle('settings:update-hotkey', (_, { accelerator }) => {
-  const ok = registerHotkey(accelerator)
-  return { ok, accelerator: currentAccelerator }
+  const prev = currentSettingsAccelerator
+  currentSettingsAccelerator = accelerator
+  const { settingsOk } = registerAllHotkeys()
+  if (!settingsOk) {
+    currentSettingsAccelerator = prev
+    registerAllHotkeys()
+    return { ok: false, accelerator: currentSettingsAccelerator }
+  }
+  return { ok: true, accelerator: currentSettingsAccelerator }
+})
+
+ipcMain.handle('main-panel:get-hotkey', () => ({ accelerator: currentMainPanelAccelerator }))
+
+ipcMain.handle('main-panel:update-hotkey', (_, { accelerator }) => {
+  const prev = currentMainPanelAccelerator
+  currentMainPanelAccelerator = accelerator
+  const { mainPanelOk } = registerAllHotkeys()
+  if (!mainPanelOk) {
+    currentMainPanelAccelerator = prev
+    registerAllHotkeys()
+    return { ok: false, accelerator: currentMainPanelAccelerator }
+  }
+  return { ok: true, accelerator: currentMainPanelAccelerator }
 })
 
 ipcMain.on('overlay:set-interactive', (_, interactive) => {
