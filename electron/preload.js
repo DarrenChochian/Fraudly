@@ -29,4 +29,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('hotkey:registration-result', listener)
     return () => ipcRenderer.removeListener('hotkey:registration-result', listener)
   },
+  getMediaPermissionStatus: () => ipcRenderer.invoke('permissions:get-status'),
+  requestMediaPermission: (kind) => ipcRenderer.invoke('permissions:request', { kind }),
+  startTranscription: (sources) => ipcRenderer.invoke('transcription:start', { sources }),
+  stopTranscription: () => ipcRenderer.invoke('transcription:stop'),
+  sendTranscriptionAudioChunk: (source, chunk) => ipcRenderer.send('transcription:audio-chunk', { source, chunk }),
+  onTranscriptionEvent: (callback) => {
+    const listener = (_, payload) => callback(payload)
+    ipcRenderer.on('transcription:event', listener)
+    return () => ipcRenderer.removeListener('transcription:event', listener)
+  },
+  captureScreenshot: () => ipcRenderer.invoke('screen:capture-screenshot'),
 })

@@ -19,6 +19,15 @@ const PINK_GLOSS_SHADOW =
 
 const MODIFIER_KEYS = new Set(['Alt', 'Control', 'Shift', 'Meta', 'AltGraph'])
 
+function formatPermissionStatus(status) {
+  const value = String(status || 'unknown').toLowerCase()
+  if (value === 'granted') return 'Granted'
+  if (value === 'denied' || value === 'restricted') return 'Denied'
+  if (value === 'not-determined' || value === 'prompt') return 'Not granted'
+  if (value === 'no-audio-track') return 'No audio track'
+  return value.charAt(0).toUpperCase() + value.slice(1)
+}
+
 function buildAccelerator(e) {
   const parts = []
   if (e.ctrlKey) parts.push('Ctrl')
@@ -48,13 +57,14 @@ function buildAccelerator(e) {
   return parts.length > 1 ? parts.join('+') : null
 }
 
-export default function SettingsPanel({ currentHotkey: propHotkey = 'Alt+K', onHotkeyChange, settingsHotkeyFailed = false, mainPanelHotkey: propMainPanelHotkey = 'Alt+L', onMainPanelHotkeyChange, mainPanelHotkeyFailed = false, onClose, onInteractiveEnter, onInteractiveLeave }) {
+export default function SettingsPanel({ currentHotkey: propHotkey = 'Alt+K', onHotkeyChange, settingsHotkeyFailed = false, mainPanelHotkey: propMainPanelHotkey = 'Alt+L', onMainPanelHotkeyChange, mainPanelHotkeyFailed = false, permissionStatus = { microphone: 'unknown', screen: 'unknown', screenshot: 'unknown' }, onRequestPermission, onClose, onInteractiveEnter, onInteractiveLeave }) {
   const [currentHotkey, setCurrentHotkey] = useState(propHotkey)
   const [mainPanelHotkey, setMainPanelHotkey] = useState(propMainPanelHotkey)
   const [recording, setRecording] = useState(false)
   const [mainPanelRecording, setMainPanelRecording] = useState(false)
   const [status, setStatus] = useState(null) // 'saved' | 'error' | null
   const [mainPanelStatus, setMainPanelStatus] = useState(null)
+  const [permissionBusy, setPermissionBusy] = useState({ microphone: false, screen: false, screenshot: false })
 
   useEffect(() => {
     setCurrentHotkey(propHotkey)
@@ -158,6 +168,17 @@ export default function SettingsPanel({ currentHotkey: propHotkey = 'Alt+K', onH
     const t = setTimeout(() => setMainPanelStatus(null), 2000)
     return () => clearTimeout(t)
   }, [mainPanelStatus])
+
+  const handlePermissionRequest = async (kind) => {
+    if (!onRequestPermission) return
+
+    setPermissionBusy((prev) => ({ ...prev, [kind]: true }))
+    try {
+      await onRequestPermission(kind)
+    } finally {
+      setPermissionBusy((prev) => ({ ...prev, [kind]: false }))
+    }
+  }
 
   return (
     <div
@@ -357,6 +378,74 @@ export default function SettingsPanel({ currentHotkey: propHotkey = 'Alt+K', onH
 
         {/* Divider */}
         <div style={{ borderTop: '1px solid rgba(255, 90, 168, 0.15)' }} />
+
+        <div className="space-y-2">
+          <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: PINK_LIGHT }}>
+            Permissions
+          </label>
+          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>
+            Permission-only controls (no auto-start).
+          </p>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-xs" style={{ color: 'rgba(226, 234, 255, 0.92)' }}>
+                Microphone: {formatPermissionStatus(permissionStatus.microphone)}
+              </div>
+              <button
+                type="button"
+                onClick={() => handlePermissionRequest('microphone')}
+                disabled={permissionBusy.microphone}
+                className="px-2 py-1 text-xs font-semibold rounded-lg border cursor-pointer transition-opacity hover:opacity-90 disabled:opacity-60"
+                style={{
+                  background: PINK_GLOSS_FILL,
+                  borderColor: 'rgba(255, 182, 224, 0.86)',
+                  color: '#ffeaf7',
+                }}
+              >
+                {permissionBusy.microphone ? 'Checking…' : 'Enable'}
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-xs" style={{ color: 'rgba(226, 234, 255, 0.92)' }}>
+                Screen audio/capture: {formatPermissionStatus(permissionStatus.screen)}
+              </div>
+              <button
+                type="button"
+                onClick={() => handlePermissionRequest('screen')}
+                disabled={permissionBusy.screen}
+                className="px-2 py-1 text-xs font-semibold rounded-lg border cursor-pointer transition-opacity hover:opacity-90 disabled:opacity-60"
+                style={{
+                  background: PINK_GLOSS_FILL,
+                  borderColor: 'rgba(255, 182, 224, 0.86)',
+                  color: '#ffeaf7',
+                }}
+              >
+                {permissionBusy.screen ? 'Checking…' : 'Enable'}
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-xs" style={{ color: 'rgba(226, 234, 255, 0.92)' }}>
+                Screenshot: {formatPermissionStatus(permissionStatus.screenshot)}
+              </div>
+              <button
+                type="button"
+                onClick={() => handlePermissionRequest('screenshot')}
+                disabled={permissionBusy.screenshot}
+                className="px-2 py-1 text-xs font-semibold rounded-lg border cursor-pointer transition-opacity hover:opacity-90 disabled:opacity-60"
+                style={{
+                  background: PINK_GLOSS_FILL,
+                  borderColor: 'rgba(255, 182, 224, 0.86)',
+                  color: '#ffeaf7',
+                }}
+              >
+                {permissionBusy.screenshot ? 'Checking…' : 'Enable'}
+              </button>
+            </div>
+          </div>
+        </div>
 
         <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
           Default: Settings Alt+K, Main Panel Alt+L

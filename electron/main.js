@@ -1,10 +1,75 @@
-const { app, BrowserWindow, screen, ipcMain, globalShortcut } = require('electron')
+const {
+  app,
+  BrowserWindow,
+  screen,
+  ipcMain,
+  globalShortcut,
+  session,
+  desktopCapturer,
+  systemPreferences,
+  shell,
+} = require('electron')
 const path = require('path')
 const { registerResearchAgentIpc } = require('./research-agent/ipc')
+const { registerTranscriptionIpc } = require('./transcription')
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 
+if (process.platform === 'darwin') {
+  app.commandLine.appendSwitch('disable-features', 'MacCatapLoopbackAudioForScreenShare')
+  console.log('[desktop-capture] macOS loopback fallback enabled (MacCatapLoopbackAudioForScreenShare disabled)')
+}
+
 let mainWindow
+let transcriptionController = null
+let overlayInteractive = false
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function normalizePermissionStatus(status) {
+  if (!status) return 'unknown'
+  return status
+}
+
+function getPermissionStatus(kind) {
+  if (!systemPreferences?.getMediaAccessStatus) {
+    if (kind === 'microphone') return 'unknown'
+    return process.platform === 'darwin' ? 'unknown' : 'granted'
+  }
+
+  if (kind === 'microphone') {
+    return normalizePermissionStatus(systemPreferences.getMediaAccessStatus('microphone'))
+  }
+
+  if (kind === 'screen' || kind === 'screenshot') {
+    if (process.platform === 'darwin') {
+      return normalizePermissionStatus(systemPreferences.getMediaAccessStatus('screen'))
+    }
+    return 'granted'
+  }
+
+  return 'unknown'
+}
+
+function setupDisplayMediaRequestHandler() {
+  session.defaultSession.setDisplayMediaRequestHandler(async (_request, callback) => {
+    try {
+      const sources = await desktopCapturer.getSources({ types: ['screen'] })
+      const primaryDisplay = screen.getPrimaryDisplay()
+      const primarySource = sources.find((source) => String(source.display_id) === String(primaryDisplay.id))
+
+      callback({
+        video: primarySource || sources[0],
+        audio: 'loopback',
+      })
+    } catch (error) {
+      console.error('[desktop-capture] Failed to get capture sources:', error)
+      callback({ video: null, audio: null })
+    }
+  }, { useSystemPicker: false })
+}
 
 function createWindow() {
   const display = screen.getPrimaryDisplay()
@@ -47,6 +112,10 @@ function createWindow() {
 
   if (isDev) {
     mainWindow.loadURL('http://localhost:5173')
+    mainWindow.webContents.once('did-finish-load', () => {
+      if (!mainWindow || mainWindow.isDestroyed()) return
+      mainWindow.webContents.openDevTools({ mode: 'detach' })
+    })
   } else {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
@@ -128,10 +197,17 @@ function registerAllHotkeys() {
 }
 
 app.whenReady().then(() => {
+  setupDisplayMediaRequestHandler()
+
   registerResearchAgentIpc({
     ipcMain,
     projectRoot: app.getAppPath(),
     userDataPath: app.getPath('userData'),
+  })
+
+  transcriptionController = registerTranscriptionIpc({
+    ipcMain,
+    projectRoot: app.getAppPath(),
   })
 
   createWindow()
@@ -169,10 +245,123 @@ ipcMain.handle('main-panel:update-hotkey', (_, { accelerator }) => {
 ipcMain.on('overlay:set-interactive', (_, interactive) => {
   if (!mainWindow || mainWindow.isDestroyed()) return
   const enabled = Boolean(interactive)
+  overlayInteractive = enabled
+  // interactive=true => receive mouse; interactive=false => click-through.
   mainWindow.setIgnoreMouseEvents(!enabled, { forward: true })
 })
 
+ipcMain.handle('permissions:get-status', () => ({
+  microphone: getPermissionStatus('microphone'),
+  screen: getPermissionStatus('screen'),
+  screenshot: getPermissionStatus('screenshot'),
+}))
+
+ipcMain.handle('permissions:request', async (_, { kind }) => {
+  const requestedKind = String(kind || '').toLowerCase()
+
+  if (requestedKind === 'microphone') {
+    if (systemPreferences?.askForMediaAccess) {
+      const granted = await systemPreferences.askForMediaAccess('microphone')
+      return {
+        ok: granted,
+        status: getPermissionStatus('microphone'),
+      }
+    }
+    return {
+      ok: getPermissionStatus('microphone') === 'granted',
+      status: getPermissionStatus('microphone'),
+    }
+  }
+
+  if (requestedKind === 'screen' || requestedKind === 'screenshot') {
+    if (process.platform === 'darwin') {
+      const status = getPermissionStatus('screen')
+      if (status === 'granted') {
+        return { ok: true, status }
+      }
+
+      let settingsOpened = false
+      try {
+        await shell.openExternal('x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture')
+        settingsOpened = true
+      } catch {
+        settingsOpened = false
+      }
+
+      return {
+        ok: false,
+        status,
+        needsDisplayMediaPrompt: true,
+        settingsOpened,
+      }
+    }
+
+    return {
+      ok: true,
+      status: 'granted',
+    }
+  }
+
+  return {
+    ok: false,
+    status: 'unknown',
+  }
+})
+
+ipcMain.handle('screen:capture-screenshot', async () => {
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    return { ok: false, error: 'Main window is unavailable' }
+  }
+
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const wasVisible = mainWindow.isVisible()
+  const previousOpacity = mainWindow.getOpacity()
+
+  try {
+    if (wasVisible) {
+      mainWindow.setOpacity(0)
+      mainWindow.setIgnoreMouseEvents(true, { forward: true })
+      await delay(120)
+    }
+
+    const sources = await desktopCapturer.getSources({
+      types: ['screen'],
+      thumbnailSize: {
+        width: primaryDisplay.size.width,
+        height: primaryDisplay.size.height,
+      },
+    })
+
+    const source =
+      sources.find((item) => String(item.display_id) === String(primaryDisplay.id)) ||
+      sources[0]
+
+    if (!source || source.thumbnail.isEmpty()) {
+      return { ok: false, error: 'No screen source available' }
+    }
+
+    return {
+      ok: true,
+      dataUrl: source.thumbnail.toDataURL(),
+      width: source.thumbnail.getSize().width,
+      height: source.thumbnail.getSize().height,
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to capture screenshot'
+    return { ok: false, error: message }
+  } finally {
+    if (wasVisible) {
+      mainWindow.setOpacity(previousOpacity)
+      if (!mainWindow.isVisible()) {
+        mainWindow.showInactive()
+      }
+      mainWindow.setIgnoreMouseEvents(!overlayInteractive, { forward: true })
+    }
+  }
+})
+
 app.on('will-quit', () => {
+  transcriptionController?.stopAllSessions?.()
   globalShortcut.unregisterAll()
 })
 

@@ -1,35 +1,12 @@
-we need a research agent similar to claude code as a backend. the env keys are in /Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/.env.example
+now we need to be able to monitor calls.
 
-how it will work.
+so we will be using the live transcription from deepgram, the docs can be found here: /Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/docs/deepgram
 
-jina ai - the websearch and webfetch tool.
+so that means we will need to capture audio from both the desktop AND the microphone. this NEEDS to work on BOTH windows and macos.
 
-webfetch:
-curl "https://r.jina.ai/https://www.example.com" \
-  -H "Authorization: Bearer JINA_API_KEY"
+for desktop capture:
+https://www.electronjs.org/docs/latest/api/desktop-capturer#caveats
 
-websearch:
-curl "https://s.jina.ai/?q=Jina+AI" \
-  -H "Authorization: Bearer JINA_API_KEY" \
-  -H "X-Respond-With: no-content"
+in the settings, we should be able to enable permission to record audio and take screenshots. so we should be able to also capture screenshots of the screen.
 
-backboard - the llm backend, use for the api docs /Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/docs
-
-so there are only like a few main tools for the agent. here are the tools and the response back the to llm agent loop.
-- websearch - serp search
-    - input: research quer(ies)
-    - response: json with markdown serp list
-- webfetch - fetch a url
-    - input: url
-    - response: json with markdown web return
-- message - update the user on progress and what it is doing.
-    - input: message to display to the user
-    - response {'status': ok} or another keep alive
-- summary - call this to end the agent loop
-    - input: summary, markdown format.
-    - response {'status': ok} or another keep alive
-
-so for now the user will input a prompt, and it would intiate the agent which will run tool calls in parallel to research the prompt. the system prompt should be in a seperate file. so it will keep looping the agent (keep alive) until it hits summary, where the agent inputs a summary that gives the user a result.
-
-think of the architecture as a senior swe, ensure everything is modular and files are <300 lines of code each. 
-
+only add the trancsription and a small debug menu on the side to show that it's working, then we will move onto the fraud detection later.

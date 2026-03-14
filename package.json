@@ -32,6 +32,13 @@
   "build": {
     "appId": "com.td.fraud-detection",
     "productName": "TD Fraud Detection",
+    "mac": {
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Fraudly needs microphone access to transcribe the user side of calls.",
+        "NSAudioCaptureUsageDescription": "Fraudly needs system audio access to transcribe caller audio from desktop capture.",
+        "NSScreenCaptureDescription": "Fraudly needs screen recording access for call monitoring screenshots."
+      }
+    },
     "directories": {
       "output": "release"
     },

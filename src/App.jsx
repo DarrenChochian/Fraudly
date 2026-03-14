@@ -76,6 +76,175 @@ const CHAT_DEFINITIONS = [
 ]
 
 const CHAT_IDS = CHAT_DEFINITIONS.map((chat) => chat.id)
+const AUDIO_CHUNK_MS = 250
+const AUDIO_MIME_CANDIDATES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus']
+
+function getRecorderOptionCandidates() {
+  if (typeof MediaRecorder === 'undefined') return []
+
+  const options = [undefined]
+  if (typeof MediaRecorder.isTypeSupported === 'function') {
+    for (const candidate of AUDIO_MIME_CANDIDATES) {
+      if (MediaRecorder.isTypeSupported(candidate)) {
+        options.push({ mimeType: candidate })
+      }
+    }
+  }
+
+  return options
+}
+
+function createAndStartRecorderWithFallback({ source, stream, onChunk, timesliceMs }) {
+  const optionsList = getRecorderOptionCandidates()
+  const failures = []
+
+  for (const options of optionsList) {
+    let recorder = null
+    try {
+      recorder = options ? new MediaRecorder(stream, options) : new MediaRecorder(stream)
+      recorder.ondataavailable = async (event) => {
+        if (!event.data || event.data.size === 0) return
+        const chunk = await event.data.arrayBuffer()
+        onChunk(chunk)
+      }
+      recorder.onerror = (event) => {
+        console.error(`[recorder:${source}] media recorder error`, event)
+      }
+
+      recorder.start(timesliceMs)
+      return { recorder, usedMimeType: options?.mimeType || 'default' }
+    } catch (error) {
+      if (recorder) {
+        try {
+          if (recorder.state !== 'inactive') recorder.stop()
+        } catch {
+          // Ignore recorder cleanup errors.
+        }
+      }
+      failures.push({
+        mimeType: options?.mimeType || 'default',
+        message: error instanceof Error ? error.message : 'unknown error',
+      })
+    }
+  }
+
+  const details = failures.map((item) => `${item.mimeType}: ${item.message}`).join(' | ')
+  throw new Error(`MediaRecorder start failed for ${source} (${details || 'no supported option'})`)
+}
+
+function createAudioLevelMonitor({ source, stream, onLevel }) {
+  try {
+    const AudioContextCtor = window.AudioContext || window.webkitAudioContext
+    if (!AudioContextCtor) {
+      return { cleanup: () => {} }
+    }
+
+    const audioContext = new AudioContextCtor()
+    const sourceNode = audioContext.createMediaStreamSource(stream)
+    const analyser = audioContext.createAnalyser()
+    analyser.fftSize = 2048
+    const data = new Uint8Array(analyser.fftSize)
+
+    sourceNode.connect(analyser)
+
+    const interval = setInterval(() => {
+      analyser.getByteTimeDomainData(data)
+
+      let sum = 0
+      for (let i = 0; i < data.length; i += 1) {
+        const normalized = (data[i] - 128) / 128
+        sum += normalized * normalized
+      }
+
+      const rms = Math.sqrt(sum / data.length)
+      onLevel(Math.round(rms * 1000) / 10)
+    }, 200)
+
+    return {
+      cleanup: () => {
+        clearInterval(interval)
+        try {
+          sourceNode.disconnect()
+        } catch {
+          // Ignore disconnection errors.
+        }
+        try {
+          analyser.disconnect()
+        } catch {
+          // Ignore disconnection errors.
+        }
+        try {
+          audioContext.close()
+        } catch {
+          // Ignore context close errors.
+        }
+      },
+    }
+  } catch (error) {
+    console.warn(`[audio-monitor:${source}] failed to initialize`, error)
+    return { cleanup: () => {} }
+  }
+}
+
+function stopStream(stream) {
+  if (!stream) return
+  for (const track of stream.getTracks()) {
+    try {
+      track.stop()
+    } catch {
+      // Ignore track stop errors.
+    }
+  }
+}
+
+function createNormalizedAudioStream(track) {
+  const rawStream = new MediaStream([track])
+
+  try {
+    const AudioContextCtor = window.AudioContext || window.webkitAudioContext
+    if (!AudioContextCtor) {
+      return {
+        stream: rawStream,
+        cleanup: () => {},
+      }
+    }
+
+    const audioContext = new AudioContextCtor()
+    const sourceNode = audioContext.createMediaStreamSource(rawStream)
+    const gainNode = audioContext.createGain()
+    gainNode.gain.value = 1
+    const destination = audioContext.createMediaStreamDestination()
+    sourceNode.connect(gainNode)
+    gainNode.connect(destination)
+
+    return {
+      stream: destination.stream,
+      cleanup: () => {
+        try {
+          sourceNode.disconnect()
+        } catch {
+          // Ignore disconnection errors.
+        }
+        try {
+          gainNode.disconnect()
+        } catch {
+          // Ignore disconnection errors.
+        }
+        try {
+          audioContext.close()
+        } catch {
+          // Ignore context close errors.
+        }
+      },
+    }
+  } catch (error) {
+    console.warn('[audio-normalize] fallback to raw track stream', error)
+    return {
+      stream: rawStream,
+      cleanup: () => {},
+    }
+  }
+}
 
 function createMessageId(prefix = 'msg') {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
@@ -141,6 +310,7 @@ function toolEntryIdFromEvent(payload) {
 }
 
 export default function App() {
+  const isMac = window.electronAPI?.platform === 'darwin'
   const [modalOpen, setModalOpen] = useState(false)
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
   const [isListening, setIsListening] = useState(false)
@@ -153,7 +323,31 @@ export default function App() {
   const [mainPanelHotkeyFailed, setMainPanelHotkeyFailed] = useState(false)
   const [settingsHotkeyFailed, setSettingsHotkeyFailed] = useState(false)
   const [runningByChat, setRunningByChat] = useState({})
+  const [transcriptionSessionState, setTranscriptionSessionState] = useState('idle')
+  const [sourceStates, setSourceStates] = useState({ caller: 'idle', user: 'idle' })
+  const [sourceChunkCounts, setSourceChunkCounts] = useState({ caller: 0, user: 0 })
+  const [latestTranscripts, setLatestTranscripts] = useState({ caller: '', user: '' })
+  const [transcriptKinds, setTranscriptKinds] = useState({ caller: 'none', user: 'none' })
+  const [sourceAudioLevels, setSourceAudioLevels] = useState({ caller: 0, user: 0 })
+  const [transcriptionError, setTranscriptionError] = useState('')
+  const [transcriptionWarning, setTranscriptionWarning] = useState('')
+  const [lastTranscriptionActivityAt, setLastTranscriptionActivityAt] = useState('')
+  const [permissionStatus, setPermissionStatus] = useState({
+    microphone: 'unknown',
+    screen: 'unknown',
+    screenshot: 'unknown',
+  })
+  const [screenshotStatus, setScreenshotStatus] = useState('idle')
+  const [lastScreenshotAt, setLastScreenshotAt] = useState('')
   const interactiveHoverCountRef = useRef(0)
+  const callerSilentSinceRef = useRef(null)
+  const mediaCaptureRef = useRef({
+    micStream: null,
+    desktopStream: null,
+    callerRecorder: null,
+    userRecorder: null,
+    cleanupFns: [],
+  })
 
   useEffect(() => {
     window.electronAPI?.getHotkey?.().then((res) => {
@@ -186,6 +380,385 @@ export default function App() {
       setOverlayInteractivity(false)
     }
   }
+
+  const refreshPermissionStatus = async () => {
+    if (!window.electronAPI?.getMediaPermissionStatus) return
+    try {
+      const status = await window.electronAPI.getMediaPermissionStatus()
+      setPermissionStatus((prev) => ({
+        ...prev,
+        ...status,
+      }))
+    } catch {
+      // Ignore permission refresh errors.
+    }
+  }
+
+  const cleanupMediaCapture = () => {
+    const media = mediaCaptureRef.current
+
+    for (const recorder of [media.callerRecorder, media.userRecorder]) {
+      if (!recorder) continue
+      try {
+        if (recorder.state !== 'inactive') recorder.stop()
+      } catch {
+        // Ignore recorder stop errors.
+      }
+    }
+
+    stopStream(media.micStream)
+    stopStream(media.desktopStream)
+
+    for (const cleanup of media.cleanupFns || []) {
+      try {
+        cleanup()
+      } catch {
+        // Ignore cleanup callback errors.
+      }
+    }
+
+    mediaCaptureRef.current = {
+      micStream: null,
+      desktopStream: null,
+      callerRecorder: null,
+      userRecorder: null,
+      cleanupFns: [],
+    }
+
+    setSourceAudioLevels({ caller: 0, user: 0 })
+  }
+
+  const stopListeningSession = async ({ reason } = {}) => {
+    cleanupMediaCapture()
+    try {
+      await window.electronAPI?.stopTranscription?.()
+    } catch {
+      // Ignore stop errors.
+    }
+
+    setIsListening(false)
+    setSourceStates((prev) => ({
+      caller: prev.caller === 'error' ? 'error' : 'idle',
+      user: prev.user === 'error' ? 'error' : 'idle',
+    }))
+
+    if (reason) {
+      setTranscriptionError(reason)
+      setTranscriptionSessionState('error')
+    } else {
+      setTranscriptionSessionState('idle')
+    }
+  }
+
+  const startListeningSession = async () => {
+    if (isListening || transcriptionSessionState === 'connecting') return
+
+    setTranscriptionError('')
+    setTranscriptionWarning('')
+    setTranscriptionSessionState('connecting')
+    setSourceStates({ caller: 'connecting', user: 'connecting' })
+    setSourceChunkCounts({ caller: 0, user: 0 })
+    setLatestTranscripts({ caller: '', user: '' })
+    setTranscriptKinds({ caller: 'none', user: 'none' })
+    setSourceAudioLevels({ caller: 0, user: 0 })
+
+    let micStream = null
+    let desktopStream = null
+
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    } catch {
+      setTranscriptionError('Microphone permission denied or unavailable.')
+      setTranscriptionSessionState('error')
+      setSourceStates({ caller: 'idle', user: 'error' })
+      await refreshPermissionStatus()
+      return
+    }
+
+    try {
+      desktopStream = await navigator.mediaDevices.getDisplayMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false,
+        },
+        video: true,
+      })
+    } catch {
+      stopStream(micStream)
+      setTranscriptionError('Desktop capture permission denied or unavailable.')
+      setTranscriptionSessionState('error')
+      setSourceStates({ caller: 'error', user: 'idle' })
+      await refreshPermissionStatus()
+      return
+    }
+
+    if (typeof MediaRecorder === 'undefined') {
+      stopStream(micStream)
+      stopStream(desktopStream)
+      setTranscriptionError('MediaRecorder is unavailable in this runtime.')
+      setTranscriptionSessionState('error')
+      setSourceStates({ caller: 'error', user: 'error' })
+      return
+    }
+
+    const callerAudioTrack = desktopStream.getAudioTracks()[0] || null
+    const userAudioTrack = micStream.getAudioTracks()[0] || null
+
+    if (callerAudioTrack) {
+      console.log('[caller-audio-track]', {
+        id: callerAudioTrack.id,
+        kind: callerAudioTrack.kind,
+        label: callerAudioTrack.label,
+        enabled: callerAudioTrack.enabled,
+        muted: callerAudioTrack.muted,
+        readyState: callerAudioTrack.readyState,
+      })
+      try {
+        console.log('[caller-audio-track-settings]', callerAudioTrack.getSettings?.())
+      } catch {
+        // Ignore settings read errors.
+      }
+      callerAudioTrack.onmute = () => console.warn('[caller-audio-track] muted')
+      callerAudioTrack.onunmute = () => console.log('[caller-audio-track] unmuted')
+      callerAudioTrack.onended = () => console.warn('[caller-audio-track] ended')
+    }
+
+    const cleanupFns = []
+    const runLocalCleanupFns = () => {
+      for (const cleanup of cleanupFns) {
+        try {
+          cleanup()
+        } catch {
+          // Ignore local cleanup callback errors.
+        }
+      }
+    }
+
+    const callerNormalized = callerAudioTrack ? createNormalizedAudioStream(callerAudioTrack) : null
+    const userNormalized = userAudioTrack ? createNormalizedAudioStream(userAudioTrack) : null
+
+    const callerStream = callerNormalized?.stream || null
+    const userStream = userNormalized?.stream || null
+
+    if (callerNormalized?.cleanup) cleanupFns.push(callerNormalized.cleanup)
+    if (userNormalized?.cleanup) cleanupFns.push(userNormalized.cleanup)
+
+    if (callerStream) {
+      const monitor = createAudioLevelMonitor({
+        source: 'caller',
+        stream: callerStream,
+        onLevel: (level) => setSourceAudioLevels((prev) => ({ ...prev, caller: level })),
+      })
+      cleanupFns.push(monitor.cleanup)
+    }
+
+    if (userStream) {
+      const monitor = createAudioLevelMonitor({
+        source: 'user',
+        stream: userStream,
+        onLevel: (level) => setSourceAudioLevels((prev) => ({ ...prev, user: level })),
+      })
+      cleanupFns.push(monitor.cleanup)
+    }
+
+    if (!callerStream) {
+      setTranscriptionWarning('Desktop audio track is unavailable. Grant screen recording + system audio and retry.')
+      setSourceStates((prev) => ({ ...prev, caller: 'no-audio-track' }))
+    }
+    if (!userStream) {
+      setTranscriptionWarning((prev) => (prev ? `${prev} Microphone track missing.` : 'Microphone track missing.'))
+      setSourceStates((prev) => ({ ...prev, user: 'no-audio-track' }))
+    }
+
+    let callerRecorder = null
+    let userRecorder = null
+    const recorderFailures = []
+
+    if (callerStream) {
+      try {
+        const { recorder, usedMimeType } = createAndStartRecorderWithFallback({
+          source: 'caller',
+          stream: callerStream,
+          onChunk: (chunk) => window.electronAPI?.sendTranscriptionAudioChunk?.('caller', chunk),
+          timesliceMs: AUDIO_CHUNK_MS,
+        })
+        callerRecorder = recorder
+        console.log('[recorder:caller] initialized with', usedMimeType)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'caller recorder init failed'
+        console.error('[recorder:caller] failed', error)
+        recorderFailures.push(message)
+        setSourceStates((prev) => ({ ...prev, caller: 'error' }))
+      }
+    }
+
+    if (userStream) {
+      try {
+        const { recorder, usedMimeType } = createAndStartRecorderWithFallback({
+          source: 'user',
+          stream: userStream,
+          onChunk: (chunk) => window.electronAPI?.sendTranscriptionAudioChunk?.('user', chunk),
+          timesliceMs: AUDIO_CHUNK_MS,
+        })
+        userRecorder = recorder
+        console.log('[recorder:user] initialized with', usedMimeType)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'user recorder init failed'
+        console.error('[recorder:user] failed', error)
+        recorderFailures.push(message)
+        setSourceStates((prev) => ({ ...prev, user: 'error' }))
+      }
+    }
+
+    const activeSources = []
+    if (callerRecorder) activeSources.push('caller')
+    if (userRecorder) activeSources.push('user')
+
+    if (activeSources.length === 0) {
+      stopStream(micStream)
+      stopStream(desktopStream)
+      runLocalCleanupFns()
+      const extra = recorderFailures.length ? ` ${recorderFailures.join(' | ')}` : ''
+      setTranscriptionError(`Unable to initialize audio recorders.${extra}`)
+      setTranscriptionSessionState('error')
+      return
+    }
+
+    const startResult = await window.electronAPI?.startTranscription?.(activeSources)
+    if (!startResult?.ok) {
+      stopStream(micStream)
+      stopStream(desktopStream)
+      runLocalCleanupFns()
+      setTranscriptionError(startResult?.error || 'Unable to start transcription session.')
+      setTranscriptionSessionState('error')
+      setSourceStates({ caller: 'error', user: 'error' })
+      return
+    }
+
+    const startedSources = []
+    if (callerRecorder && callerRecorder.state === 'recording') startedSources.push('caller')
+    if (userRecorder && userRecorder.state === 'recording') startedSources.push('user')
+
+    if (startedSources.length === 0) {
+      stopStream(micStream)
+      stopStream(desktopStream)
+      runLocalCleanupFns()
+      await window.electronAPI?.stopTranscription?.()
+      setTranscriptionError('Unable to start media recorder for one or more audio streams.')
+      setTranscriptionSessionState('error')
+      setSourceStates({ caller: 'error', user: 'error' })
+      return
+    }
+
+    if (startedSources.length !== activeSources.length) {
+      const warning = `Recorder started only for: ${startedSources.join(', ')}`
+      setTranscriptionWarning((prev) => (prev ? `${prev} ${warning}` : warning))
+
+      await window.electronAPI?.stopTranscription?.()
+      const restartResult = await window.electronAPI?.startTranscription?.(startedSources)
+      if (!restartResult?.ok) {
+        stopStream(micStream)
+        stopStream(desktopStream)
+        runLocalCleanupFns()
+        setTranscriptionError(restartResult?.error || 'Failed to restart transcription for available sources.')
+        setTranscriptionSessionState('error')
+        setSourceStates({ caller: 'error', user: 'error' })
+        return
+      }
+    }
+
+    for (const track of desktopStream.getVideoTracks()) {
+      track.onended = () => {
+        stopListeningSession({ reason: 'Desktop capture stopped.' })
+      }
+    }
+
+    mediaCaptureRef.current = {
+      micStream,
+      desktopStream,
+      callerRecorder,
+      userRecorder,
+      cleanupFns,
+    }
+
+    setIsListening(true)
+    setTranscriptionSessionState('listening')
+    await refreshPermissionStatus()
+  }
+
+  const toggleListeningSession = () => {
+    if (isListening) {
+      stopListeningSession()
+      return
+    }
+    startListeningSession()
+  }
+
+  const requestPermission = async (kind) => {
+    const normalizedKind = String(kind || '').toLowerCase()
+
+    const result = await window.electronAPI?.requestMediaPermission?.(normalizedKind)
+
+    if (normalizedKind === 'screen' || normalizedKind === 'screenshot') {
+      if (result?.status !== 'granted') {
+        try {
+          const permissionStream = await navigator.mediaDevices.getDisplayMedia({ audio: false, video: true })
+          stopStream(permissionStream)
+        } catch {
+          // Ignore permission prompt cancellations.
+        }
+      }
+    }
+
+    await refreshPermissionStatus()
+    return result
+  }
+
+  const captureScreenshot = async () => {
+    setScreenshotStatus('capturing')
+    try {
+      const result = await window.electronAPI?.captureScreenshot?.()
+      if (!result?.ok) {
+        setScreenshotStatus('error')
+        setTranscriptionError(result?.error || 'Failed to capture screenshot.')
+        return
+      }
+
+      setScreenshotStatus('captured')
+      setLastScreenshotAt(new Date().toLocaleTimeString())
+    } catch {
+      setScreenshotStatus('error')
+      setTranscriptionError('Failed to capture screenshot.')
+    }
+  }
+
+  useEffect(() => {
+    refreshPermissionStatus()
+  }, [])
+
+  useEffect(() => {
+    if (!isListening) {
+      callerSilentSinceRef.current = null
+      return
+    }
+
+    if ((sourceAudioLevels.caller || 0) > 0.5) {
+      callerSilentSinceRef.current = null
+      return
+    }
+
+    if (!callerSilentSinceRef.current) {
+      callerSilentSinceRef.current = Date.now()
+      return
+    }
+
+    const silentMs = Date.now() - callerSilentSinceRef.current
+    if (silentMs < 8000) return
+
+    const warning = 'Desktop audio stream is connected but appears silent. Confirm system audio is shared in the screen picker and macOS Screen Recording/System Audio permissions are granted.'
+    setTranscriptionWarning((prev) => (prev?.includes('appears silent') ? prev : (prev ? `${prev} ${warning}` : warning)))
+  }, [isListening, sourceAudioLevels.caller])
 
   const appendMessage = (chatId, message) => {
     setChatMessages((prev) => ({
@@ -334,6 +907,73 @@ export default function App() {
     }
   }, [])
 
+  useEffect(() => {
+    const unsubscribe = window.electronAPI?.onTranscriptionEvent?.((payload) => {
+      if (!payload || typeof payload !== 'object') return
+
+      if (payload.type === 'session_state') {
+        if (payload.state === 'error') {
+          console.error('[transcription][session]', payload)
+        } else {
+          console.log('[transcription][session]', payload)
+        }
+        setTranscriptionSessionState(payload.state || 'idle')
+        if (payload.state === 'error' && payload.message) {
+          setTranscriptionError(payload.message)
+        }
+      }
+
+      if (payload.type === 'source_state' && payload.source) {
+        if (payload.state === 'error') {
+          console.error(`[transcription][${payload.source}]`, payload)
+        } else if (payload.state === 'reconnecting' || payload.state === 'closed') {
+          console.warn(`[transcription][${payload.source}]`, payload)
+        } else {
+          console.log(`[transcription][${payload.source}]`, payload)
+        }
+        setSourceStates((prev) => ({
+          ...prev,
+          [payload.source]: payload.state || 'idle',
+        }))
+
+        if (payload.state === 'error' && payload.message) {
+          setTranscriptionError(payload.message)
+        }
+      }
+
+      if (payload.type === 'source_chunk' && payload.source) {
+        setSourceChunkCounts((prev) => ({
+          ...prev,
+          [payload.source]: Number(payload.count || 0),
+        }))
+      }
+
+      if (payload.type === 'transcript' && payload.source) {
+        setLatestTranscripts((prev) => ({
+          ...prev,
+          [payload.source]: payload.transcript || '(silence)',
+        }))
+        setTranscriptKinds((prev) => ({
+          ...prev,
+          [payload.source]: payload.isFinal ? 'final' : 'interim',
+        }))
+      }
+
+      setLastTranscriptionActivityAt(payload.ts || new Date().toISOString())
+    })
+
+    return () => {
+      unsubscribe?.()
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      cleanupMediaCapture()
+      window.electronAPI?.stopTranscription?.()
+    }
+  }, [])
+
   const handleOverlayClose = () => {
     setModalOpen(false)
     setSelectedChatId(null)
@@ -454,7 +1094,8 @@ export default function App() {
         <>
           <button
             type="button"
-            onClick={() => setIsListening((v) => !v)}
+            onClick={toggleListeningSession}
+            disabled={transcriptionSessionState === 'connecting'}
             onMouseEnter={handleInteractiveEnter}
             onMouseLeave={handleInteractiveLeave}
             className={`overlay-interactive absolute top-4 left-1/2 -translate-x-1/2 z-10 rounded-2xl border-2 cursor-pointer overflow-hidden
@@ -468,6 +1109,7 @@ export default function App() {
               background: isListening ? PINK_GLOSS_FILL : PINK_GLOSS_FILL_DARK,
               borderColor: isListening ? 'rgba(255, 194, 231, 0.88)' : BORDER_PINK,
               boxShadow: isListening ? PINK_GLOSS_SHADOW : '0 0 0 1px rgba(255, 122, 193, 0.28), inset 0 1px rgba(255, 198, 229, 0.24), 0 10px 24px rgba(68, 18, 48, 0.42)',
+              opacity: transcriptionSessionState === 'connecting' ? 0.8 : 1,
               backdropFilter: GLASS_BACKDROP,
               WebkitBackdropFilter: GLASS_BACKDROP,
             }}
@@ -486,10 +1128,48 @@ export default function App() {
             ) : (
               <>
                 <WaveformIcon className="w-5 h-5 text-white flex-shrink-0" />
-                <span className="text-sm font-medium text-white whitespace-nowrap">Start listening</span>
+                <span className="text-sm font-medium text-white whitespace-nowrap">
+                  {transcriptionSessionState === 'connecting' ? 'Connecting…' : 'Start listening'}
+                </span>
               </>
             )}
           </button>
+
+          <div
+            onMouseEnter={handleInteractiveEnter}
+            onMouseLeave={handleInteractiveLeave}
+            className="overlay-interactive absolute right-4 top-24 w-72 rounded-xl border p-3 z-10"
+            style={{
+              backgroundColor: BG_PANEL,
+              backgroundImage: NEUTRAL_PANEL_FILL,
+              borderColor: BORDER_PINK,
+              boxShadow: NEUTRAL_PANEL_SHADOW,
+              backdropFilter: GLASS_BACKDROP,
+              WebkitBackdropFilter: GLASS_BACKDROP,
+            }}
+          >
+            <div className="text-xs font-semibold uppercase mb-2" style={{ color: PINK_LIGHT }}>
+              Transcription Debug
+            </div>
+            <div className="text-xs space-y-1" style={{ color: 'rgba(226, 233, 255, 0.92)' }}>
+              <div>Session: <span className="font-semibold">{transcriptionSessionState}</span></div>
+              <div>Caller source: <span className="font-semibold">{sourceStates.caller}</span> · chunks {sourceChunkCounts.caller}</div>
+              <div>User source: <span className="font-semibold">{sourceStates.user}</span> · chunks {sourceChunkCounts.user}</div>
+              <div>Caller level: {sourceAudioLevels.caller.toFixed(1)}</div>
+              <div>User level: {sourceAudioLevels.user.toFixed(1)}</div>
+              <div className="truncate">Caller ({transcriptKinds.caller}): {latestTranscripts.caller || '...'}</div>
+              <div className="truncate">User ({transcriptKinds.user}): {latestTranscripts.user || '...'}</div>
+              <div>Last activity: {lastTranscriptionActivityAt ? new Date(lastTranscriptionActivityAt).toLocaleTimeString() : 'n/a'}</div>
+              <div>Screenshot: {screenshotStatus}{lastScreenshotAt ? ` @ ${lastScreenshotAt}` : ''}</div>
+              {isMac && (
+                <div style={{ color: '#fbbf24' }}>
+                  macOS: if desktop audio is silent, verify Screen Recording + system audio permissions.
+                </div>
+              )}
+              {transcriptionWarning && <div style={{ color: '#fbbf24' }}>{transcriptionWarning}</div>}
+              {transcriptionError && <div style={{ color: '#f87171' }}>{transcriptionError}</div>}
+            </div>
+          </div>
 
           <div className="absolute left-4 top-24 bottom-4 flex items-stretch gap-6 z-10">
             <div
@@ -740,6 +1420,18 @@ export default function App() {
                       className="flex-1 min-w-0 px-4 py-3 text-sm text-white placeholder-zinc-500 bg-transparent border-0 outline-none disabled:opacity-60"
                     />
                     <button
+                      type="button"
+                      onClick={captureScreenshot}
+                      className="px-3 py-3 text-xs font-semibold text-white/90 cursor-pointer transition-opacity hover:opacity-90"
+                      style={{
+                        background: NEUTRAL_CARD_FILL,
+                        borderLeft: '1px solid rgba(120, 134, 168, 0.42)',
+                      }}
+                      title="Capture screenshot"
+                    >
+                      Shot
+                    </button>
+                    <button
                       type="submit"
                       disabled={selectedChatIsRunning || !input.trim()}
                       className="px-4 py-3 text-sm font-medium text-white cursor-pointer transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
@@ -766,6 +1458,8 @@ export default function App() {
           mainPanelHotkey={mainPanelHotkey}
           onMainPanelHotkeyChange={setMainPanelHotkey}
           mainPanelHotkeyFailed={mainPanelHotkeyFailed}
+          permissionStatus={permissionStatus}
+          onRequestPermission={requestPermission}
           onClose={() => { setSettingsOpen(false); resetOverlayInteractivity() }}
           onInteractiveEnter={handleInteractiveEnter}
           onInteractiveLeave={handleInteractiveLeave}
