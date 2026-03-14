@@ -86,8 +86,8 @@ const CircularText = ({ text, spinDuration = 20, onHover = 'speedUp', size = 'sm
 
   return (
     <motion.div
-      className={`m-0 mx-auto rounded-full absolute text-white font-black text-center cursor-pointer origin-center ${containerSize} ${className}`}
-      style={{ rotate: rotation }}
+    className={`rounded-full absolute inset-0 m-auto text-white font-black text-center cursor-pointer origin-center ${containerSize} ${className}`}
+    style={{ rotate: rotation }}
       initial={{ rotate: 0 }}
       animate={controls}
       onMouseEnter={handleHoverStart}
