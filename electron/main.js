@@ -8,10 +8,16 @@ const {
   desktopCapturer,
   systemPreferences,
   shell,
+  nativeImage,
 } = require('electron')
+const fs = require('fs/promises')
 const path = require('path')
+const { execFile } = require('child_process')
+const { promisify } = require('util')
 const { registerResearchAgentIpc } = require('./research-agent/ipc')
 const { registerTranscriptionIpc } = require('./transcription')
+
+const execFileAsync = promisify(execFile)
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 
@@ -23,6 +29,126 @@ if (process.platform === 'darwin') {
 let mainWindow
 let transcriptionController = null
 let overlayInteractive = false
+
+function getScreenshotDirectory() {
+  return path.resolve(app.getAppPath(), 'imgs')
+}
+
+function getScreenshotFilePath() {
+  const timestamp = new Date().toISOString().replace(/[.:]/g, '-')
+  return path.join(getScreenshotDirectory(), `shot-${timestamp}.png`)
+}
+
+function getMacOSScreenshotHelperSourcePath() {
+  return path.join(__dirname, 'capture-excluding-overlay.swift')
+}
+
+function getMacOSScreenshotHelperBinaryPath() {
+  return path.join(app.getPath('userData'), 'bin', 'capture-excluding-overlay')
+}
+
+function getOverlayWindowId() {
+  const mediaSourceId = mainWindow?.getMediaSourceId?.()
+  const match = /^window:(\d+):/.exec(String(mediaSourceId || ''))
+  return match ? match[1] : null
+}
+
+async function ensureMacOSScreenshotHelper() {
+  const sourcePath = getMacOSScreenshotHelperSourcePath()
+  const binaryPath = getMacOSScreenshotHelperBinaryPath()
+
+  const [sourceStats, binaryStats] = await Promise.all([
+    fs.stat(sourcePath),
+    fs.stat(binaryPath).catch(() => null),
+  ])
+
+  if (binaryStats && binaryStats.mtimeMs >= sourceStats.mtimeMs) {
+    return binaryPath
+  }
+
+  await fs.mkdir(path.dirname(binaryPath), { recursive: true })
+  await execFileAsync('/usr/bin/xcrun', ['swiftc', '-parse-as-library', sourcePath, '-o', binaryPath])
+  return binaryPath
+}
+
+async function readSavedScreenshot(filePath) {
+  const image = nativeImage.createFromPath(filePath)
+  if (image.isEmpty()) {
+    throw new Error('Saved screenshot is empty')
+  }
+
+  const { width, height } = image.getSize()
+  return {
+    ok: true,
+    dataUrl: image.toDataURL(),
+    filePath,
+    width,
+    height,
+  }
+}
+
+async function captureScreenshotExcludingOverlayMacOS(filePath) {
+  const helperPath = await ensureMacOSScreenshotHelper()
+  const displayId = String(screen.getPrimaryDisplay().id)
+  const overlayWindowId = getOverlayWindowId()
+
+  if (!overlayWindowId) {
+    throw new Error('Overlay window id is unavailable')
+  }
+
+  await fs.mkdir(path.dirname(filePath), { recursive: true })
+  await execFileAsync(helperPath, [displayId, overlayWindowId, filePath])
+  return readSavedScreenshot(filePath)
+}
+
+async function captureScreenshotWithDesktopCapturer(filePath) {
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const wasVisible = mainWindow.isVisible()
+  const previousOpacity = mainWindow.getOpacity()
+
+  try {
+    if (wasVisible) {
+      mainWindow.setOpacity(0)
+      mainWindow.setIgnoreMouseEvents(true, { forward: true })
+      await delay(120)
+    }
+
+    const sources = await desktopCapturer.getSources({
+      types: ['screen'],
+      thumbnailSize: {
+        width: primaryDisplay.size.width,
+        height: primaryDisplay.size.height,
+      },
+    })
+
+    const source =
+      sources.find((item) => String(item.display_id) === String(primaryDisplay.id)) ||
+      sources[0]
+
+    if (!source || source.thumbnail.isEmpty()) {
+      throw new Error('No screen source available')
+    }
+
+    await fs.mkdir(path.dirname(filePath), { recursive: true })
+    await fs.writeFile(filePath, source.thumbnail.toPNG())
+
+    return {
+      ok: true,
+      dataUrl: source.thumbnail.toDataURL(),
+      filePath,
+      width: source.thumbnail.getSize().width,
+      height: source.thumbnail.getSize().height,
+    }
+  } finally {
+    if (wasVisible) {
+      mainWindow.setOpacity(previousOpacity)
+      if (!mainWindow.isVisible()) {
+        mainWindow.showInactive()
+      }
+      mainWindow.setIgnoreMouseEvents(!overlayInteractive, { forward: true })
+    }
+  }
+}
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -313,50 +439,20 @@ ipcMain.handle('screen:capture-screenshot', async () => {
     return { ok: false, error: 'Main window is unavailable' }
   }
 
-  const primaryDisplay = screen.getPrimaryDisplay()
-  const wasVisible = mainWindow.isVisible()
-  const previousOpacity = mainWindow.getOpacity()
-
   try {
-    if (wasVisible) {
-      mainWindow.setOpacity(0)
-      mainWindow.setIgnoreMouseEvents(true, { forward: true })
-      await delay(120)
+    const filePath = getScreenshotFilePath()
+    if (process.platform === 'darwin') {
+      try {
+        return await captureScreenshotExcludingOverlayMacOS(filePath)
+      } catch (error) {
+        console.warn('[screenshot] Native overlay exclusion failed, falling back to hidden-overlay capture:', error)
+      }
     }
 
-    const sources = await desktopCapturer.getSources({
-      types: ['screen'],
-      thumbnailSize: {
-        width: primaryDisplay.size.width,
-        height: primaryDisplay.size.height,
-      },
-    })
-
-    const source =
-      sources.find((item) => String(item.display_id) === String(primaryDisplay.id)) ||
-      sources[0]
-
-    if (!source || source.thumbnail.isEmpty()) {
-      return { ok: false, error: 'No screen source available' }
-    }
-
-    return {
-      ok: true,
-      dataUrl: source.thumbnail.toDataURL(),
-      width: source.thumbnail.getSize().width,
-      height: source.thumbnail.getSize().height,
-    }
+    return await captureScreenshotWithDesktopCapturer(filePath)
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to capture screenshot'
     return { ok: false, error: message }
-  } finally {
-    if (wasVisible) {
-      mainWindow.setOpacity(previousOpacity)
-      if (!mainWindow.isVisible()) {
-        mainWindow.showInactive()
-      }
-      mainWindow.setIgnoreMouseEvents(!overlayInteractive, { forward: true })
-    }
   }
 })
 
