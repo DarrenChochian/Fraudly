@@ -1,7 +1,16 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+const BUTTON_WIDTH = 52
+const BUTTON_HEIGHT = 52
 
 export default function App() {
   const [modalOpen, setModalOpen] = useState(false)
+
+  useEffect(() => {
+    if (!modalOpen && window.electronAPI?.setWindowMode) {
+      window.electronAPI.setWindowMode('button', BUTTON_WIDTH, BUTTON_HEIGHT)
+    }
+  }, [modalOpen])
 
   const handleOpen = () => {
     setModalOpen(true)
@@ -10,7 +19,7 @@ export default function App() {
 
   const handleClose = () => {
     setModalOpen(false)
-    window.electronAPI?.setWindowMode?.('button')
+    window.electronAPI?.setWindowMode?.('button', BUTTON_WIDTH, BUTTON_HEIGHT)
   }
 
   return (
@@ -19,7 +28,8 @@ export default function App() {
         <button
           type="button"
           onClick={handleOpen}
-          className="w-[52px] h-[52px] text-sm font-semibold text-white bg-[#ff5aa8] border-0 rounded-xl cursor-pointer shadow-[0_4px_20px_rgba(255,90,168,0.4)] transition-transform hover:bg-[#ff8ec8] hover:scale-105 active:scale-95 shrink-0"
+          style={{ width: BUTTON_WIDTH, height: BUTTON_HEIGHT }}
+          className="text-sm font-semibold text-white bg-[#ff5aa8] border-0 rounded-xl cursor-pointer shadow-[0_4px_20px_rgba(255,90,168,0.4)] transition-transform hover:bg-[#ff8ec8] hover:scale-105 active:scale-95 shrink-0"
           title="Open"
         >
           Open

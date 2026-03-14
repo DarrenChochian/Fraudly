@@ -3,18 +3,18 @@ const path = require('path')
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 
-const BUTTON_SIZE = 52
 const PADDING = 10
 /** Modal size as decimal of screen (e.g. 0.8 = 80% of work area width and height) */
 const MODAL_SCREEN_PERCENT = 0.8
 
-function getButtonBounds() {
+/** Position a window of the given size at the top-right of the work area with padding. */
+function getButtonBounds(width, height) {
   const work = screen.getPrimaryDisplay().workArea
   return {
-    x: work.x + work.width - BUTTON_SIZE - PADDING,
+    x: work.x + work.width - width - PADDING,
     y: work.y + PADDING,
-    width: BUTTON_SIZE,
-    height: BUTTON_SIZE,
+    width,
+    height,
   }
 }
 
@@ -31,7 +31,9 @@ function getModalBounds() {
 }
 
 function createWindow() {
-  const bounds = getButtonBounds()
+  const initialWidth = 52
+  const initialHeight = 52
+  const bounds = getButtonBounds(initialWidth, initialHeight)
 
   const mainWindow = new BrowserWindow({
     ...bounds,
@@ -58,10 +60,17 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
 
-  ipcMain.handle('set-window-mode', (_, mode) => {
+  ipcMain.handle('set-window-mode', (_, mode, width, height) => {
     if (mainWindow.isDestroyed()) return
-    const bounds = mode === 'modal' ? getModalBounds() : getButtonBounds()
-    mainWindow.setBounds(bounds)
+    if (mode === 'modal') {
+      mainWindow.setBounds(getModalBounds())
+    } else {
+      const w = Number(width)
+      const h = Number(height)
+      if (Number.isFinite(w) && Number.isFinite(h)) {
+        mainWindow.setBounds(getButtonBounds(w, h))
+      }
+    }
   })
 }
 
