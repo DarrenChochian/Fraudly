@@ -33,16 +33,29 @@ function registerResearchAgentIpc({ ipcMain, projectRoot, userDataPath }) {
     return services
   }
 
+  ipcMain.handle('research:initialize-chats', async (_, payload) => {
+    const chatIds = Array.isArray(payload?.chatIds) ? payload.chatIds : []
+    return getServices().researchLoop.initializeChats({
+      chatIds,
+      onEvent: () => {},
+    })
+  })
+
   ipcMain.handle('research:run', async (event, payload) => {
     const prompt = payload?.prompt
+    const chatId = String(payload?.chatId || '').trim()
     if (!prompt || typeof prompt !== 'string') {
       throw new Error('Prompt is required')
+    }
+    if (!chatId) {
+      throw new Error('chatId is required')
     }
 
     const runId = crypto.randomUUID()
     const sendEvent = (data) => {
       event.sender.send('research:event', {
         ...data,
+        chatId,
         runId,
         ts: new Date().toISOString(),
       })
@@ -52,6 +65,7 @@ function registerResearchAgentIpc({ ipcMain, projectRoot, userDataPath }) {
 
     try {
       const result = await getServices().researchLoop.run({
+        chatId,
         prompt,
         runId,
         onEvent: sendEvent,

@@ -19,28 +19,88 @@ const PINK_GLOW = 'rgba(255, 90, 168, 0.25)'
 const BORDER_PINK = 'rgba(255, 90, 168, 0.4)'
 const BG_PANEL = 'rgba(10, 10, 12, 0.5)'
 
-const placeholderHistory = [
-  { id: '1', title: 'Chat 1', preview: 'Last message...' },
-  { id: '2', title: 'Chat 2', preview: 'Another message' },
-  { id: '3', title: 'Chat 3', preview: 'Preview text' },
+const CHAT_DEFINITIONS = [
+  { id: '1', title: 'Chat 1' },
+  { id: '2', title: 'Chat 2' },
+  { id: '3', title: 'Chat 3' },
 ]
 
-const initialMessagesForChat = (chatId) => [
-  { id: `${chatId}-welcome`, role: 'assistant', text: 'Hello! How can I help you today?' },
-]
+const CHAT_IDS = CHAT_DEFINITIONS.map((chat) => chat.id)
+
+function createMessageId(prefix = 'msg') {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+function truncate(text, max = 90) {
+  const value = String(text ?? '')
+  return value.length > max ? `${value.slice(0, max - 1)}…` : value
+}
+
+function initialMessagesForChat(chatId) {
+  return [
+    {
+      id: `${chatId}-welcome`,
+      type: 'text',
+      role: 'assistant',
+      text: 'Hello! How can I help you today?',
+    },
+  ]
+}
+
+function buildInitialChatMessages() {
+  return Object.fromEntries(CHAT_DEFINITIONS.map((chat) => [chat.id, initialMessagesForChat(chat.id)]))
+}
+
+function statusStyles(status) {
+  if (status === 'success') {
+    return {
+      borderColor: 'rgba(34, 197, 94, 0.35)',
+      textColor: 'rgb(134 239 172)',
+      badgeBg: 'rgba(34, 197, 94, 0.15)',
+      badgeText: 'rgb(134 239 172)',
+    }
+  }
+  if (status === 'error') {
+    return {
+      borderColor: 'rgba(239, 68, 68, 0.4)',
+      textColor: 'rgb(252 165 165)',
+      badgeBg: 'rgba(239, 68, 68, 0.15)',
+      badgeText: 'rgb(252 165 165)',
+    }
+  }
+  return {
+    borderColor: 'rgba(255, 90, 168, 0.45)',
+    textColor: PINK_LIGHT,
+    badgeBg: 'rgba(255, 90, 168, 0.15)',
+    badgeText: PINK_LIGHT,
+  }
+}
+
+function previewForHistory(message) {
+  if (!message) return 'No activity yet'
+  if (message.type === 'tool') {
+    return `${message.toolName || 'tool'} (${message.status || 'running'}) • ${message.argsPreview || 'no args'}`
+  }
+  return message.text || 'No activity yet'
+}
+
+function toolEntryIdFromEvent(payload) {
+  const runId = payload?.runId || 'run'
+  const toolCallId = payload?.toolCallId || `${payload?.toolName || 'tool'}-${payload?.argsPreview || 'args'}`
+  return `tool-${runId}-${toolCallId}`
+}
 
 export default function App() {
   const [modalOpen, setModalOpen] = useState(false)
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
   const [isListening, setIsListening] = useState(false)
-  const [chatMessages, setChatMessages] = useState(() =>
-    Object.fromEntries(placeholderHistory.map((c) => [c.id, initialMessagesForChat(c.id)]))
-  )
+  const [chatMessages, setChatMessages] = useState(() => buildInitialChatMessages())
   const [input, setInput] = useState('')
   const [selectedChatId, setSelectedChatId] = useState(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [hotkey, setHotkey] = useState('Alt+K')
   const [mainPanelHotkey, setMainPanelHotkey] = useState('Alt+L')
+  const [runningByChat, setRunningByChat] = useState({})
   const interactiveHoverCountRef = useRef(0)
 
   useEffect(() => {
@@ -75,8 +135,23 @@ export default function App() {
     }
   }
 
+  const appendMessage = (chatId, message) => {
+    setChatMessages((prev) => ({
+      ...prev,
+      [chatId]: [...(prev[chatId] || []), message],
+    }))
+  }
+
+  const toggleToolCard = (chatId, messageId) => {
+    setChatMessages((prev) => ({
+      ...prev,
+      [chatId]: (prev[chatId] || []).map((message) =>
+        message.id === messageId ? { ...message, expanded: !message.expanded } : message,
+      ),
+    }))
+  }
+
   useEffect(() => {
-    // Default to click-through; interactive regions opt in on hover.
     setOverlayInteractivity(false)
     return () => setOverlayInteractivity(false)
   }, [])
@@ -96,7 +171,7 @@ export default function App() {
           setSelectedChatId(null)
           resetOverlayInteractivity()
         } else {
-          setSelectedChatId(placeholderHistory[0]?.id ?? null)
+          setSelectedChatId(CHAT_DEFINITIONS[0]?.id ?? null)
         }
         return !prev
       })
@@ -104,6 +179,92 @@ export default function App() {
     return () => {
       unsubSettings?.()
       unsubMainPanel?.()
+    }
+  }, [])
+
+  useEffect(() => {
+    window.electronAPI
+      ?.initializeResearchChats?.(CHAT_IDS)
+      .catch((error) => console.error('Failed to initialize research chats:', error))
+  }, [])
+
+  useEffect(() => {
+    const unsubscribe = window.electronAPI?.onResearchEvent?.((payload) => {
+      const chatId = String(payload?.chatId || '').trim()
+      if (!chatId) return
+
+      if (payload.type === 'tool_call_started' || payload.type === 'tool_call_finished') {
+        setChatMessages((prev) => {
+          const nextChatMessages = [...(prev[chatId] || [])]
+          const messageId = toolEntryIdFromEvent(payload)
+          const existingIndex = nextChatMessages.findIndex((message) => message.id === messageId)
+          const existing = existingIndex >= 0 ? nextChatMessages[existingIndex] : null
+
+          const nextMessage = {
+            id: messageId,
+            type: 'tool',
+            role: 'assistant',
+            toolCallId: payload.toolCallId || '',
+            toolName: payload.toolName || 'tool',
+            argsPreview: payload.argsPreview || existing?.argsPreview || 'no args',
+            status:
+              payload.status || (payload.type === 'tool_call_started' ? 'running' : existing?.status || 'success'),
+            outputPreview: payload.outputPreview || existing?.outputPreview || '',
+            error: payload.error || existing?.error || '',
+            expanded: existing?.expanded || false,
+          }
+
+          if (existingIndex >= 0) {
+            nextChatMessages[existingIndex] = nextMessage
+          } else {
+            nextChatMessages.push(nextMessage)
+          }
+
+          return {
+            ...prev,
+            [chatId]: nextChatMessages,
+          }
+        })
+      } else if (payload.type === 'started' || payload.type === 'progress') {
+        appendMessage(chatId, {
+          id: createMessageId('progress'),
+          type: 'progress',
+          role: 'assistant',
+          text: payload.message || 'Working...',
+        })
+      } else if (payload.type === 'completed') {
+        if (payload.summary) {
+          appendMessage(chatId, {
+            id: createMessageId('assistant'),
+            type: 'text',
+            role: 'assistant',
+            text: payload.summary,
+          })
+        }
+        setRunningByChat((prev) => {
+          const next = { ...prev }
+          delete next[chatId]
+          return next
+        })
+      } else if (payload.type === 'error') {
+        appendMessage(chatId, {
+          id: createMessageId('error'),
+          type: 'text',
+          role: 'assistant',
+          text: `Research failed: ${payload.message || 'Unknown error'}`,
+        })
+        setRunningByChat((prev) => {
+          const next = { ...prev }
+          delete next[chatId]
+          return next
+        })
+      }
+    })
+
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe()
+      }
     }
   }, [])
 
@@ -124,25 +285,67 @@ export default function App() {
       return
     }
     setModalOpen(true)
-    setSelectedChatId(placeholderHistory[0]?.id ?? null)
+    setSelectedChatId(CHAT_DEFINITIONS[0]?.id ?? null)
   }
 
-  const handleSend = (e) => {
-    e.preventDefault()
-    if (!input.trim() || !selectedChatId) return
+  const handleSend = async (event) => {
+    event.preventDefault()
+
+    const chatId = selectedChatId
     const text = input.trim()
+    if (!chatId || !text || runningByChat[chatId]) return
+
     setInput('')
-    setChatMessages((prev) => ({
+    appendMessage(chatId, {
+      id: createMessageId('user'),
+      type: 'text',
+      role: 'user',
+      text,
+    })
+
+    if (!window.electronAPI?.runResearch) {
+      appendMessage(chatId, {
+        id: createMessageId('error'),
+        type: 'text',
+        role: 'assistant',
+        text: 'Research backend is unavailable.',
+      })
+      return
+    }
+
+    setRunningByChat((prev) => ({
       ...prev,
-      [selectedChatId]: [...(prev[selectedChatId] || []), { id: Date.now(), role: 'user', text }],
+      [chatId]: true,
     }))
+
+    try {
+      await window.electronAPI.runResearch({
+        chatId,
+        prompt: text,
+      })
+    } catch {
+      setRunningByChat((prev) => {
+        const next = { ...prev }
+        delete next[chatId]
+        return next
+      })
+    }
   }
+
+  const historyWithPreview = CHAT_DEFINITIONS.map((chat) => {
+    const messagesForChat = chatMessages[chat.id] || []
+    const lastMessage = messagesForChat[messagesForChat.length - 1]
+    return {
+      ...chat,
+      preview: truncate(previewForHistory(lastMessage)),
+    }
+  })
 
   const messages = selectedChatId ? (chatMessages[selectedChatId] || []) : []
+  const selectedChatIsRunning = selectedChatId ? Boolean(runningByChat[selectedChatId]) : false
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
-      {/* FRAUDLY button - top right, always visible */}
       <button
         type="button"
         onClick={handleToggle}
@@ -157,12 +360,7 @@ export default function App() {
         className="overlay-interactive absolute top-5 right-5 text-sm font-semibold text-white border-0 rounded-xl cursor-pointer transition-transform hover:scale-105 active:scale-95 z-20"
         title={modalOpen ? `Close (${mainPanelHotkey})` : `Open (${mainPanelHotkey})`}
       >
-        <CircularText
-          text="FRAUDLY"
-          onHover="speedUp"
-          spinDuration={20}
-          className="custom-class"
-        />
+        <CircularText text="FRAUDLY" onHover="speedUp" spinDuration={20} className="custom-class" />
       </button>
 
       {/* Settings gear button - below FRAUDLY button */}
@@ -185,7 +383,6 @@ export default function App() {
 
       {modalOpen && (
         <>
-          {/* Transcribe button - top center */}
           <button
             type="button"
             onClick={() => setIsListening((v) => !v)}
@@ -207,23 +404,18 @@ export default function App() {
                 </span>
                 <div className="flex items-center gap-2 shrink-0">
                   <WaveformIcon className="w-5 h-5 text-white animate-pulse" />
-                  <span className="text-sm font-medium text-white whitespace-nowrap">
-                    Listening…
-                  </span>
+                  <span className="text-sm font-medium text-white whitespace-nowrap">Listening…</span>
                 </div>
               </>
             ) : (
               <>
                 <WaveformIcon className="w-5 h-5 text-white flex-shrink-0" />
-                <span className="text-sm font-medium text-white whitespace-nowrap">
-                  Start listening
-                </span>
+                <span className="text-sm font-medium text-white whitespace-nowrap">Start listening</span>
               </>
             )}
           </button>
 
           <div className="absolute left-4 top-24 bottom-4 flex items-stretch gap-6 z-10">
-            {/* History - left side */}
             <div
               onMouseEnter={handleInteractiveEnter}
               onMouseLeave={handleInteractiveLeave}
@@ -249,23 +441,22 @@ export default function App() {
                   className="flex items-center justify-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:opacity-90 transition-opacity shrink-0"
                   style={{ color: PINK_LIGHT }}
                 >
-                  <span className="text-sm font-medium">
-                    {sidebarExpanded ? '◀ History' : '▶'}
-                  </span>
+                  <span className="text-sm font-medium">{sidebarExpanded ? '◀ History' : '▶'}</span>
                 </button>
                 <button
                   type="button"
-                    onClick={handleOverlayClose}
+                  onClick={handleOverlayClose}
                   className="w-7 h-7 p-0 flex items-center justify-center rounded cursor-pointer hover:opacity-90 transition-opacity shrink-0"
                   style={{ color: PINK_LIGHT }}
-                    title="Close overlay"
+                  title="Close overlay"
                 >
                   ×
                 </button>
               </div>
+
               {sidebarExpanded && (
                 <div className="flex-1 overflow-y-auto p-2 space-y-1 min-h-0">
-                  {placeholderHistory.map((chat) => (
+                  {historyWithPreview.map((chat) => (
                     <button
                       key={chat.id}
                       type="button"
@@ -277,9 +468,7 @@ export default function App() {
                       }`}
                       style={{
                         backgroundColor:
-                          selectedChatId === chat.id
-                            ? 'rgba(255, 90, 168, 0.12)'
-                            : 'transparent',
+                          selectedChatId === chat.id ? 'rgba(255, 90, 168, 0.12)' : 'transparent',
                         color: selectedChatId === chat.id ? PINK_LIGHT : 'rgba(255,255,255,0.7)',
                       }}
                     >
@@ -291,7 +480,6 @@ export default function App() {
               )}
             </div>
 
-            {/* Chat panel - beside history */}
             {selectedChatId && (
               <div
                 onMouseEnter={handleInteractiveEnter}
@@ -320,36 +508,103 @@ export default function App() {
                     ×
                   </button>
                 </div>
-                <div
-                  className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.15)' }}
-                >
-                  {messages.map((m) => (
-                    <div
-                      key={m.id}
-                      className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
+
+                <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0" style={{ backgroundColor: 'rgba(0,0,0,0.15)' }}>
+                  {messages.map((message) => {
+                    if (message.type === 'progress') {
+                      return (
+                        <div key={message.id} className="flex justify-start">
+                          <div
+                            className="max-w-[95%] rounded-lg px-3 py-2 border text-xs"
+                            style={{
+                              backgroundColor: 'rgba(255,255,255,0.04)',
+                              borderColor: 'rgba(255,255,255,0.1)',
+                              color: 'rgba(226, 232, 240, 0.9)',
+                            }}
+                          >
+                            {message.text}
+                          </div>
+                        </div>
+                      )
+                    }
+
+                    if (message.type === 'tool') {
+                      const style = statusStyles(message.status)
+                      return (
+                        <div key={message.id} className="flex justify-start">
+                          <div
+                            className="w-full max-w-[95%] rounded-xl border overflow-hidden"
+                            style={{
+                              borderColor: style.borderColor,
+                              backgroundColor: 'rgba(255,255,255,0.03)',
+                            }}
+                          >
+                            <button
+                              type="button"
+                              onClick={() => toggleToolCard(selectedChatId, message.id)}
+                              className="w-full px-3 py-2 text-left flex items-start gap-2 cursor-pointer"
+                              style={{ color: '#e2e8f0' }}
+                            >
+                              <span className="text-xs mt-0.5" style={{ color: style.textColor }}>
+                                {message.expanded ? '▾' : '▸'}
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <div className="text-xs font-semibold truncate" style={{ color: style.textColor }}>
+                                  {message.toolName || 'tool'}
+                                </div>
+                                <div className="text-xs opacity-85 truncate">{message.argsPreview || 'no args'}</div>
+                              </div>
+                              <span
+                                className="text-[10px] px-2 py-1 rounded-full shrink-0 uppercase"
+                                style={{
+                                  backgroundColor: style.badgeBg,
+                                  color: style.badgeText,
+                                }}
+                              >
+                                {message.status || 'running'}
+                              </span>
+                            </button>
+
+                            {message.expanded && (
+                              <div
+                                className="px-3 py-2 border-t text-xs whitespace-pre-wrap"
+                                style={{
+                                  borderColor: 'rgba(255,255,255,0.08)',
+                                  color: 'rgba(226, 232, 240, 0.92)',
+                                }}
+                              >
+                                {message.error || message.outputPreview || 'No output preview'}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    }
+
+                    return (
                       <div
-                        className={`max-w-[85%] rounded-2xl px-4 py-2.5 border ${
-                          m.role === 'user' ? 'rounded-br-md' : 'rounded-bl-md'
-                        }`}
-                        style={{
-                          backgroundColor:
-                            m.role === 'user'
-                              ? 'rgba(255, 90, 168, 0.2)'
-                              : 'rgba(255,255,255,0.06)',
-                          borderColor:
-                            m.role === 'user'
-                              ? 'rgba(255, 90, 168, 0.4)'
-                              : 'rgba(255,255,255,0.1)',
-                          color: '#e2e8f0',
-                        }}
+                        key={message.id}
+                        className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
-                        <span className="text-sm">{m.text}</span>
+                        <div
+                          className={`max-w-[85%] rounded-2xl px-4 py-2.5 border ${
+                            message.role === 'user' ? 'rounded-br-md' : 'rounded-bl-md'
+                          }`}
+                          style={{
+                            backgroundColor:
+                              message.role === 'user' ? 'rgba(255, 90, 168, 0.2)' : 'rgba(255,255,255,0.06)',
+                            borderColor:
+                              message.role === 'user' ? 'rgba(255, 90, 168, 0.4)' : 'rgba(255,255,255,0.1)',
+                            color: '#e2e8f0',
+                          }}
+                        >
+                          <span className="text-sm whitespace-pre-wrap">{message.text}</span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
+
                 <form
                   onSubmit={handleSend}
                   className="p-4 border-t shrink-0"
@@ -358,23 +613,22 @@ export default function App() {
                     borderColor: 'rgba(255, 90, 168, 0.25)',
                   }}
                 >
-                  <div
-                    className="flex gap-2 rounded-xl border overflow-hidden"
-                    style={{ borderColor: 'rgba(255, 90, 168, 0.3)' }}
-                  >
+                  <div className="flex gap-2 rounded-xl border overflow-hidden" style={{ borderColor: 'rgba(255, 90, 168, 0.3)' }}>
                     <input
                       type="text"
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
-                      placeholder="Type a message..."
-                      className="flex-1 min-w-0 px-4 py-3 text-sm text-white placeholder-zinc-500 bg-transparent border-0 outline-none"
+                      placeholder={selectedChatIsRunning ? 'Researching...' : 'Type a message...'}
+                      disabled={selectedChatIsRunning}
+                      className="flex-1 min-w-0 px-4 py-3 text-sm text-white placeholder-zinc-500 bg-transparent border-0 outline-none disabled:opacity-60"
                     />
                     <button
                       type="submit"
-                      className="px-4 py-3 text-sm font-medium text-white cursor-pointer transition-opacity hover:opacity-90"
+                      disabled={selectedChatIsRunning || !input.trim()}
+                      className="px-4 py-3 text-sm font-medium text-white cursor-pointer transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
                       style={{ backgroundColor: PINK }}
                     >
-                      Send
+                      {selectedChatIsRunning ? 'Running' : 'Send'}
                     </button>
                   </div>
                 </form>

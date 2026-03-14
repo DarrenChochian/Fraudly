@@ -3,7 +3,8 @@ const { contextBridge, ipcRenderer } = require('electron')
 contextBridge.exposeInMainWorld('electronAPI', {
   platform: process.platform,
   setOverlayInteractivity: (interactive) => ipcRenderer.send('overlay:set-interactive', interactive),
-  runResearch: (prompt) => ipcRenderer.invoke('research:run', { prompt }),
+  initializeResearchChats: (chatIds) => ipcRenderer.invoke('research:initialize-chats', { chatIds }),
+  runResearch: (payload) => ipcRenderer.invoke('research:run', payload),
   onResearchEvent: (callback) => {
     const listener = (_, payload) => callback(payload)
     ipcRenderer.on('research:event', listener)
