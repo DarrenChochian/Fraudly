@@ -1,0 +1,29 @@
+***
+
+title: Multilingual Voice Agents
+subtitle: Learn the best ways to build a multilingual voice agent.
+slug: docs/multilingual-voice-agent
+-----------------------------------
+
+Learn the best way to support a multi-lingual voice agent through Deepgram.
+
+# Select a multilingual speech-to-text (STT) model.
+
+In order to have a fully multi-lingual agent, you need to select a multi-lingual speech-to-text model and specify the appropriate language. Today, you should specify the following parameters in your [Settings](/docs/voice-agent-settings).
+
+* `agent.listen.provider.model` : `nova-3`
+* `agent.listen.provider.language` : `multi`
+
+# Select a multilingual text-to-speech (TTS) provider.
+
+OpenAI, Eleven Labs, and Cartesia have multi-lingual language models. Select one of those providers and use `agent.speak.provider.language` as multi. For Eleven Labs, this parameter aligns to their `language_code`.
+
+# Prompt Recommendations
+
+Prompt design can help adjust the agent's behavior depending on your expected use case. Results may vary depending on the LLM provider you use.
+
+| Use Case                                                                                                                                                  | Recommendation                                                                                                                                                        |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Mirroring conversation that switches back and forth between two languages (e.g. English > Spanish > English).                                             | To more reliably mirror the end user's language, provid eexplicit per-turn language instructions (e.g. “match the language of each user message independently”).      |
+| Enforce an agent to speak a single language (e.g. English) , even if a user speaks a different language (e.g. Spanish).                                   | Use a strict English-only instruction in the prompt.                                                                                                                  |
+| Provide bilingual support where relevant (e.g. English input in English-speaking agents, Spanish input results in natural bilingual Spanish and English). | Specify conditional language mixing in the prompt, (e.g. “Respond in English unless the user speaks Spanish; if Spanish, you may mix Spanish and English naturally”). |

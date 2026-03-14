@@ -1,0 +1,595 @@
+# Single Text Request
+
+POST https://api.deepgram.com/v1/speak
+Content-Type: application/json
+
+Convert text into natural-sounding speech using Deepgram's TTS REST API
+
+Reference: https://developers.deepgram.com/reference/text-to-speech/speak-request
+
+## OpenAPI Specification
+
+```yaml
+openapi: 3.1.0
+info:
+  title: Deepgram API Specification
+  version: 1.0.0
+paths:
+  /v1/speak:
+    post:
+      operationId: generate
+      summary: Text to Speech transformation
+      description: Convert text into natural-sounding speech using Deepgram's TTS REST API
+      tags:
+        - subpackage_speak.subpackage_speak/v1.subpackage_speak/v1/audio
+      parameters:
+        - name: callback
+          in: query
+          description: URL to which we'll make the callback request
+          required: false
+          schema:
+            type: string
+        - name: callback_method
+          in: query
+          description: HTTP method by which the callback request will be made
+          required: false
+          schema:
+            $ref: '#/components/schemas/V1SpeakPostParametersCallbackMethod'
+        - name: mip_opt_out
+          in: query
+          description: >-
+            Opts out requests from the Deepgram Model Improvement Program. Refer
+            to our Docs for pricing impacts before setting this to true.
+            https://dpgr.am/deepgram-mip
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: tag
+          in: query
+          description: >-
+            Label your requests for the purpose of identification during usage
+            reporting
+          required: false
+          schema:
+            $ref: '#/components/schemas/V1SpeakPostParametersTag'
+        - name: bit_rate
+          in: query
+          description: >-
+            The bitrate of the audio in bits per second. Choose from predefined
+            ranges or specific values based on the encoding type.
+          required: false
+          schema:
+            $ref: '#/components/schemas/V1SpeakPostParametersBitRate'
+        - name: container
+          in: query
+          description: >-
+            Container specifies the file format wrapper for the output audio.
+            The available options depend on the encoding type.
+          required: false
+          schema:
+            $ref: '#/components/schemas/V1SpeakPostParametersContainer'
+        - name: encoding
+          in: query
+          description: >-
+            Encoding allows you to specify the expected encoding of your audio
+            output
+          required: false
+          schema:
+            $ref: '#/components/schemas/V1SpeakPostParametersEncoding'
+        - name: model
+          in: query
+          description: AI model used to process submitted text
+          required: false
+          schema:
+            $ref: '#/components/schemas/V1SpeakPostParametersModel'
+        - name: sample_rate
+          in: query
+          description: >-
+            Sample Rate specifies the sample rate for the output audio. Based on
+            the encoding, different sample rates are supported. For some
+            encodings, the sample rate is not configurable
+          required: false
+          schema:
+            $ref: '#/components/schemas/V1SpeakPostParametersSampleRate'
+        - name: Authorization
+          in: header
+          description: |
+            Use `Authorization: Token <API_KEY>`
+            Example: `Authorization: Token 12345abcdef`
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful text-to-speech transformation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/speak_v1_audio_generate_Response_200'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      requestBody:
+        description: Transform text to speech
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpeakV1Request'
+servers:
+  - url: https://api.deepgram.com
+  - url: https://agent.deepgram.com
+components:
+  schemas:
+    V1SpeakPostParametersCallbackMethod:
+      type: string
+      enum:
+        - POST
+        - PUT
+      default: POST
+      title: V1SpeakPostParametersCallbackMethod
+    V1SpeakPostParametersTag:
+      oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
+      title: V1SpeakPostParametersTag
+    V1SpeakPostParametersBitRate0:
+      type: string
+      enum:
+        - '32000'
+        - '48000'
+      description: Encoding - mp3(default). Supported bitrates - 32000, 48000(default) bps.
+      title: V1SpeakPostParametersBitRate0
+    V1SpeakPostParametersBitRate:
+      oneOf:
+        - $ref: '#/components/schemas/V1SpeakPostParametersBitRate0'
+        - type: number
+          format: double
+        - type: number
+          format: double
+      title: V1SpeakPostParametersBitRate
+    V1SpeakPostParametersContainer0:
+      type: string
+      enum:
+        - none
+      description: No container.
+      title: V1SpeakPostParametersContainer0
+    V1SpeakPostParametersContainer1:
+      type: string
+      enum:
+        - wav
+      description: >-
+        Encoding - linear16. Supported container - wav (default), or no
+        container.
+      title: V1SpeakPostParametersContainer1
+    V1SpeakPostParametersContainer2:
+      type: string
+      enum:
+        - wav
+      description: Encoding - mulaw. Supported container - wav (default), or no container.
+      title: V1SpeakPostParametersContainer2
+    V1SpeakPostParametersContainer3:
+      type: string
+      enum:
+        - wav
+      description: Encoding - alaw. Supported container - wav (default), or no container.
+      title: V1SpeakPostParametersContainer3
+    V1SpeakPostParametersContainer4:
+      type: string
+      enum:
+        - ogg
+      description: Encoding - opus. Supported container - ogg (default).
+      title: V1SpeakPostParametersContainer4
+    V1SpeakPostParametersContainer:
+      oneOf:
+        - $ref: '#/components/schemas/V1SpeakPostParametersContainer0'
+        - $ref: '#/components/schemas/V1SpeakPostParametersContainer1'
+        - $ref: '#/components/schemas/V1SpeakPostParametersContainer2'
+        - $ref: '#/components/schemas/V1SpeakPostParametersContainer3'
+        - $ref: '#/components/schemas/V1SpeakPostParametersContainer4'
+      title: V1SpeakPostParametersContainer
+    V1SpeakPostParametersEncoding0:
+      type: string
+      enum:
+        - linear16
+      description: >-
+        Encoding - linear16. Uncompressed, high-quality audio format often used
+        for telephony or audio processing.
+      title: V1SpeakPostParametersEncoding0
+    V1SpeakPostParametersEncoding1:
+      type: string
+      enum:
+        - flac
+      description: Encoding - flac. Lossless audio format for high-quality compression.
+      title: V1SpeakPostParametersEncoding1
+    V1SpeakPostParametersEncoding2:
+      type: string
+      enum:
+        - mulaw
+      description: Encoding - mulaw. Compressed audio format commonly used in telephony.
+      title: V1SpeakPostParametersEncoding2
+    V1SpeakPostParametersEncoding3:
+      type: string
+      enum:
+        - alaw
+      description: Encoding - alaw. Similar to mulaw but used in international telephony.
+      title: V1SpeakPostParametersEncoding3
+    V1SpeakPostParametersEncoding4:
+      type: string
+      enum:
+        - mp3
+      description: Encoding - mp3. Popular compressed audio format for music and streaming.
+      title: V1SpeakPostParametersEncoding4
+    V1SpeakPostParametersEncoding5:
+      type: string
+      enum:
+        - opus
+      description: >-
+        Encoding - opus. High-compression audio format optimized for real-time
+        communications.
+      title: V1SpeakPostParametersEncoding5
+    V1SpeakPostParametersEncoding6:
+      type: string
+      enum:
+        - aac
+      description: >-
+        Encoding - aac. Advanced audio format offering better quality at smaller
+        file sizes than mp3.
+      title: V1SpeakPostParametersEncoding6
+    V1SpeakPostParametersEncoding:
+      oneOf:
+        - $ref: '#/components/schemas/V1SpeakPostParametersEncoding0'
+        - $ref: '#/components/schemas/V1SpeakPostParametersEncoding1'
+        - $ref: '#/components/schemas/V1SpeakPostParametersEncoding2'
+        - $ref: '#/components/schemas/V1SpeakPostParametersEncoding3'
+        - $ref: '#/components/schemas/V1SpeakPostParametersEncoding4'
+        - $ref: '#/components/schemas/V1SpeakPostParametersEncoding5'
+        - $ref: '#/components/schemas/V1SpeakPostParametersEncoding6'
+      title: V1SpeakPostParametersEncoding
+    V1SpeakPostParametersModel:
+      type: string
+      enum:
+        - aura-asteria-en
+        - aura-luna-en
+        - aura-stella-en
+        - aura-athena-en
+        - aura-hera-en
+        - aura-orion-en
+        - aura-arcas-en
+        - aura-perseus-en
+        - aura-angus-en
+        - aura-orpheus-en
+        - aura-helios-en
+        - aura-zeus-en
+        - aura-2-amalthea-en
+        - aura-2-andromeda-en
+        - aura-2-apollo-en
+        - aura-2-arcas-en
+        - aura-2-aries-en
+        - aura-2-asteria-en
+        - aura-2-athena-en
+        - aura-2-atlas-en
+        - aura-2-aurora-en
+        - aura-2-callista-en
+        - aura-2-cordelia-en
+        - aura-2-cora-en
+        - aura-2-delia-en
+        - aura-2-draco-en
+        - aura-2-electra-en
+        - aura-2-harmonia-en
+        - aura-2-helena-en
+        - aura-2-hera-en
+        - aura-2-hermes-en
+        - aura-2-hyperion-en
+        - aura-2-iris-en
+        - aura-2-janus-en
+        - aura-2-juno-en
+        - aura-2-jupiter-en
+        - aura-2-luna-en
+        - aura-2-mars-en
+        - aura-2-minerva-en
+        - aura-2-neptune-en
+        - aura-2-odysseus-en
+        - aura-2-ophelia-en
+        - aura-2-orion-en
+        - aura-2-orpheus-en
+        - aura-2-pandora-en
+        - aura-2-phoebe-en
+        - aura-2-pluto-en
+        - aura-2-saturn-en
+        - aura-2-selene-en
+        - aura-2-thalia-en
+        - aura-2-theia-en
+        - aura-2-vesta-en
+        - aura-2-zeus-en
+        - aura-2-sirio-es
+        - aura-2-nestor-es
+        - aura-2-carina-es
+        - aura-2-celeste-es
+        - aura-2-alvaro-es
+        - aura-2-diana-es
+        - aura-2-aquila-es
+        - aura-2-selena-es
+        - aura-2-estrella-es
+        - aura-2-javier-es
+      default: aura-asteria-en
+      title: V1SpeakPostParametersModel
+    V1SpeakPostParametersSampleRate0:
+      type: string
+      enum:
+        - '8000'
+        - '16000'
+        - '24000'
+        - '32000'
+        - '48000'
+      description: >-
+        Encoding - linear16. Supported sample rates - 8000, 16000, 24000, 32000,
+        48000 Hz.
+      title: V1SpeakPostParametersSampleRate0
+    V1SpeakPostParametersSampleRate1:
+      type: string
+      enum:
+        - '8000'
+        - '16000'
+      description: Encoding - mulaw. Supported sample rates - 8000, 16000 Hz.
+      title: V1SpeakPostParametersSampleRate1
+    V1SpeakPostParametersSampleRate2:
+      type: string
+      enum:
+        - '8000'
+        - '16000'
+      description: Encoding - alaw. Supported sample rates - 8000, 16000 Hz.
+      title: V1SpeakPostParametersSampleRate2
+    V1SpeakPostParametersSampleRate3:
+      type: string
+      enum:
+        - '22050'
+      description: Encoding - mp3. Sample rate is fixed and not configurable (22050 Hz).
+      title: V1SpeakPostParametersSampleRate3
+    V1SpeakPostParametersSampleRate4:
+      type: string
+      enum:
+        - '48000'
+      description: Encoding - opus. Sample rate is fixed at 48000 Hz.
+      title: V1SpeakPostParametersSampleRate4
+    V1SpeakPostParametersSampleRate:
+      oneOf:
+        - $ref: '#/components/schemas/V1SpeakPostParametersSampleRate0'
+        - $ref: '#/components/schemas/V1SpeakPostParametersSampleRate1'
+        - $ref: '#/components/schemas/V1SpeakPostParametersSampleRate2'
+        - $ref: '#/components/schemas/V1SpeakPostParametersSampleRate3'
+        - $ref: '#/components/schemas/V1SpeakPostParametersSampleRate4'
+      title: V1SpeakPostParametersSampleRate
+    SpeakV1Request:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The text content to be converted to speech
+      required:
+        - text
+      description: Request body for text-to-speech conversion
+      title: SpeakV1Request
+    speak_v1_audio_generate_Response_200:
+      type: object
+      properties: {}
+      description: Empty response body
+      title: speak_v1_audio_generate_Response_200
+    ErrorResponseTextError:
+      type: string
+      title: ErrorResponseTextError
+    ErrorResponseLegacyError:
+      type: object
+      properties:
+        err_code:
+          type: string
+          description: The error code
+        err_msg:
+          type: string
+          description: The error message
+        request_id:
+          type: string
+          description: The request ID
+      title: ErrorResponseLegacyError
+    ErrorResponseModernError:
+      type: object
+      properties:
+        category:
+          type: string
+          description: The category of the error
+        message:
+          type: string
+          description: A message about the error
+        details:
+          type: string
+          description: A description of the error
+        request_id:
+          type: string
+          description: The unique identifier of the request
+      title: ErrorResponseModernError
+    ErrorResponse:
+      oneOf:
+        - $ref: '#/components/schemas/ErrorResponseTextError'
+        - $ref: '#/components/schemas/ErrorResponseLegacyError'
+        - $ref: '#/components/schemas/ErrorResponseModernError'
+      title: ErrorResponse
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: |
+        Use `Authorization: Token <API_KEY>`
+        Example: `Authorization: Token 12345abcdef`
+    JwtAuth:
+      type: http
+      scheme: bearer
+      description: |
+        Use `Authorization: Bearer <JWT>`
+        Example: `Authorization: Bearer eyJhbGciOiJ...`
+
+```
+
+## SDK Code Examples
+
+```python
+import requests
+
+url = "https://api.deepgram.com/v1/speak"
+
+querystring = {"model":"aura-2-thalia-en"}
+
+payload = { "text": "Hello, welcome to Deepgram!" }
+headers = {
+    "Authorization": "Token <apiKey>",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, json=payload, headers=headers, params=querystring)
+
+print(response.json())
+```
+
+```javascript
+const url = 'https://api.deepgram.com/v1/speak?model=aura-2-thalia-en';
+const options = {
+  method: 'POST',
+  headers: {Authorization: 'Token <apiKey>', 'Content-Type': 'application/json'},
+  body: '{"text":"Hello, welcome to Deepgram!"}'
+};
+
+try {
+  const response = await fetch(url, options);
+  const data = await response.json();
+  console.log(data);
+} catch (error) {
+  console.error(error);
+}
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"strings"
+	"net/http"
+	"io"
+)
+
+func main() {
+
+	url := "https://api.deepgram.com/v1/speak?model=aura-2-thalia-en"
+
+	payload := strings.NewReader("{\n  \"text\": \"Hello, welcome to Deepgram!\"\n}")
+
+	req, _ := http.NewRequest("POST", url, payload)
+
+	req.Header.Add("Authorization", "Token <apiKey>")
+	req.Header.Add("Content-Type", "application/json")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := io.ReadAll(res.Body)
+
+	fmt.Println(res)
+	fmt.Println(string(body))
+
+}
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+
+url = URI("https://api.deepgram.com/v1/speak?model=aura-2-thalia-en")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(url)
+request["Authorization"] = 'Token <apiKey>'
+request["Content-Type"] = 'application/json'
+request.body = "{\n  \"text\": \"Hello, welcome to Deepgram!\"\n}"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```java
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+
+HttpResponse<String> response = Unirest.post("https://api.deepgram.com/v1/speak?model=aura-2-thalia-en")
+  .header("Authorization", "Token <apiKey>")
+  .header("Content-Type", "application/json")
+  .body("{\n  \"text\": \"Hello, welcome to Deepgram!\"\n}")
+  .asString();
+```
+
+```php
+<?php
+require_once('vendor/autoload.php');
+
+$client = new \GuzzleHttp\Client();
+
+$response = $client->request('POST', 'https://api.deepgram.com/v1/speak?model=aura-2-thalia-en', [
+  'body' => '{
+  "text": "Hello, welcome to Deepgram!"
+}',
+  'headers' => [
+    'Authorization' => 'Token <apiKey>',
+    'Content-Type' => 'application/json',
+  ],
+]);
+
+echo $response->getBody();
+```
+
+```csharp
+using RestSharp;
+
+var client = new RestClient("https://api.deepgram.com/v1/speak?model=aura-2-thalia-en");
+var request = new RestRequest(Method.POST);
+request.AddHeader("Authorization", "Token <apiKey>");
+request.AddHeader("Content-Type", "application/json");
+request.AddParameter("application/json", "{\n  \"text\": \"Hello, welcome to Deepgram!\"\n}", ParameterType.RequestBody);
+IRestResponse response = client.Execute(request);
+```
+
+```swift
+import Foundation
+
+let headers = [
+  "Authorization": "Token <apiKey>",
+  "Content-Type": "application/json"
+]
+let parameters = ["text": "Hello, welcome to Deepgram!"] as [String : Any]
+
+let postData = JSONSerialization.data(withJSONObject: parameters, options: [])
+
+let request = NSMutableURLRequest(url: NSURL(string: "https://api.deepgram.com/v1/speak?model=aura-2-thalia-en")! as URL,
+                                        cachePolicy: .useProtocolCachePolicy,
+                                    timeoutInterval: 10.0)
+request.httpMethod = "POST"
+request.allHTTPHeaderFields = headers
+request.httpBody = postData as Data
+
+let session = URLSession.shared
+let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+  if (error != nil) {
+    print(error as Any)
+  } else {
+    let httpResponse = response as? HTTPURLResponse
+    print(httpResponse)
+  }
+})
+
+dataTask.resume()
+```

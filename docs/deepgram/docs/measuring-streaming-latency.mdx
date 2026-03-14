@@ -1,0 +1,152 @@
+***
+
+title: Measuring STT Latency
+subtitle: >-
+Learn how to measure and analyze latency in speech-to-text transcription using
+Deepgram.
+slug: docs/measuring-streaming-latency
+--------------------------------------
+
+This guide explains how to measure latency when using Deepgram's speech-to-text (STT) models for streaming transcription. Streaming latency is critical for real-time applications like voice agents and live captioning.
+
+There are two key latency metrics for streaming, and which one matters depends on your use case:
+
+* **Transcript latency**: How far behind the transcription is from the audio being sent. This is the primary metric for live captioning, real-time analytics, and call transcription.
+* **End-of-turn (EOT) latency**: The time from when a user stops speaking to when an EOT event is received. This is the critical metric for voice agent applications, where it directly determines how quickly your agent can begin responding.
+
+This guide covers how to measure both.
+
+<Info>
+  **Batch transcription** processes pre-recorded audio files and returns complete transcripts once processing finishes. For batch, throughput and turnaround time matter more than per-word latency. This guide focuses exclusively on streaming.
+</Info>
+
+## Understanding Latency Components
+
+Streaming latency is composed of several distinct components. Understanding each helps you identify bottlenecks.
+
+### Network Latency
+
+Network latency has two distinct parts:
+
+**Connection latency** is the one-time cost of establishing a WebSocket connection. It includes DNS resolution, TCP connection, TLS handshake, and WebSocket upgrade. This only affects the start of a session. The [network\_latency](https://github.com/deepgram/support-toolkit/tree/main/network_latency) tool breaks down connection latency into these components.
+
+**Per-message latency** is the ongoing cost of generating and sending transcripts during streaming. It includes network transit time in both directions plus server-side transcription processing time. The TCP connection time (reported by the `network_latency` tool) is a good approximation of the network transit portion of per-message latency.
+
+For a quick approximation of TCP round-trip time using cURL:
+
+<CodeGroup>
+  ```bash cURL
+  curl -sSf -w "latency: %{time_connect}\n" -so /dev/null https://api.deepgram.com
+  ```
+</CodeGroup>
+
+Physical distance, network infrastructure, firewalls, proxies, and VPNs all contribute to network transit time.
+
+### Transcription Latency
+
+Transcription latency is the time Deepgram's servers take to process audio and return results. Deepgram's models are optimized to deliver transcription latency in 300 milliseconds or less for streaming workloads.
+
+### Buffer Size
+
+The size of audio chunks you send affects latency. Larger buffers add built-in delay while audio accumulates before being sent. Smaller buffers reduce this delay but increase network overhead. Streaming buffer sizes should be between 20 and 100 milliseconds of audio.
+
+### Client-Side Processing
+
+Time spent encoding audio, managing WebSocket connections, and processing responses on your client also contributes to total latency. The programming language, runtime, and current system load all influence this.
+
+Audio encoding format can also have a minor impact — uncompressed formats like linear16 require no client-side encoding overhead, while compressed formats add processing time.
+
+## Model Considerations
+
+Deepgram offers different models and features optimized for different use cases. Latency characteristics can vary between them, with Flux being specifically designed for ultra-low latency voice agent workflows.
+
+### Nova-3
+
+Nova-3 is Deepgram's flagship STT model, delivering sub-300 ms streaming latency with industry-leading accuracy. It supports multilingual transcription and keyterm prompting. Nova-3 is well-suited for common streaming applications including live captioning, call transcription, and real-time analytics.
+
+### Flux
+
+[Flux is Deepgram's conversational speech recognition model](https://deepgram.com/learn/introducing-flux-conversational-speech-recognition), designed specifically for voice agents. It combines STT with integrated end-of-turn detection, eliminating the need for separate voice activity detection (VAD) pipelines. Flux can reduce agent response latency by 200–600 ms compared to traditional STT+VAD approaches by detecting turn endings earlier and more accurately.
+
+Both Nova-3 and Flux can be measured the same way for continuous transcript latency. The difference is that Flux provides additional events for turn detection, including `EndOfTurn` and `EagerEndOfTurn`. For voice agent applications, the key metric is often the time from when the user stops speaking to when an `EndOfTurn` event is received. `EagerEndOfTurn` events allow you to start preparing LLM responses before the turn definitively ends, reducing the delay between when a user stops speaking and when they hear a reply.
+
+## Measuring Latency
+
+This section covers client-side measurement, which captures end-to-end latency including network overhead. This reflects what your users actually perceive and is the most relevant metric for production applications.
+
+### Calculating Total Transcript Latency
+
+To calculate total transcript latency:
+
+1. **Track the audio cursor (X)**: The number of seconds of audio you've submitted to Deepgram.
+2. **Track the transcript cursor (Y)**: Every time you receive an interim transcript (containing `"is_final": false` for Nova-3, or `"type": "Update"` for Flux), record the amount of audio processed using the JSON response.
+3. **Calculate latency**: Subtract Y from X. The result (X - Y) is your total latency at that moment.
+
+This approach provides a practical approximation of per-message latency that includes transcription processing, network overhead, and buffer sizes.
+
+<Warning>
+  Use only interim transcripts for this calculation. Finals are delayed by endpoint detection (waiting for speech to end), which conflates transcript latency with EOT latency.
+</Warning>
+
+<Warning>
+  Deepgram provides `start` and `duration` timestamps with each transcript. It can be tempting to use these to measure latency, but the timestamps are not guaranteed to be accurate at millisecond-level precision and therefore should not be used for precise timing analysis such as latency measurements.
+</Warning>
+
+### Measuring EOT Latency
+
+End-of-turn (EOT) latency—the time from when a user stops speaking to when an EOT event is received—is difficult to measure precisely without ground truth timestamps indicating exactly when speech ended.
+
+The [stt\_stream\_file](https://github.com/deepgram/support-toolkit/tree/main/stt_stream_file) tool measures EOT latency using voice activity detection (VAD) to determine when speech actually ended in the audio. It then calculates the wall-clock time from when that audio was sent over the WebSocket to when the EOT event arrived. For voice agent applications, this metric captures the delay between when a user finishes speaking and when the transcript is available to send to an LLM for processing.
+
+### Estimating Transcription Latency
+
+Transcription latency cannot be measured directly from the client. To estimate it, subtract the network transit time from total transcript latency:
+
+```
+Transcription Latency ≈ Total Transcript Latency - Network Transit Time
+```
+
+The TCP connection time is a good approximation of network transit time. For example, if your total transcript latency averages 300 ms and your TCP connection time is approximately 50 ms, the transcription latency is roughly 250 ms.
+
+## Latency Expectations
+
+What latency should you expect? Below are general guidelines:
+
+| Component                    | Typical Range | Notes                                                                           |
+| ---------------------------- | ------------- | ------------------------------------------------------------------------------- |
+| Network transit time         | 20–200 ms     | Varies by geography and network conditions                                      |
+| Transcription latency        | 150–300 ms    | Deepgram's models are optimized to deliver 300 ms or less under most conditions |
+| Total transcript latency     | 200–500 ms    | Client-side, end-to-end                                                         |
+| End-of-turn detection (Flux) | 100–500 ms    | Time from speech end to `EndOfTurn` event                                       |
+
+These numbers are approximate and will vary based on the audio and acoustic environment, as well as your specific setup, network, and usage patterns. Latency fluctuates over time, so measure over a representative sample and track percentile statistics (p50, p95, p99) rather than relying on a single measurement. Which percentile matters most depends on your application's requirements.
+
+For voice agent applications, the critical metric is end-of-turn (EOT) latency, not transcription latency. Flux's integrated turn detection helps minimize the time between when a user finishes speaking and when your application can begin responding.
+
+If you consistently see latencies significantly above the ranges in the table above:
+
+* **High connection latency**: Use connection pooling to reuse established WebSocket connections across requests, avoiding repeated connection setup costs.
+* **High network transit time**: Consider co-locating your application by deploying Deepgram's software via [self-hosted deployment](https://deepgram.com/self-hosted) or AWS Sagemaker to minimize network distance.
+* **High total transcript latency with low network latency**: Review your buffer sizes and client-side processing overhead.
+
+## Tools for Measuring Latency
+
+Deepgram provides tools in the [support-toolkit](https://github.com/deepgram/support-toolkit) repository to help diagnose latency issues:
+
+| Tool                                                                                       | Purpose                                                                                                                         |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| [network\_latency](https://github.com/deepgram/support-toolkit/tree/main/network_latency)  | Measure WebSocket connection latency broken down by DNS, TCP, TLS, and WebSocket upgrade phases                                 |
+| [stt\_stream\_file](https://github.com/deepgram/support-toolkit/tree/main/stt_stream_file) | Real-time audio transcription with an optional terminal UI, supporting microphone and file input with VAD-based latency metrics |
+
+Clone the repository and follow the setup instructions in the relevant README to get started.
+
+## Summary
+
+Measuring STT latency helps you understand and optimize your application's real-time performance. Key takeaways:
+
+* Total transcript latency = network transit time + transcription latency + client processing.
+* Transcript latency and EOT latency are different metrics for different use cases — measure them independently.
+* Expect sub-300 ms transcription latency with Nova-3 and Flux under typical conditions.
+* Use Deepgram's [support-toolkit](https://github.com/deepgram/support-toolkit) to measure latency and diagnose issues.
+* For voice agents, use Flux's integrated turn detection to minimize end-to-end response time.
+* If latency is high, consider connection pooling or co-locating with a [self-hosted deployment](https://deepgram.com/self-hosted) or AWS Sagemaker.

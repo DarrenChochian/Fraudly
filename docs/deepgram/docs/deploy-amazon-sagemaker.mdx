@@ -1,0 +1,505 @@
+***
+
+title: Deploy Deepgram on Amazon SageMaker
+subtitle: >-
+Deepgram can be deployed into your own Amazon Virtual Private Cloud (VPC)
+environment using Amazon SageMaker AI. Simply subscribe to the Deepgram
+product in the AWS Marketplace and then deploy a SageMaker Endpoint, using our
+pre-made SageMaker Model Package.
+slug: docs/deploy-amazon-sagemaker
+----------------------------------
+
+Amazon SageMaker is a managed cloud platform from Amazon Web Services (AWS) that enables
+deployment of Deepgram as a managed, container-based service. Once you deploy Deepgram
+as a SageMaker Model Endpoint, you can run inference against the service using the Amazon
+SageMaker AI Software Development Kit (SDK).
+
+## Supported Products
+
+Follow [this AWS Marketplace](https://aws.amazon.com/marketplace/search/results?searchTerms=deepgram\&CREATOR=6efa21f9-9a33-4cae-ba44-756436fa71dd\&FULFILLMENT_OPTION_TYPE=SAGEMAKER_MODEL\&filters=CREATOR%2CFULFILLMENT_OPTION_TYPE) link to see the Deepgram products that are supported on the SageMaker AI platform. No login to your AWS account is required to view this public AWS Marketplace website.
+
+Each transcription language model is published as a separate product listing. Please subscribe to and deploy SageMaker Endpoints for each language model that you wish to utilize. Your application code will need to route to your SageMaker Endpoint for the language model you wish to run inference against.
+
+*Language Requests*: If there is a transcription language that is not currently listed on the AWS Marketplace, please work with your account manager to request additional language models to be added. For a full list of the Deepgram supported transcription languages, [check out this document](https://developers.deepgram.com/docs/models-languages-overview). You can also view the [Changelog](https://developers.deepgram.com/changelog) to see recent product announcements.
+
+For Text-to-Speech (TTS) models, we also publish separate language synthesis models under separate AWS Marketplace product listings. You can choose which TTS languages you'd like to subscribe to and deploy as SageMaker Endpoints into your AWS account.
+
+## Limitations
+
+When using Deepgram services in Amazon SageMaker, please be aware of the following limitations.
+
+* Deepgram cannot call Large Langage Model (LLM) services
+* Deepgram cannot invoke user-defined [callback URLs](/docs/callback)
+* Passing a JSON payload for transcription (e.g., referencing a file stored in cloud storage via URL) is unsupported, as the SageMaker isolation model prevents the container from reaching out to external cloud storage
+* Deepgram [custom metrics](/docs/metrics-guide) are not currently available through Amazon SageMaker Endpoints
+
+## Prerequisites
+
+* An AWS account
+* AWS IAM permissions to SageMaker and Marketplace
+  * [**IAM Policy**](https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AWSMarketplaceManageSubscriptions.html): AWSMarketplaceManageSubscriptions
+  * [**IAM Policy**](https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonSageMakerFullAccess.html): AmazonSageMakerFullAccess
+
+## Subscribe to Deepgram Products
+
+Before you can deploy Deepgram on Amazon SageMaker AI, you'll need to subscribe to the product in the AWS Marketplace.
+Keep in mind that you are not billed for the product until you deploy an [Amazon SageMaker AI Endpoint resource](https://docs.aws.amazon.com/sagemaker/latest/dg/manage-endpoints-console.html).
+
+<Steps>
+  <Step>
+    Login to the [AWS Management Console](https://console.aws.amazon.com/) for the account you'd like to deploy in
+  </Step>
+
+  <Step>
+    Search for and navigate to the [AWS Marketplace console](https://us-east-1.console.aws.amazon.com/marketplace/search)
+  </Step>
+
+  <Step>
+    Click on the **Discover Products** link on the left
+  </Step>
+
+  <Step>
+    Under **Search AWS Marketplace products**, search for "*Deepgram*"
+  </Step>
+
+  <Step>
+    Under **Refine Results**, **Delivery Methods**, check the **SageMaker Model** box
+  </Step>
+
+  <Step>
+    Click on the Deepgram product you're interested in deploying (eg. *Deepgram Voice AI- English Speech-to-Text (STT)*)
+  </Step>
+
+  <Step>
+    Click on the **View Purchase Options** button
+  </Step>
+
+  <Step>
+    Ensure the **Offer Type** of **Public Offer** is selected (*if required*)
+  </Step>
+
+  <Step>
+    Scroll down and click the **Subscribe** button
+  </Step>
+</Steps>
+
+## Create AWS IAM Role for SageMaker Execution
+
+Follow [the AWS documentation](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html) to create an AWS Identity & Access Management (IAM) role that will be used to run SageMaker Model Endpoints.
+You only need to create a single SageMaker execution role, and can reuse this IAM Role to deploy multiple SageMaker Endpoints.
+
+## Deploy Deepgram Model Package for SageMaker AI
+
+Once you've subscribed to the Deepgram product on AWS Marketplace, you can deploy a [SageMaker AI Endpoint](https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html).
+The SageMaker "Endpoint" resource represents the compute instance that runs the Deepgram Voice AI services.
+It will take several minutes to deploy a SageMaker Endpoint, once you initiate the resource creation.
+
+<Steps>
+  <Step>
+    In the AWS Management Console, navigate to the [SageMaker AI console](https://console.aws.amazon.com/sagemaker/home)
+  </Step>
+
+  <Step>
+    In the left-hand menu, under the **AWS Marketplace Resources** heading, select **Marketplace Model Packages**
+  </Step>
+
+  <Step>
+    Click on the **AWS Marketplace Subscriptions** tab
+  </Step>
+
+  <Step>
+    Select the product link, *and then* select the radio button next to the product version in the list
+  </Step>
+
+  <Step>
+    Select **Actions** ➡️ **Create Endpoint**
+  </Step>
+
+  <Step>
+    Provide a name for the model (eg. `deepgram-streaming-stt`)
+  </Step>
+
+  <Step>
+    Under **IAM Role**, select the [SageMaker execution role](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html) that you created
+  </Step>
+
+  <Step>
+    Click the **Next** button
+  </Step>
+
+  <Step>
+    Provide an **Endpoint Name**, such as `my-deepgram-streaming-stt`
+  </Step>
+
+  <Step>
+    Under **Variants** ➡️ **Production**, scroll all the way to the right, and click **Edit**
+  </Step>
+
+  <Step>
+    If desired, select **Choose Other Instance Type** and select the instance type you want to deploy to (eg. `g5.2xlarge`), then click **Save**
+  </Step>
+
+  <Step>
+    Click the **Create Endpoint Configuration** button
+  </Step>
+
+  <Step>
+    Click the **Submit** button, to create the SageMaker AI Endpoint
+  </Step>
+</Steps>
+
+After following these steps, you should see a new Endpoint in your AWS account.
+If you don't see the Endpoint, ensure that you have selected the correct AWS region in the [AWS Management Console](https://console.aws.amazon.com/sagemaker/home?#/endpoints).
+It may take several minutes for the Endpoint to change to status `InService`.
+Once the Endpoint status has changed to `InService`, you can monitor the Amazon CloudWatch Logs for the Endpoint to ensure normal operation of the Deepgram services.
+
+## Inference
+
+### Speech-to-Text (STT) Streaming
+
+Once you've deployed the Deepgram services as a SageMaker Endpoint, you can run streaming inference against the Endpoint using a supported AWS Software Development Kit (SDK).
+This capability requires the `InvokeEndpointWithBidirectionalStream` API in the [Amazon SageMaker AI service](https://docs.aws.amazon.com/sagemaker/latest/dg/api-and-sdk-reference.html).
+
+The Deepgram WebSocket payloads do not change in SageMaker, however they will be wrapped in an additional data structure required by the Amazon SageMaker API.
+For example, to send an array of bytes as an audio payload to the Deepgram STT streaming API, a WebSocket `KeepAlive`, or `CloseStream` message, you would use the following payloads.
+
+<CodeBlock>
+  ```typescript title="SageMaker Bidirectional Payload Examples"
+  // Deepgram STT streaming on Amazon SageMaker audio chunk
+  PayloadPart: {
+      Bytes: [0, 255, 128, 64, 250, 5],
+      DataType: "BINARY",
+  },
+
+  // Deepgram STT streaming on Amazon SageMaker "KeepAlive" message
+  PayloadPart: {
+      Bytes: new TextEncoder().encode(JSON.stringify({
+          type: "KeepAlive",
+      })),
+      DataType: "UTF8",
+  },
+
+  // Deepgram STT streaming on Amazon SageMaker "CloseStream" message
+  PayloadPart: {
+      Bytes: new TextEncoder().encode(JSON.stringify({
+          type: "CloseStream",
+      })),
+      DataType: "UTF8",
+  },
+  ```
+</CodeBlock>
+
+Let's walk through the code to run inference against the Deepgram Speech-to-Text (STT) streaming transcription endpoint in SageMaker AI.
+First, import the necessary items from the Amazon SageMaker AI runtime API.
+
+<CodeBlock>
+  ```typescript title=TypeScript
+    import {
+        SageMakerRuntimeHTTP2Client,
+        RequestStreamEvent,
+        InvokeEndpointWithBidirectionalStreamCommand,
+        InvokeEndpointWithBidirectionalStreamCommandInput,
+        InvokeEndpointWithBidirectionalStreamCommandOutput,
+    } from '@aws-sdk/client-sagemaker-runtime-http2';
+  ```
+</CodeBlock>
+
+Next, construct the input arguments for the SageMaker AI bidirectional streaming API.
+
+<CodeBlock>
+  ```typescript title=TypeScript
+    const invokeParams: InvokeEndpointWithBidirectionalStreamCommandInput = {
+        EndpointName: `YOUR_SAGEMAKER_ENDPOINT_NAME`,                   // Specify the SageMaker Endpoint name you've deployed
+        ModelInvocationPath: 'v1/listen',                               // The Deepgram STT WebSocket streaming API URL path
+        ModelQueryString: 'model=nova-3&diarize=false&language=multi',  // Specify the Deepgram STT query string parameters you'd like to use
+        Body: createWebSocketStream(inputFilePath),                // async generator function that returns WebSocket messages, as AsyncIterable<RequestEventStream>
+    };
+  ```
+</CodeBlock>
+
+Next, create the SageMaker AI streaming client ([JavaScript SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/sagemaker-runtime-http2/)) and command, and invoke it.
+
+<CodeBlock>
+  ```typescript title=TypeScript
+    const smClient = new SageMakerRuntimeHTTP2Client({
+        // Specify the correct AWS region for your SageMaker Endpoint resource
+        region: 'us-east-2',
+        // This is the Amazon SageMaker API Endpoint URL, not your SageMaker Endpoint resource
+        endpoint: 'https://runtime.sagemaker.us-east-2.amazonaws.com:8443'
+    });
+    const command = new InvokeEndpointWithBidirectionalStreamCommand(invokeParams);
+    const response: InvokeEndpointWithBidirectionalStreamCommandOutput = await smClient.send(command);
+  ```
+</CodeBlock>
+
+After invoking the streaming connection, process each response message received from the streaming API.
+
+<CodeBlock>
+  ```typescript title=TypeScript
+    for await (const chunk of response.Body) {
+        if (chunk.PayloadPart && chunk.PayloadPart.Bytes) {
+            const chunkData = new TextDecoder().decode(chunk.PayloadPart.Bytes);
+            console.log('Bidirectional chunk data:', chunkData);
+        }
+    }
+  ```
+</CodeBlock>
+
+You'll also need to implement the `createWebSocketStream` function, which will be a generator function that will continuously `yield` WebSocket client messages to the Deepgram API.
+This function could read a live audio stream from a microphone, using the [@mastra/node-audio package](https://www.npmjs.com/package/@mastra/node-audio), or stream a local WAV file, in chunks.
+
+<CodeBlock>
+  ```typescript title=TypeScript
+  async function* createWebSocketStream() {
+    // Read microphone or WAV file in chunks and continuously yield
+    while (true) {
+      yield {
+        PayloadPart: {
+            // The raw audio bytes should be provided as a Uint8Array
+            Bytes: new Uint8Array([0,1,2,3,4,5]),
+            DataType: "BINARY",
+        },
+      }
+    }
+  }
+  ```
+</CodeBlock>
+
+Here is a complete example:
+
+<CodeBlock>
+  ```typescript title="TypeScript Complete Example" maxLines=10
+    // Sample script to capture microphone input and stream to Amazon SageMaker bidirectional 
+    // streaming endpoint with Deepgram transcription Voice AI models.
+    import {
+        SageMakerRuntimeHTTP2Client,
+        InvokeEndpointWithBidirectionalStreamCommand,
+        InvokeEndpointWithBidirectionalStreamCommandOutput,
+        RequestStreamEvent,
+        InvokeEndpointWithBidirectionalStreamCommandInput
+    } from '@aws-sdk/client-sagemaker-runtime-http2';
+    import { getMicrophoneStream } from '@mastra/node-audio';
+    import { Readable } from 'stream';
+
+    // Configuration interface
+    interface Config {
+        endpointName: string;
+    }
+
+    // Script Configuration
+
+    // CHANGE ME: Specify the region where your SageMake Endpoint is deployed.
+    const region: string = "YOUR_AWS_REGION";
+    // CHANGE ME: This must correspond to the AWS region where your Endpoint is deployed.
+    const bidiEndpoint: string = `https://runtime.sagemaker.${region}.amazonaws.com:8443`;
+    // The internal WebSocket API route you want to access, used by Deepgram specifically.
+    const modelInvocationPath = 'v1/listen';
+    // CHANGE ME: Update this to the model parameters you want. Preview only supports nova-3, entity detection, and diarization.
+    const modelQueryString = 'model=nova-3&language=multi';
+
+    // CHANGE ME: Update this value to the name of the SageMaker Endpoint you deploy
+    const config: Config = {
+        endpointName: `YOUR_ENDPOINT_NAME`,
+    };
+
+    const sagemakerRuntimeClientForBidi = new SageMakerRuntimeHTTP2Client({
+        region: region,
+        endpoint: bidiEndpoint
+    });
+
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms)).then(() => console.log("Sleeping completed!"));
+
+    // Generator function that yields audio chunks from the local microphone
+    async function* audioStream(chunkSize: number = 1024*128) : AsyncIterable<RequestStreamEvent> {
+        const KEEPALIVE_INTERVAL = 3000; // 3 seconds
+        let lastKeepaliveTime = Date.now();
+
+        let microphone = getMicrophoneStream();
+
+        let streamActive = true;
+        // Set up keepalive interval
+        const keepaliveInterval = setInterval(() => {
+            if (streamActive && Date.now() - lastKeepaliveTime >= KEEPALIVE_INTERVAL) {
+                console.log('Sending keepalive message...');
+                lastKeepaliveTime = Date.now();
+            }
+        }, KEEPALIVE_INTERVAL);
+        
+        try {
+            for await (const chunk of microphone) {
+                yield {
+                    PayloadPart: {
+                        Bytes: new Uint8Array(chunk),
+                        DataType: "BINARY",
+                    },
+                };
+            }
+            console.log('Audio streaming complete. Continuing to send keepalive messages...');
+            const keepaliveEndTime = Date.now() + 120000; // Keep alive for 40 seconds
+            
+            while (Date.now() < keepaliveEndTime) {
+                const now = Date.now();
+                if (now - lastKeepaliveTime >= KEEPALIVE_INTERVAL) {
+                    const timestamp = new Date(now).toISOString();
+                    console.log(`Sending post-stream keepalive message at ${timestamp}...`);
+                    yield {
+                        PayloadPart: {
+                            Bytes: new TextEncoder().encode(JSON.stringify({
+                                type: "KeepAlive",
+                            })),
+                            DataType: "UTF8",
+                        },
+                    };
+                    lastKeepaliveTime = now;
+                }
+                // Small sleep to prevent tight loop
+                await sleep(3000);
+            }
+
+            // Close the connection after receiving all the response messages
+            yield {
+                PayloadPart: {
+                    Bytes: new TextEncoder().encode(JSON.stringify({
+                        type: "CloseStream",
+                    })),
+                    DataType: "UTF8",
+                },
+            };
+            
+            console.log('Keepalive period completed.');
+        } finally {
+            streamActive = false;
+            clearInterval(keepaliveInterval);
+        }
+    }
+
+    // Invokes the Amazon SageMaker bidirectional stream API and processes response payloads
+    async function invokeEndpointWithBidirectionalStream(): Promise<InvokeEndpointWithBidirectionalStreamCommandOutput> {
+        console.log('Invoking endpoint with bidirectional stream...');
+
+        const invokeParams: InvokeEndpointWithBidirectionalStreamCommandInput = {
+            EndpointName: config.endpointName,
+            // Body: createRequestStream(), // as AsyncIterable<RequestStreamEvent>
+            Body: audioStream(), // as AsyncIterable<RequestStreamEvent>
+            ModelInvocationPath: modelInvocationPath,
+            ModelQueryString: modelQueryString,
+        };
+
+        try {
+            console.log('Using custom bidi endpoint:', bidiEndpoint);
+            const command = new InvokeEndpointWithBidirectionalStreamCommand(invokeParams);
+            console.log('Sending bidirectional stream request...');
+            const response: InvokeEndpointWithBidirectionalStreamCommandOutput = await sagemakerRuntimeClientForBidi.send(command);
+
+            console.log('Bidirectional stream response received. Processing...');
+            console.log('Response metadata:', response.$metadata);
+
+            if (response.Body) {
+                let chunkCount = 0;
+                const timeout = setTimeout(() => {
+                    console.log('Timeout waiting for bidirectional stream chunks');
+                }, 20000); // 10 second timeout
+
+                try {
+                    // Read responses from the bidirectional stream
+                    for await (const chunk of response.Body) {
+                        chunkCount++;
+                        console.log(`Processing bidirectional chunk ${chunkCount}:`, Object.keys(chunk));
+
+                        if (chunk.PayloadPart && chunk.PayloadPart.Bytes) {
+                            const chunkData = new TextDecoder().decode(chunk.PayloadPart.Bytes);
+                            console.log('Bidirectional chunk data:', chunkData);
+                            // console.log('Bidirectional chunk:', chunk.PayloadPart);
+                        }
+
+                        if (chunk.InternalStreamFailure) {
+                            console.error('Bidirectional internal stream failure:', chunk.InternalStreamFailure);
+                            break;
+                        }
+
+                        if (chunk.ModelStreamError) {
+                            console.error('Bidirectional model stream error:', chunk.ModelStreamError);
+                            break;
+                        }
+                    }
+                    clearTimeout(timeout);
+                    console.log(`Processed ${chunkCount} bidirectional chunks total`);
+                } catch (streamError) {
+                    clearTimeout(timeout);
+                    console.error('Error processing bidirectional stream:', streamError);
+                    throw streamError;
+                }
+            } else {
+                console.log('No bidirectional response body received');
+            }
+
+            console.log('Bidirectional endpoint invocation completed successfully');
+            return response;
+        } catch (error: any) {
+            console.error('Error invoking endpoint with bidirectional stream:', error);
+            console.error('Error details:', {
+                name: error.name,
+                message: error.message,
+                statusCode: error.$metadata?.httpStatusCode
+            });
+            throw error;
+        }
+    }
+
+    // Main execution function
+    async function main(): Promise<void> {
+        try {
+            console.log('Starting SageMaker deployment process...');
+
+            await invokeEndpointWithBidirectionalStream();
+
+            console.log('All operations completed successfully!');
+
+        } catch (error) {
+            console.error('Deployment process failed:', error);
+            throw error;
+        }
+    }
+
+    declare const require: any;
+    declare const module: any;
+    declare const process: any;
+
+    if (typeof require !== 'undefined' && require.main === module) {
+        main().catch(error => {
+            console.error('Script execution failed:', error);
+            if (typeof process !== 'undefined') {
+                process.exit(1);
+            }
+        });
+    }
+
+    export {
+        invokeEndpointWithBidirectionalStream,
+        config,
+        bidiEndpoint
+    };
+  ```
+</CodeBlock>
+
+## Troubleshooting
+
+If you're experiencing any issues with your Deepgram deployment on Amazon SageMaker AI, you can obtain the Deepgram container logs from the Amazon CloudWatch service.
+If you open the SageMaker AI Endpoint resource details, there will be a link to open the Amazon CloudWatch Log Group for that endpoint.
+Within the CloudWatch Log Group, there should be a Log Stream that contains the Deepgram logs for all components.
+You can use the Amazon CloudWatch Logs [Live Tail feature](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs_LiveTail.html) to watch logs in near-real-time
+while you are sending requests to the Deepgram API, via the SageMaker AI APIs.
+
+To use the CloudWatch Logs Live Tail feature locally, from the [AWS CLI tool](https://aws.amazon.com/cli/), you can use the following command.
+
+```
+aws logs tail --follow /aws/sagemaker/Endpoints/YOUR_SAGEMAKER_ENDPOINT_NAME --region YOUR_AWS_REGION
+```
+
+### Checklist
+
+If you experience any issues using Deepgram services running on the Amazon SageMaker AI platform, please review this checklist before contacting Deepgram support.
+
+* Ensure that your application's AWS IAM User or IAM Role has permission to call the `InvokeEndpointWithBidirectionalStream` SageMaker AI action.
+* Ensure your application is targeting the correct AWS account and region, where your SageMaker Endpoint exists.
+* Ensure the Deepgram product you've deployed (eg. streaming Speech-to-Text), from the AWS Marketplace, corresponds to the Deepgram API you're calling.

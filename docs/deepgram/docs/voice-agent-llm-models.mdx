@@ -1,0 +1,344 @@
+***
+
+title: LLM Models
+subtitle: >-
+An overview of the LLM providers and models you can use with the Voice Agent
+API.
+slug: docs/voice-agent-llm-models
+---------------------------------
+
+Defines the LLM (*Large Language Model*) to be used with your Agent. The `provider.type` field specifies the format or protocol of the API.
+
+For example:
+
+* `open_ai` means the API follows OpenAI's Chat Completions format.
+* This option can be used with OpenAI, Azure OpenAI, or Amazon Bedrock — as long as the endpoint behaves like OpenAI's Chat Completion API.
+
+<Info>
+  You can set your Voice Agent's LLM model in the [Settings Message](/docs/configure-voice-agent) See the docs for more information.
+</Info>
+
+## Supported LLM providers
+
+You can query the following endpoint to check the supported models for each provider:
+
+```cURL
+curl https://agent.deepgram.com/v1/agent/settings/think/models
+```
+
+### Example Payload
+
+```json
+{
+  "models": [
+    {
+      "id": "gpt-5.2-instant",
+      "name": "GPT-5.2 Instant",
+      "provider": "open_ai"
+    },
+   {
+      "id": "gpt-5.2",
+      "name": "GPT-5.2 Thinking",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-5.1-chat-latest",
+      "name": "GPT-5.1 Instant",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-5.1",
+      "name": "GPT-5.1 Thinking",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-5-nano",
+      "name": "GPT-5 Nano",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-5-mini",
+      "name": "GPT-5 Mini",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-5",
+      "name": "GPT-5",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-4.1",
+      "name": "GPT-4.1",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-4.1-mini",
+      "name": "GPT-4.1 mini",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-4.1-nano",
+      "name": "GPT-4.1 nano",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-4o",
+      "name": "GPT-4o",
+      "provider": "open_ai"
+    },
+    {
+      "id": "gpt-4o-mini",
+      "name": "GPT-4o mini",
+      "provider": "open_ai"
+    },
+    {
+      "id": "claude-4-5-haiku-latest",
+      "name": "Claude Haiku 4.5",
+      "provider": "anthropic"
+    },
+    {
+      "id": "claude-sonnet-4-5",
+      "name": "Claude Sonnet 4.5",
+      "provider": "anthropic"
+    },
+    {
+      "id": "claude-3-5-haiku-latest",
+      "name": "Claude Haiku 3.5",
+      "provider": "anthropic"
+    },
+    {
+      "id": "claude-sonnet-4-20250514",
+      "name": "Claude Sonnet 4",
+      "provider": "anthropic"
+    },
+    {
+      "id": "gemini-3-flash-preview",
+      "name": "Gemini 3.0 Flash Preview",
+      "provider": "google"
+    },
+    {
+      "id": "gemini-3-pro-preview",
+      "name": "Gemini 3.0 Pro Preview",
+      "provider": "google"
+    },
+    {
+      "id": "gemini-2.5-flash-lite",
+      "name": "Gemini 2.0 Flash Lite",
+      "provider": "google"
+    },
+    {
+      "id": "gemini-2.5-flash",
+      "name": "Gemini 2.5 Flash",
+      "provider": "google"
+    },
+    {
+      "id": "gemini-2.0-flash",
+      "name": "Gemini 2.0 Flash",
+      "provider": "google"
+    },
+    {
+      "id": "openai/gpt-oss-20b",
+      "name": "GPT OSS 20B",
+      "provider": "groq"
+    }
+  ]
+}
+
+```
+
+<Info>
+  If you don't specify `agent.think.provider.type` the Voice Agent will use Deepgram's default managed LLMs. For managed LLMs, supported model names are predefined in our configuration.
+</Info>
+
+| Parameter                   | `open_ai` | `anthropic` | `aws_bedrock` | `google` | `groq`   |
+| --------------------------- | --------- | ----------- | ------------- | -------- | -------- |
+| `agent.think.provider.type` | `open_ai` | `anthropic` | `aws_bedrock` | `google` | `groq`   |
+| `agent.think.endpoint`      | optional  | optional    | required      | optional | required |
+
+The `agent.think.endpoint` is optional or required based on the provider type:
+
+* For `open_ai`, `anthropic`, and `google`, the `endpoint` field is optional because Deepgram provides managed LLMs for these providers.
+* For `groq` and `aws_bedrock` provider types, `endpoint` is required because Deepgram does not manage those LLMs.
+* If an `endpoint` is provided the `url` is required but `headers` are optional.
+
+<Info>
+  When using `aws_bedrock` as the provider type, you must also provide AWS credentials in the `agent.think.provider.credentials` field. This should include:
+
+  * `type`: Either "iam" or "sts"
+  * `region`: AWS region (e.g., "us-east-2")
+  * `access_key_id`: Your AWS access key ID
+  * `secret_access_key`: Your AWS secret access key
+  * `session_token`: Required only when `type` is "sts"
+</Info>
+
+## Supported LLM models
+
+### OpenAI
+
+| Provider  | Model                 | Pricing Tier |
+| --------- | --------------------- | ------------ |
+| `open_ai` | `gpt-5.2-instant`     | `Standard`   |
+| `open_ai` | `gpt-5.2`             | `Advanced`   |
+| `open_ai` | `gpt-5.1`             | `Advanced`   |
+| `open_ai` | `gpt-5.1-chat-latest` | `Advanced`   |
+| `open_ai` | `gpt-5`               | `Advanced`   |
+| `open_ai` | `gpt-5-mini`          | `Standard`   |
+| `open_ai` | `gpt-5-nano`          | `Standard`   |
+| `open_ai` | `gpt-4.1`             | `Advanced`   |
+| `open_ai` | `gpt-4.1-mini`        | `Standard`   |
+| `open_ai` | `gpt-4.1-nano`        | `Standard`   |
+| `open_ai` | `gpt-4o`              | `Advanced`   |
+| `open_ai` | `gpt-4o-mini`         | `Standard`   |
+
+### Anthropic
+
+| Provider    | Model                      | Pricing Tier |
+| ----------- | -------------------------- | ------------ |
+| `anthropic` | `claude-sonnet-4-5`        | `Advanced`   |
+| `anthropic` | `claude-4-5-haiku-latest`  | `Standard`   |
+| `anthropic` | `claude-3-5-haiku-latest`  | `Standard`   |
+| `anthropic` | `claude-sonnet-4-20250514` | `Advanced`   |
+
+### Google
+
+| Provider | Model                    | Pricing Tier |
+| -------- | ------------------------ | ------------ |
+| `google` | `gemini-3-flash-preview` | `Standard`   |
+| `google` | `gemini-3-pro-preview`   | `Advanced`   |
+| `google` | `gemini-2.5-flash`       | `Standard`   |
+| `google` | `gemini-2.0-flash`       | `Standard`   |
+| `google` | `gemini-2.0-flash-lite`  | `Standard`   |
+
+#### Example using Deepgram's managed Google LLM
+
+<CodeGroup>
+  ```json JSON
+    // ... other settings ...
+    "think": {
+      "provider": {
+        "type": "google",
+        "model": "gemini-2.5-flash",
+        "temperature": 0.5
+      }
+    }
+    // ... other settings ...
+  ```
+</CodeGroup>
+
+#### Example using a custom Google endpoint (BYO)
+
+When using a custom endpoint, the `model` property is not supported.
+The desired model is specified as part of the endpoint URL instead.
+
+<Info>
+  Use [API keys](https://ai.google.dev/gemini-api/docs/api-key) from [Google AI Studio](https://aistudio.google.com/app/api-keys) for Gemini models. Keys from Vertex AI, Workspace Gemini, or Gemini Enterprise will not work with the Agent API.
+</Info>
+
+<CodeGroup>
+  ```json JSON
+    // ... other settings ...
+    "think": {
+      "provider": {
+        "type": "google",
+        "temperature": 0.5
+      },
+      "endpoint": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse",
+        "headers": {
+          "x-goog-api-key": "xxxxxxxxx"
+        }
+      }
+    }
+    // ... other settings ...
+  ```
+</CodeGroup>
+
+### Groq
+
+| Provider | Model                | Pricing Tier |
+| -------- | -------------------- | ------------ |
+| `groq`   | `openai/gpt-oss-20b` | `Standard`   |
+
+## Example Payload
+
+<CodeGroup>
+  ```json JSON
+  // ... other settings ...
+   "think": {
+        "provider": {
+          "type": "open_ai",
+          "model": "gpt-4o-mini",
+          "temperature": 0.7
+        },
+        "endpoint": { // Optional if LLM provider is open_ai, anthropic, or google. Required for 3rd party LLM providers such as groq
+          "url": "https://api.example.com/llm", // Required if endpoint is provided
+          "headers": { // Optional if an endpoint is provided
+            "authorization": "Bearer {{token}}"
+          }
+        },
+      }
+  // ... other settings ...
+  ```
+</CodeGroup>
+
+## Passing a custom (BYO) LLM through a Cloud Provider
+
+<Info>
+  For Bring Your Own (BYO) LLMs, any model string provided is accepted without restriction.
+</Info>
+
+Deepgram tests against major LLM providers including OpenAI, Anthropic, and Google. When bringing your own LLM, you have two options:
+
+* **Use an OpenAI-compatible LLM service or gateway.** Set `provider.type` to `open_ai` and point the `endpoint.url` to your service. Any LLM endpoint that conforms to the OpenAI Chat Completions API format will work, including third-party LLM gateways.
+* **Use a custom endpoint from one of the supported major LLM providers.** If you have your own contract or deployment with a supported provider (such as OpenAI, Anthropic, or Google), set the `provider.type` to match that provider and supply your own `endpoint.url` and `endpoint.headers`.
+
+In both cases, configure the `provider.type` to one of the supported provider values and set the `endpoint.url` and `endpoint.headers` fields to the correct values for your provider or gateway.
+
+<CodeGroup>
+  ```json JSON
+    // ... other settings ...
+  "think": {
+        "provider": {
+          "type": "open_ai",
+          "model": "gpt-4",
+          "temperature": 0.7
+        },
+        "endpoint": { // Required for a custom LLM
+          "url": "https://cloud.provider.com/llm", // Required for a custom LLM
+          "headers": { // Optional for a custom LLM
+            "authorization": "Bearer {{token}}"
+          }
+        },
+      }
+    // ... other settings ...
+  ```
+</CodeGroup>
+
+## Using Multiple LLM Providers
+
+If you need to set a fallback LLM provider, you can define multiple LLM providers for your Voice Agent. The `think`object supports both a single provider and an array of providers.
+
+#### Example
+
+```json JSON
+{
+"agent": {
+  "think": [
+    {
+      "provider": {
+        "type": "open_ai",
+        "model": "gpt-4o-mini",
+        "temperature": 0.7
+      }
+    },
+    {
+      "provider": {
+        "type": "anthropic",
+        "model": "claude-4-5-haiku-latest",
+        "temperature": 0.7
+      }
+    }
+  ]
+}
+}
+```

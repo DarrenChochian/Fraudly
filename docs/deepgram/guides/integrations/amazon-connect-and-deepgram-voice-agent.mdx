@@ -1,0 +1,295 @@
+***
+
+title: Amazon Connect and Deepgram Voice Agent
+description: >-
+Learn how to integrate Amazon Connect telephony with Deepgram Voice Agent to
+build real-time conversational AI with function calling.
+--------------------------------------------------------
+
+# Amazon Connect and Deepgram Voice Agent
+
+In this guide, you'll integrate [Amazon Connect](https://docs.aws.amazon.com/connect/) inbound calls to a [Deepgram-powered voice agent](/docs/voice-agent) using a **Bot Media Gateway** that streams call audio over WebSockets.
+
+The Deepgram Voice Agent will:
+
+* Process speech in real time
+* Manage the conversation
+* Invoke backend APIs using **function calling**
+* Generate spoken responses streamed back to the caller
+
+***
+
+## Overview
+
+In this architecture:
+
+1. A caller dials an **Amazon Connect phone number**
+2. The **Contact Flow** performs routing and initial prompts
+3. The call is transferred to an **external bot endpoint**
+4. A **Bot Media Gateway** streams call audio to the Deepgram Voice Agent API
+5. The **Deepgram Voice Agent** processes the conversation and calls backend APIs when needed
+6. Audio responses are streamed back to the caller
+
+The Voice Agent API operates over a **bidirectional WebSocket connection**, allowing clients to continuously stream audio and receive responses in real time.
+
+***
+
+## Reference Architecture
+
+```text
+Caller (PSTN)
+   |
+   v
+Amazon Connect
+(Inbound Contact Flow)
+   |
+   |-- Transfer to phone number / Quick Connect -->
+   v
+External Bot Endpoint
+   |
+   v
+Bot Media Gateway
+- telephony termination
+- media streaming bridge
+- WebSocket session with Deepgram
+   |
+   v
+Deepgram Voice Agent API
+- real-time voice orchestration
+- function calling to backend systems
+- generates spoken responses
+   |
+   +---------------------------> Business Tools / APIs
+   |                             - CRM
+   |                             - ticketing
+   |                             - order status
+   |                             - knowledge base
+   |                             - scheduling
+   |
+   v
+Audio response back to Bot Media Gateway
+   |
+   v
+Caller
+   |
+   v
+(optional) transfer back to Amazon Connect queue/agent
+```
+
+***
+
+### Before You Begin
+
+You will need:
+
+* An Amazon Connect instance
+* A Deepgram API key
+* A server capable of handling SIP, RTP, or WebRTC telephony
+* A Bot Media Gateway service (Node.js, Python, or Go recommended)
+
+Your gateway will:
+
+* Terminate the phone call
+* Open a WebSocket connection to Deepgram
+* Stream audio between the call and the Voice Agent
+
+### Step 1 – Configure Amazon Connect
+
+Create a Contact Flow that routes callers to your AI agent.
+
+Typical flow:
+
+```text
+Inbound call
+   ↓
+Greeting / IVR
+   ↓
+Transfer to external number
+   ↓
+Bot endpoint
+```
+
+Use either:
+
+* Transfer to phone number
+* Quick Connect
+
+This sends the caller to the telephony endpoint hosting your voice agent gateway.
+
+### Step 2 – Build the Bot Media Gateway
+
+The Bot Media Gateway bridges **telephony audio** and the **Deepgram Voice Agent WebSocket**.
+
+Typical responsibilities:
+
+* Accept incoming SIP or RTP streams
+* Convert audio into the required format
+* Forward audio frames to Deepgram
+* Play synthesized audio responses back to the caller
+
+Deployment options include:
+
+* AWS ECS
+* AWS Fargate
+* Kubernetes
+* Containerized microservice
+
+Example architecture of the media gateway:
+
+```text
+RTP Audio (phone call)
+       ⇅
+Bot Media Gateway
+       ⇅
+Deepgram Voice Agent WebSocket
+```
+
+### Step 3 – Connect to the Voice Agent API
+
+The Bot Media Gateway opens a WebSocket connection to the Deepgram Voice Agent endpoint.
+
+Example endpoint:
+
+```text
+wss://agent.deepgram.com/v1/agent/converse
+```
+
+Once the connection opens:
+
+1. Wait for the Welcome message
+2. Send a Settings message
+3. Begin streaming audio
+
+The Welcome message confirms the WebSocket connection is established.
+
+### Step 4 – Send Voice Agent Settings
+
+Before sending audio, configure the voice agent using a Settings message.
+
+The Settings message initializes the agent and defines audio formats and behavior.
+
+Example:
+
+```json
+{
+ "type": "Settings",
+ "audio": {
+   "input": {
+     "encoding": "linear16",
+     "sample_rate": 24000
+   },
+   "output": {
+     "encoding": "linear16",
+     "sample_rate": 24000,
+     "container": "none"
+   }
+ },
+ "agent": {
+   "instructions": "You are a helpful customer support assistant."
+ }
+}
+```
+
+After sending settings, the server responds with:
+
+```text
+SettingsApplied
+```
+
+This confirms configuration has been successfully loaded.
+
+### Step 5 – Stream Call Audio
+
+Once the agent is initialized, the gateway begins streaming audio frames.
+
+The Voice Agent API expects raw binary audio frames sent over the WebSocket connection.
+
+Example message type:
+
+```text
+AgentV1Media (binary audio)
+```
+
+Deepgram processes the audio and emits conversation events as the interaction progresses.
+
+### Step 6 – Handle Voice Agent Events
+
+During the conversation, the server sends real-time events describing the interaction.
+
+Examples include:
+•	UserStartedSpeaking
+•	AgentThinking
+•	AgentStartedSpeaking
+•	ConversationText
+
+These events help the client manage audio playback and conversational state.
+
+Example event:
+
+```json
+{
+  "type": "ConversationText",
+  "role": "assistant",
+  "content": "Sure — I can help with that."
+}
+```
+
+### Step 7 – Function Calling
+
+The Deepgram Voice Agent can call backend systems using function calling.
+
+When the agent decides it needs external data, it sends a `FunctionCallRequest`.
+
+Example:
+
+```json
+{
+ "type": "FunctionCallRequest",
+ "functions": [
+   {
+     "name": "get_order_status",
+     "arguments": {
+       "order_id": "12345"
+     },
+     "client_side": false
+   }
+ ]
+}
+```
+
+Review our [function calling docs](/voice-agent/function-calling) for more details.
+
+### Step 8 - Audio Playback
+
+When the agent generates speech, the Voice Agent API streams synthesized audio back to the client.
+
+Your gateway:
+
+1. Receives audio frames
+2. Buffers them
+3. Sends them to the caller
+
+Because the WebSocket connection streams audio continuously, playback can begin immediately, reducing latency.
+
+### Step 9 - Escalate to a Human Agent
+
+If the voice agent cannot resolve a request, it can transfer the caller back to Amazon Connect.
+
+Typical escalation flow:
+
+```text
+Voice Agent detects escalation
+        ↓
+Bot Media Gateway initiates transfer
+        ↓
+Amazon Connect queue
+        ↓
+Human agent
+```
+
+Context from the AI conversation can be stored in a CRM or ticketing system before the transfer.
+
+### Additional Resources
+
+* [Deepgram Voice Agent documentation](/docs/voice-agent)
+* [Amazon Connect](https://docs.aws.amazon.com/connect/)

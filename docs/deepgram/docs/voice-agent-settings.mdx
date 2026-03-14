@@ -1,0 +1,97 @@
+***
+
+title: Settings
+subtitle: >-
+Send a Settings message to configure the voice agent's behavior, audio
+formats, and provider configurations before starting the conversation.
+slug: docs/voice-agent-settings
+-------------------------------
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="headset" /> Voice Agent</span>
+  </span>
+</div>
+
+The `Settings` message is a JSON command that serves as an initialization step, setting up both the behavior of the voice agent.
+
+## Purpose
+
+The `Settings` message is an initialization command that establishes both the behavior of the voice agent and the audio transmission formats before voice data is exchanged. The client should send a `Settings` message immediately after opening the websocket and before sending any audio.
+
+<Info>
+  For a detailed explanation of all the options available for the `Settings` message, see our documentation on how to [Configure the Voice Agent](/docs/configure-voice-agent).
+</Info>
+
+## Example Payloads
+
+This example uses a very basic `Settings` to establish a connection. To send the `Settings` message, you need to send the following JSON message to the server:
+
+<CodeGroup>
+  ```json JSON
+  {
+  "type": "Settings",
+  "tags": ["demo", "voice_agent"],
+  "audio": {
+    "input": {
+      "encoding": "linear16",
+      "sample_rate": 24000
+    },
+    "output": {
+      "encoding": "linear16",
+      "sample_rate": 24000,
+      "container": "none"
+      // ... additional output options: bitrate
+    }
+  },
+  "agent": {
+    "language": "en", // If Flux is used, this will be ignored for STT.
+    "listen": {
+      "provider": {
+        "type": "deepgram",
+        "model": "nova-3",
+        "smart_format": false // Deepgram providers only. Cannot be used with Flux.
+        // ... additional provider options: keyterms (nova-3 'en' only)
+      }
+    },
+    "think": {
+      "provider": {
+        "type": "open_ai",
+        "model": "gpt-4o-mini",
+        "temperature": 0.7
+        // Optional if LLM provider is open_ai or anthropic. Required for 3rd party LLM providers such as google and groq
+      },
+      // ... additional think options: prompt, context_length, functions, endpoint
+    },
+    "speak": {
+      "provider": {
+        "type": "deepgram",
+        "model": "aura-2-thalia-en"
+        // Examples for other providers:
+        // "type": "open_ai", "model": "tts-1", "voice": "alloy"
+        // "type": "eleven_labs", "model_id": "eleven_monolingual_v1", "language_code": "en-US"
+        // "type": "cartesia", "model_id": "sonic-2", "voice": {"mode": "id", "id": "voice-id"}, "language": "en"
+        // "type": "aws_polly", "voice": "Matthew", "language_code": "en-US", "engine": "standard", "credentials": {...}
+      }
+      // ... additional speak options: endpoint (required for non-deepgram providers)
+    }
+    // ... additional agent options: context, greeting
+  }
+  // ... additional top-level options: experimental
+  }
+  ```
+</CodeGroup>
+
+Upon receiving the `Settings` message, the server will process all remaining audio data and return the following [`SettingsApplied`](/docs/voice-agent-setting-applied-message) message.
+
+<CodeGroup>
+  ```json JSON
+  {
+      "type": "SettingsApplied"
+  }
+  ```
+</CodeGroup>
+
+## Next Steps
+
+* [Voice Agent Message Flow](/docs/voice-agent-message-flow) for the correct message flow when building a Voice Agent client.

@@ -1,0 +1,364 @@
+***
+
+title: Deploy Text-to-Speech (TTS) Services
+subtitle: Self-Hosted Deployment with Docker/Podman
+slug: docs/deploy-tts-services
+description: >-
+Deploy Deepgram's TTS services including Aura-2 for conversational AI voice
+synthesis
+---------
+
+This guide covers deploying Deepgram's Text-to-Speech (TTS) services for conversational AI voice synthesis with ultra-low latency and high-quality natural speech generation.
+
+<Info>
+  Looking to deploy Speech-to-Text (STT) services instead? See the [Deploy STT Services](/docs/deploy-stt-services) guide.
+</Info>
+
+As with other Deepgram self-hosted services, Deepgram TTS services use the same container images (`quay.io/deepgram/self-hosted-api` and `quay.io/deepgram/self-hosted-engine`) as STT deployments. However, **Deepgram strongly recommends configuring each node for a specific service type—either STT or TTS—for optimal performance and resource utilization**.
+
+You need to download and deploy these images from a container image repository, along with TTS-specific configuration files and environment variables that will be provided by Deepgram.
+
+## TTS Performance Considerations
+
+### Latency and Throughput
+
+**Latency** is the time delay between when a TTS API request is submitted and when you receive the first byte of audio data that can be played back to the end user.
+
+**Throughput** refers to the number of TTS requests that can be processed successfully within a given time period.
+
+There is a technical tradeoff between these metrics:
+
+* **Lower request volume** = Lower latency per request, but lower overall throughput
+* **Higher request volume** = Higher latency per request, but higher overall throughput
+
+Finding the correct balance is essential for your application's success and to limit hardware costs. Your Deepgram Account Representative will assist with optimization.
+
+### Dedicated Hardware Recommendation
+
+**For optimal TTS performance, dedicate separate GPUs specifically for TTS traffic.** If you're already running STT services, route TTS requests to dedicated TTS-optimized hardware rather than sharing GPUs between STT and TTS workloads.
+
+This dedicated approach is critical for:
+
+* Real-time applications (voicebots) with strict latency requirements
+* High-throughput applications optimizing for maximum hardware utilization
+
+## Prerequisites
+
+Before you begin, you will need to complete the [Deployment Environments](/docs/self-hosted-deployment-environments) guide, as well as all sub-guides to complete your environment configuration.
+
+You will also need to complete the [Self Service Licensing & Credentials](/docs/self-hosted-self-service-tutorial) guide to authenticate your products with Deepgram's licensing servers and pull Deepgram container images from [Quay](https://quay.io).
+
+### Hardware Requirements
+
+TTS self-hosted deployments have specific resource requirements:
+
+* **GPU**: NVIDIA GPUs with CUDA 12.8+ support required
+* **Memory**: 32-48 GiB RAM per language deployment
+* **CPU**: 4+ cores per language deployment
+* **Storage**: Sufficient space for model files and logs
+* **NVIDIA Driver**: Compatible with CUDA 12.8 (driver versions change frequently - check NVIDIA compatibility matrix)
+* **Container Runtime**: Docker with nvidia-container-runtime or Podman with GPU support
+
+<Info>
+  TTS hardware requirements are higher than standard STT deployments due to the computational complexity of high-quality speech synthesis. Consult your Deepgram Account Representative for hardware recommendations optimized for TTS latency vs. throughput based on your specific use case.
+</Info>
+
+## TTS Models and Language Support
+
+### Aura-2 (Latest Generation)
+
+Aura-2 supports both English and Spanish languages with superior quality and performance. You can choose to deploy:
+
+* **Single language, single instance** - One API and Engine service pair
+* **Single language, multiple instances** - Multiple API and Engine pairs for the same language (load balancing/redundancy)
+* **Multiple languages** - English and Spanish services running side-by-side
+* **Mixed deployment** - Any combination of the above
+
+For multiple service deployments (same language or different languages), you'll need to:
+
+* Modify ports for API and metrics servers to avoid conflicts
+* Pin each instance to specific GPUs using CUDA device assignments
+* Use appropriate UUIDs in Engine configurations for each language
+
+### Legacy Aura Models
+
+Previous generation Aura models may have different configuration requirements. Contact your Deepgram Account Representative for guidance on legacy model deployment.
+
+## Get Deepgram Products
+
+### Cache Container Image Repository Credentials
+
+Use the image repository credentials you generated in the [self-service licensing and credentials](/docs/self-hosted-self-service-tutorial#create-container-image-distribution-credentials) guide to login to Quay on your deployment environment. Once your credentials are cached locally, you should not have to log in again (until after you manually log out).
+
+<CodeGroup>
+  ```shell Shell
+  # Complete with login information generated in Deepgram Console
+  docker login quay.io
+  ```
+</CodeGroup>
+
+## Deployment Methods
+
+TTS services can be deployed using multiple container orchestration platforms:
+
+### Docker Compose
+
+Suitable for development, testing, and simple production deployments.
+
+### Podman Compose
+
+Alternative to Docker with similar functionality and compose file compatibility.
+
+### Kubernetes with Helm
+
+Recommended for production deployments requiring scaling, high availability, and advanced orchestration.
+
+## Get Configuration Files
+
+Configuration files are available in the [self-hosted-resources repository](https://github.com/deepgram/self-hosted-resources).
+
+1. Create your configuration directory:
+
+   <CodeGroup>
+     ```shell Shell
+     mkdir -p config
+     ```
+   </CodeGroup>
+
+2. Download the appropriate files for your deployment method:
+
+   **Docker Compose:**
+
+   * `docker/docker-compose.aura-2.yml` - Reference configuration with both English and Spanish
+
+   **Podman Compose:**
+
+   * `podman/podman-compose.aura-2.yml` - Reference configuration with both English and Spanish
+
+   **Kubernetes/Helm:**
+
+   * `charts/deepgram-self-hosted/samples/04-aura-2-setup.yaml` - Helm values example
+
+   **Language-specific Configuration Files:**
+
+   * `common/standard_deploy/api.aura-2-en.toml`
+   * `common/standard_deploy/engine.aura-2-en.toml`
+   * `common/standard_deploy/api.aura-2-es.toml`
+   * `common/standard_deploy/engine.aura-2-es.toml`
+
+   The reference compose files show both languages deployed side-by-side. You can modify these to deploy only the services you need.
+
+## Customize Your Configuration
+
+Once you have downloaded all provided files to your deployment machine, you need to update your configuration for your specific deployment environment.
+
+### Credentials
+
+You will need to have an environment variable `DEEPGRAM_API_KEY` exported with your self-hosted API key secret. See our [Self Service Licensing & Credentials](/docs/self-hosted-self-service-tutorial#create-a-self-hosted-api-key) guide for instructions on generating a self-hosted API key for use in this section.
+
+<Warning>
+  Per the link above, you will create you self-hosted API key in the `API Key` tab of Deepgram Console. These are *not* created in the "Self-Hosted" tab, which is reserved for creating distribution credentials.
+</Warning>
+
+### Configuration Files
+
+#### Compose File
+
+The Docker Compose configuration files use the standard Deepgram self-hosted container images:
+
+* `quay.io/deepgram/self-hosted-api:release-250814`
+* `quay.io/deepgram/self-hosted-engine:release-250814`
+
+<Warning>
+  While these are the same container images used for STT deployments, **Deepgram strongly recommends dedicating each node to either STT or TTS workloads**. Running mixed workloads on the same node can lead to suboptimal performance, resource contention, and unpredictable latency.
+</Warning>
+
+TTS functionality is enabled through specific configuration files, environment variables, and GPU assignments detailed below.
+
+Make sure to export your self-hosted API key secret in your deployment environment.
+
+<CodeGroup>
+  ```bash shell
+  export DEEPGRAM_API_KEY=API_KEY_SECRET
+  ```
+</CodeGroup>
+
+#### TTS Configuration Files
+
+TTS deployments use service-specific configuration files and environment variables:
+
+**Configuration Files by Language (Aura-2):**
+
+* `api.aura-2-en.toml` - English API configuration pointing to English Engine
+* `engine.aura-2-en.toml` - English Engine configuration
+* `api.aura-2-es.toml` - Spanish API configuration pointing to Spanish Engine
+* `engine.aura-2-es.toml` - Spanish Engine configuration
+
+**Required Environment Variables by Language (Aura-2):**
+
+*English Services:*
+
+```bash
+IMPELLER_AURA2_T2C_UUID="15ef8614-52cb-4cd3-a641-d68249c15d53"
+IMPELLER_AURA2_C2A_UUID="2e5096c7-7bf1-435e-bbdd-f673f88d0ebd"
+IMPELLER_AURA2_MAX_BATCH_SIZE=8
+CUDA_VISIBLE_DEVICES=0,1  # Adjust GPU assignment as needed
+```
+
+*Spanish Services:*
+
+```bash
+IMPELLER_AURA2_T2C_UUID="5d53d105-c6a4-47f5-b670-61adb6e8a880"
+IMPELLER_AURA2_C2A_UUID="4d5c93ad-9e20-4ebf-a1f0-0fb88ac73ef5"
+IMPELLER_AURA2_MAX_BATCH_SIZE=8
+CUDA_VISIBLE_DEVICES=2,3  # Adjust GPU assignment as needed
+```
+
+*Polyglot Services (Dutch, German, French, Italian, Japanese):*
+
+```bash
+IMPELLER_AURA2_MAX_BATCH_SIZE=8
+IMPELLER_AURA2_T2C_UUID="04975889-c601-4f80-a02f-0f2f9c22deaf"
+IMPELLER_AURA2_C2A_UUID="9e94567e-11e7-4619-adbc-d28212194367"
+CUDA_VISIBLE_DEVICES=2,3  # Adjust GPU assignment as needed
+```
+
+**Important Notes:**
+
+* UUIDs are language-specific and must match the language being deployed
+* `CUDA_VISIBLE_DEVICES` should be set to pin each service to specific GPUs
+* For multiple instances of the same language, use the same UUIDs but different GPU assignments
+* Batch size should be configured for your specific GPU and performance requirements
+
+<Info>
+  For legacy Aura models or other TTS configurations, consult your Deepgram Account Representative for the appropriate configuration files and environment variables.
+</Info>
+
+## Testing Your Containers
+
+To make sure your Deepgram self-hosted TTS deployment is properly configured and running, you will want to run the containers and make a sample request.
+
+### Start the Deepgram Containers
+
+Now that you have your configuration files setup up and in the correct location to be used by the container, use Docker Compose to run the container:
+
+<CodeGroup>
+  ```shell Shell
+  cd config
+
+  # For Docker Compose
+  docker compose -f docker-compose.aura-2.yml up -d
+
+  # For Podman Compose
+  podman-compose -f podman-compose.aura-2.yml up -d
+
+  # With elevated privileges if needed
+  sudo --preserve-env=DEEPGRAM_API_KEY docker compose -f docker-compose.aura-2.yml up -d
+  ```
+</CodeGroup>
+
+<Info>
+  If you get an error similar to the following, you may not have the minimum NVIDIA driver version required for Deepgram services to run properly. Please see [Drivers and Containerization Platforms](/docs/drivers-and-containerization-platforms#download-and-install-the-official-drivers) for instructions on installing/upgrading to the latest driver version.
+</Info>
+
+You can then view the running containers with the container process status command, and optionally view the logs of each container to verify their status.
+
+<CodeGroup>
+  ```shell Shell
+  docker ps
+  # Take note of the "Container ID" for each Deepgram container
+  docker logs CONTAINER_ID
+  ```
+</CodeGroup>
+
+<Info>
+  Replace the placeholder `CONTAINER_ID` with the Container ID of each container whose logs you would like to inspect more completely.
+</Info>
+
+### Networking Considerations
+
+**Port Assignments:**
+The reference configurations use these port mappings:
+
+* **English API**: 8080
+* **Spanish API**: 8081
+* **English Engine Metrics**: 9991
+* **Spanish Engine Metrics**: 9992
+
+For custom deployments, ensure:
+
+* Each API service uses a unique port
+* Each Engine metrics port is unique
+* Firewall rules allow access to your chosen API ports
+
+**Protocol Usage:**
+Unless you have HTTPS/TLS configured, use `http://` and `ws://` protocols:
+
+* English: `http://localhost:8080/v1/speak`
+* Spanish: `http://localhost:8081/v1/speak`
+* Multiple English instances: `http://localhost:8080`, `http://localhost:8081`, etc.
+
+### Test Your TTS Setup with Sample Requests
+
+Test your environment and container setup with sample TTS requests.
+
+1. Test your TTS deployment with speak requests:
+
+   **Test English Service (Aura-2):**
+
+   <CodeGroup>
+     ```shell Shell
+     curl --request POST \
+        --header "Content-Type: application/json" \
+        --output tts-english-test.wav \
+        --data '{"text":"This is a TTS English self-hosted test."}' \
+        --url "http://localhost:8080/v1/speak?model=aura-2-thalia-en"
+     ```
+   </CodeGroup>
+
+   **Test Spanish Service (Aura-2, if deployed):**
+
+   <CodeGroup>
+     ```shell Shell
+     curl --request POST \
+        --header "Content-Type: application/json" \
+        --output tts-spanish-test.wav \
+        --data '{"text":"Esta es una prueba de TTS español alojado localmente."}' \
+        --url "http://localhost:8081/v1/speak?model=aura-2-celeste-es"
+     ```
+   </CodeGroup>
+
+   **Test Multiple English Instances (if deployed):**
+
+   <CodeGroup>
+     ```shell Shell
+     # Test first English instance
+     curl --request POST \
+        --header "Content-Type: application/json" \
+        --output tts-en-instance-1.wav \
+        --data '{"text":"Testing first English instance."}' \
+        --url "http://localhost:8080/v1/speak?model=aura-2-thalia-en"
+
+     # Test second English instance (if on different port)
+     curl --request POST \
+        --header "Content-Type: application/json" \
+        --output tts-en-instance-2.wav \
+        --data '{"text":"Testing second English instance."}' \
+        --url "http://localhost:8081/v1/speak?model=aura-2-thalia-en"
+     ```
+   </CodeGroup>
+
+<Info>
+  If you do not specify a `model`, the default voice model `aura-asteria-en` will be used. You can find all of our available voices [here](/docs/tts-models).
+</Info>
+
+You should receive a response with the audio output. You can copy this file locally to manually evaluate the synthesized speech. Congratulations - your self-hosted TTS setup is working!
+
+***
+
+What's Next
+
+Now that you have a basic TTS setup working, take some time to learn about building up to a production-level environment, as well as helpful Deepgram add-on services.
+
+* [Scaling and Deployment Strategies](/docs/scaling-and-deployment-strategies)
+* [Self-Hosted Add Ons](/docs/self-hosted-add-ons)

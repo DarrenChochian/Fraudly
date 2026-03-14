@@ -1,0 +1,147 @@
+***
+
+title: Configure Endpointing and Interim Results
+subtitle: Control when transcripts are returned during live streaming audio.
+slug: docs/understand-endpointing-interim-results
+-------------------------------------------------
+
+This guide shows you how to configure [endpointing](/docs/endpointing/) and [interim results](/docs/interim-results/) to control transcript delivery timing in your streaming application.
+
+## Configure endpointing for pause detection
+
+Endpointing detects pauses in speech and returns `speech_final: true` when a pause is detected. Use this to trigger downstream processing when a speaker stops talking.
+
+1. Set the `endpointing` parameter to a millisecond value in your WebSocket connection:
+
+<CodeGroup>
+  ```python Python
+  with client.listen.v1.connect(
+      model="nova-3",
+      language="en-US",
+      endpointing=300  # 300ms of silence triggers speech_final
+  ) as connection:
+  ```
+</CodeGroup>
+
+2. Handle responses where `speech_final: true`:
+
+<CodeGroup>
+  ```json JSON
+  {
+    "is_final": true,
+    "speech_final": true,
+    "channel": {
+      "alternatives": [{
+        "transcript": "another big"
+      }]
+    }
+  }
+  ```
+</CodeGroup>
+
+**Recommended values:**
+
+* **10ms (default):** Fast response for chatbots expecting short utterances
+* **300-500ms:** Better for conversations where speakers pause mid-thought
+* **`endpointing=false`:** Disable pause detection entirely
+
+## Enable interim results for real-time feedback
+
+Interim results provide preliminary transcripts as audio streams in, marked with `is_final: false`. When Deepgram reaches maximum accuracy for a segment, it sends a finalized transcript with `is_final: true`.
+
+1. Set `interim_results=true` in your WebSocket connection:
+
+<CodeGroup>
+  ```python Python
+  with client.listen.v1.connect(
+      model="nova-3",
+      language="en-US",
+      interim_results=True,
+      endpointing=300
+  ) as connection:
+  ```
+</CodeGroup>
+
+2. Process responses based on the `is_final` flag:
+   * `is_final: false` — Preliminary transcript, may change
+   * `is_final: true` — Finalized transcript for this audio segment
+
+## Combine both features for complete utterances
+
+When using both features together, concatenate finalized transcripts to build complete utterances.
+
+1. Enable both features in your WebSocket connection:
+
+<CodeGroup>
+  ```python Python
+  with client.listen.v1.connect(
+      model="nova-3",
+      language="en-US",
+      interim_results=True,
+      endpointing=300
+  ) as connection:
+  ```
+</CodeGroup>
+
+2. Append each `is_final: true` transcript to a buffer.
+
+3. When `speech_final: true` arrives, the buffer contains the complete utterance.
+
+4. Clear the buffer and start collecting the next utterance.
+
+The following example shows how `is_final` and `speech_final` interact when a speaker dictates a credit card number:
+
+<CodeGroup>
+  ```json JSON
+  1 0.000-1.100 ["is_final": false] ["speech_final": false] yeah so
+  2 0.000-2.200 ["is_final": false] ["speech_final": false] yeah so my credit card number
+  3 0.000-3.200 ["is_final": false] ["speech_final": false] yeah so my credit card number is two two
+  4 0.000-4.300 ["is_final": false] ["speech_final": false] yeah so my credit card number is two two two two three
+  5 0.000-3.260 ["is_final": true ] ["speech_final": false] yeah so my credit card number is two two
+  6 3.260-5.100 ["is_final": false] ["speech_final": false] two two three three three three
+  7 3.260-5.500 ["is_final": true ] ["speech_final": true ] two two three three three three
+  ```
+</CodeGroup>
+
+On line 5, `is_final: true` indicates a finalized transcript, but `speech_final: false` means the speaker hasn't paused yet. On line 7, both flags are `true`, signaling the end of an utterance. To get the complete transcript, concatenate lines 5 and 7.
+
+<Warning>
+  Do not use `speech_final: true` alone to capture full transcripts. Long utterances may have multiple `is_final: true` responses before `speech_final: true` is returned.
+</Warning>
+
+## Implement utterance segmentation
+
+For applications requiring complete sentences, add timing-based segmentation on top of endpointing.
+
+1. Enable punctuation in your WebSocket connection:
+
+<CodeGroup>
+  ```python Python
+  with client.listen.v1.connect(
+      model="nova-3",
+      language="en-US",
+      interim_results=True,
+      endpointing=300,
+      punctuate=True
+  ) as connection:
+  ```
+</CodeGroup>
+
+2. Process only `is_final: true` responses.
+
+3. Break utterances at punctuation terminators or when the gap between adjacent words exceeds your threshold.
+
+## Verify your configuration
+
+Your configuration is working correctly when:
+
+* Responses with `speech_final: true` arrive after detected pauses
+* Interim results (`is_final: false`) update in real-time as audio streams
+* Finalized transcripts (`is_final: true`) contain accurate text for each segment
+* Complete utterances can be reconstructed by concatenating `is_final: true` responses until `speech_final: true`
+
+## Next steps
+
+* [Endpointing reference](/docs/endpointing/) — Full parameter documentation
+* [Interim Results reference](/docs/interim-results/) — Detailed response format
+* [Understanding End of Speech Detection](/docs/understanding-end-of-speech-detection) — Related speech detection features

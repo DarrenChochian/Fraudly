@@ -1,0 +1,296 @@
+# Deepgram's Docs
+
+## Docs
+
+- [Welcome to Deepgram's Docs!](https://developers.deepgram.com/home.mdx)
+- [Ask AI](https://developers.deepgram.com/ask-ai.mdx): Get instant answers about Deepgram's products, APIs, and documentation
+- [Support](https://developers.deepgram.com/support.mdx): Join the Deepgram Developer Community to: connect, discuss challenges, and learn about using Deepgram
+- [Security Policy](https://developers.deepgram.com/trust-security/security-policy.mdx): Learn about Deepgram's commitment to maintaining a company culture that values information security and data privacy
+- [Data Privacy Compliance](https://developers.deepgram.com/trust-security/data-privacy-compliance.mdx): Learn about Deepgram data privacy compliance frameworks and certifications.
+- [Information Security & Privacy Statement](https://developers.deepgram.com/trust-security/information-security-privacy.mdx): Review Deepgram's information security and privacy statement.
+- [SDK Feature Matrix](https://developers.deepgram.com/sdks/sdk-features.mdx): A matrix of all Deepgram API features supported by our different SDKs.
+- [Make Your First API Request](https://developers.deepgram.com/guides/fundamentals/make-your-first-api-request.mdx): Follow these steps to get started with Deepgram and make your first request.
+- [Authenticating](https://developers.deepgram.com/guides/fundamentals/authenticating.mdx): Learn how to authenticate with Deepgram's API.
+- [Token-Based Auth](https://developers.deepgram.com/guides/fundamentals/token-based-authentication.mdx): Generates a temporary JSON Web Token (JWT) with a 30-second TTL (Time To Live) for Deepgram APIs.
+- [Model Metadata](https://developers.deepgram.com/guides/fundamentals/model-metadata.mdx): Use the Models endpoint to determine which models you can access and returns metadata about those models.
+- [Using Custom Add On Parameters with SDKs](https://developers.deepgram.com/guides/fundamentals/using-custom-parameters-sdks.mdx): Learn how to use custom add on parameters to set arbitrary key/value pairs with the Deepgram SDKs.
+- [Tagging Your Usage Data](https://developers.deepgram.com/guides/fundamentals/tagging-your-usage-data.mdx): Tagging allows you to label your requests for grouping & filtering usage reports.
+- [Managing Projects](https://developers.deepgram.com/guides/deep-dives/managing-projects.mdx): Learn about Deepgram Projects, which organize all of your Deepgram resources and consist of a set of users, a set of API Keys, and billing and monitoring settings.
+- [Using Multiple Projects](https://developers.deepgram.com/guides/deep-dives/using-multiple-projects.mdx): Learn about scenarios in which it would be best to set up multiple Deepgram projects.
+- [Working With Roles & API Scopes](https://developers.deepgram.com/guides/deep-dives/working-with-roles.mdx): Learn how to use roles and API scope permissions when working with the Deepgram API and Console.
+- [Supported Audio Formats](https://developers.deepgram.com/docs/supported-audio-formats.mdx): Learn about audio formats and encoding supported by Deepgram.
+- [Deployment Options](https://developers.deepgram.com/docs/deployment-options.mdx): Learn about the deployment options available for Deepgram services.
+- [Creating API Keys](https://developers.deepgram.com/docs/create-additional-api-keys.mdx): Learn about the fundamentals of creating API keys with the Deepgram Console or the Deepgram API.
+- [Safely Removing Team Members With Active API Keys](https://developers.deepgram.com/guides/deep-dives/safely-removing-team-members-with-active-api-keys.mdx): Learn how to offboard team members without disrupting production services that rely on their API keys.
+- [Using the Sec-WebSocket-Protocol](https://developers.deepgram.com/docs/using-the-sec-websocket-protocol.mdx): Learn how to to use the Sec-WebSocket-Protocol with Deepgram APIs to send secure client side requests via web sockets.
+- [Logs & Usage Data](https://developers.deepgram.com/docs/using-logs-usage.mdx): Learn how to use Deepgram's Log and Usage features.
+- [Model Improvement Partnership Program](https://developers.deepgram.com/docs/the-deepgram-model-improvement-partnership-program.mdx): Learn about how Deepgram trains our AI models and how you can opt out of our Model Improvement Program.
+- [Working With Concurrency Rate Limits](https://developers.deepgram.com/docs/working-with-concurrency-rate-limits.mdx): Learn how to better handle concurrency rate limit issues when using Deepgram.
+- [Build a Voice Agent with Twilio & OpenAI & Deepgram](https://developers.deepgram.com/docs/build-voice-agent-with-twilio-deepgram-openai.mdx): Learn how to build a voice agent application that includes Twilio, OpenAI, Deepgram speech-to-text & text-to-speech, while optimizing for low latency.
+- [Calculate Talk Time Analytics](https://developers.deepgram.com/docs/calculate-talk-time-analytics.mdx): Using Deepgram's speech-to-text API with diarization, you can gather the data you need to make informed decisions about your organization's interactions.
+- [Transcribe Meetings in Realtime](https://developers.deepgram.com/docs/transcribe-meetings-in-realtime.mdx): With Deepgram’s API, you can add captions to live videos or display captions in real-time at conferences and events, and analyze spoken words for live content.
+- [Transcribe Recorded Calls With Twilio](https://developers.deepgram.com/docs/transcribe-recorded-calls-with-twilio.mdx): With Twilio and Deepgram you can record and transcribe your phone calls.
+- [Amazon Connect and Deepgram](https://developers.deepgram.com/docs/deepgram-with-amazon-connect.mdx): Integrate Deepgram's Speech-to-Text (STT) and Text-to-Speech (TTS) models directly into Amazon Connect and Amazon Lex to power intelligent IVR systems and virtual voice agents.
+- [Amazon Connect and Deepgram Voice Agent](https://developers.deepgram.com/guides/integrations/amazon-connect-and-deepgram-voice-agent.mdx): Learn how to integrate Amazon Connect telephony with Deepgram Voice Agent to build real-time conversational AI with function calling.
+- [AWS S3 Presigned URLs and Deepgram](https://developers.deepgram.com/docs/using-aws-s3-presigned-urls-with-the-deepgram-api.mdx): Use S3 to send audio data to Deepgram and store transcripts from Deepgram directly in S3.
+- [Amazon Bedrock and Deepgram Voice Agent](https://developers.deepgram.com/docs/amazon-bedrock-and-deepgram-voice-agent.mdx): Use Amazon Bedrock with Deepgram Voice Agent either natively or via a proxy server.
+- [Genesys and Deepgram](https://developers.deepgram.com/docs/genesys-deepgram.mdx): Genesys is a cloud-based platform used by many organizations to manage their call centers. With our plug-and-play Genesys integration, you can have all of your Genesys calls transcribed by Deepgram.
+- [Google Dialogflow CX and Deepgram](https://developers.deepgram.com/docs/use-deepgram-with-dialogflow-cx.mdx): Dialogflow CX is a framework for building virtual agents. Learn how to incorporate Deepgram's transcription and text-to-speech for improved accuracy.
+- [Make.com and Deepgram](https://developers.deepgram.com/docs/makecom-deepgram-integration.mdx): Learn how to use Deepgram in Make.com workflows.
+- [Twilio and Deepgram STT](https://developers.deepgram.com/docs/on-premise-twilio-integration.mdx): A starter server and a self-hosted solution for integrating speech-to-text with Twilio and Deepgram.
+- [Twilio and Deepgram TTS](https://developers.deepgram.com/docs/twilio-and-deepgram-tts.mdx): Learn how to use Twilio with Deepgram Aura TTS.
+- [Twilio and Deepgram Voice Agent](https://developers.deepgram.com/docs/twilio-and-deepgram-voice-agent.mdx): Learn how to use Twilio with Deepgram Voice Agent API.
+- [Zapier and Deepgram](https://developers.deepgram.com/docs/zapier-integration.mdx): Learn how to use Deepgram in Zapier automated workflows.
+- [Zoom and Deepgram](https://developers.deepgram.com/docs/integrate-deepgram-with-zoom.mdx): Learn how to transcribe Zoom meetings using Deepgram.
+- [Deepgram API Overview](https://developers.deepgram.com/reference/deepgram-api-overview.mdx)
+- [Authentication](https://developers.deepgram.com/reference/authentication.mdx): Authenticating requests made to the Deepgram API
+- [Configuring Custom Endpoints](https://developers.deepgram.com/reference/custom-endpoints.mdx): Instructions for using Deepgram's EU endpoint, Dedicated endpoints, and self-hosted endpoints with your applications.
+- [Errors](https://developers.deepgram.com/docs/errors.mdx): Errors you might encounter when making requests to the Deepgram API
+- [API Rate Limits](https://developers.deepgram.com/reference/api-rate-limits.mdx): Understand the different service limits of Deepgram's APIs.
+- [Getting Started](https://developers.deepgram.com/docs/voice-agent.mdx): An introduction to using Deepgram's Voice Agent API to build interactive voice agents.
+- [Feature Overview](https://developers.deepgram.com/docs/voice-agent-feature-overview.mdx): Below is a matrix of Deepgram's Voice Agent API features. Please refer to the corresponding documentation for more details.
+- [Template Apps](https://developers.deepgram.com/docs/voice-agent-template-apps.mdx): Get up and running fast with our Voice Agent template applications, fully integrated with Deepgram out-of-the-box.
+- [Configure the Voice Agent](https://developers.deepgram.com/docs/configure-voice-agent.mdx): Learn about the voice agent configuration options for the agent, and both input and output audio.
+- [Build a Multi-Agent Architecture](https://developers.deepgram.com/docs/multi-agent-architecture.mdx): Create a multi-agent architecture using Deepgram's Voice Agent API, where specialized agents handle different phases of customer interactions through seamless handoffs.
+- [Function Calling](https://developers.deepgram.com/docs/voice-agents-function-calling.mdx): Overview of Function Calling with Voice Agents.
+- [Build A Function Call](https://developers.deepgram.com/docs/build-a-function-call.mdx): Learn how to build a Function Call to use with your Agent.
+- [Function Call Request](https://developers.deepgram.com/docs/voice-agent-function-call-request.mdx): Server-initiated message requesting a function call, to be handled by either client or server
+- [Function Call Response](https://developers.deepgram.com/docs/voice-agent-function-call-response.mdx): Message containing the result of a function call, sent by client or server
+- [Function Call Context](https://developers.deepgram.com/docs/voice-agent-function-call-context.mdx): Provide function call context as part of the conversation history when starting a new Voice Agent session.
+- [Inputs: Client Messages](https://developers.deepgram.com/docs/voice-agent-inputs.mdx): Client messages you can send to the server to control the Voice Agent.
+- [Settings](https://developers.deepgram.com/docs/voice-agent-settings.mdx): Send a Settings message to configure the voice agent's behavior, audio formats, and provider configurations before starting the conversation.
+- [Update Speak](https://developers.deepgram.com/docs/voice-agent-update-speak.mdx): Send a message to change the Speak model in the middle of a conversation.
+- [Update Think](https://developers.deepgram.com/docs/voice-agent-update-think.mdx): Send a message to replace the Think provider in the middle of a conversation.
+- [Update Prompt](https://developers.deepgram.com/docs/voice-agent-update-prompt.mdx): Send a message to update the system prompt of the agent.
+- [Inject Agent](https://developers.deepgram.com/docs/voice-agent-inject-agent-message.mdx): Send a message to immediately trigger an Agent statement.
+- [Inject User](https://developers.deepgram.com/docs/voice-agent-inject-user-message.mdx): Send a text based message to the agent.
+- [Agent Keep Alive](https://developers.deepgram.com/docs/agent-keep-alive.mdx): Send messages ensuring uninterrupted communication for your agent.
+- [Outputs: Server Events](https://developers.deepgram.com/docs/voice-agent-outputs.mdx): Server messages you will receive from the Agent server.
+- [Welcome](https://developers.deepgram.com/docs/voice-agent-welcome-message.mdx): Receive a welcome message from the server to confirm the websocket has opened.
+- [Settings Applied](https://developers.deepgram.com/docs/voice-agent-setting-applied-message.mdx): Confirms the server has successfully received and applied the Settings message.
+- [Conversation Text](https://developers.deepgram.com/docs/voice-agent-conversation-text.mdx): Facilitates real-time communication by relaying spoken statements from both the user and the agent.
+- [User Started Speaking](https://developers.deepgram.com/docs/voice-agent-user-started-speaking.mdx): Notifies the client that the user has begun speaking.
+- [Agent Thinking](https://developers.deepgram.com/docs/voice-agent-agent-thinking.mdx): Informs the client when the agent is processing information.
+- [Prompt Updated](https://developers.deepgram.com/docs/voice-agent-prompt-updated.mdx): Confirms that a Prompt Configuration change has been applied.
+- [Think Updated](https://developers.deepgram.com/docs/voice-agent-think-updated.mdx): Confirms that a Think Configuration change has been applied.
+- [Speak Updated](https://developers.deepgram.com/docs/voice-agent-speak-updated.mdx): Confirms that a Speak Configuration change has been applied.
+- [Agent Audio Done](https://developers.deepgram.com/docs/voice-agent-agent-audio-done.mdx): Get signals that the server has finished sending the final audio segment to the client.
+- [Agent Errors](https://developers.deepgram.com/docs/voice-agent-errors.mdx): Receive errors from the server if an issue has occurred.
+- [Agent Warnings](https://developers.deepgram.com/docs/voice-agent-warning.mdx): Receive warnings from the server if an issue has occurred.
+- [History](https://developers.deepgram.com/docs/voice-agent-history.mdx): Provide conversation and function call history when starting a new Voice Agent session.
+- [LLM Models](https://developers.deepgram.com/docs/voice-agent-llm-models.mdx): An overview of the LLM providers and models you can use with the Voice Agent API.
+- [TTS Models](https://developers.deepgram.com/docs/voice-agent-tts-models.mdx): An overview of Text-to-Speech providers and models you can use with the Voice Agent API.
+- [Media Inputs & Outputs](https://developers.deepgram.com/docs/voice-agent-media-inputs-outputs.mdx): Use different media inputs and outputs when using the Voice Agent API.
+- [Multilingual Voice Agents](https://developers.deepgram.com/docs/multilingual-voice-agent.mdx): Learn the best ways to build a multilingual voice agent.
+- [Voice Agent Audio & Playback](https://developers.deepgram.com/docs/voice-agent-audio-playback.mdx): Learn some strategies for dealing with audio and playback issues.
+- [Voice Agent Adaptive Echo Cancellation](https://developers.deepgram.com/docs/voice-agent-echo-cancellation.mdx): Learn some tips and strategies for dealing with echo cancellation.
+- [Voice Agent Message Flow](https://developers.deepgram.com/docs/voice-agent-message-flow.mdx): Implement the correct WebSocket message sequence for Voice Agent conversations.
+- [Getting Started with Speech to Text](https://developers.deepgram.com/docs/stt/getting-started.md)
+- [Getting Started](https://developers.deepgram.com/docs/pre-recorded-audio.mdx): An introduction to getting transcription data from pre-recorded audio files.
+- [Feature Overview](https://developers.deepgram.com/docs/stt-pre-recorded-feature-overview.mdx): Below is a matrix of Deepgram's speech-to-text Pre-Recorded features. Please refer to the corresponding documentation for more details.
+- [Template Apps](https://developers.deepgram.com/docs/stt-pre-recorded-template-apps.mdx): Get up and running fast with our pre-recorded speech-to-text template applications, fully integrated with Deepgram out-of-the-box.
+- [Automatically Generating WebVTT & SRT Captions](https://developers.deepgram.com/docs/automatically-generating-webvtt-and-srt-captions.mdx): Learn how to create ready-to-upload caption files for the web and broadcast.
+- [Automatically Transcribe and Summarize Phone Calls](https://developers.deepgram.com/docs/automatically-transcribing-and-summarizing-phone-calls.mdx): Learn how to use Twilio Functions and Deepgram's Summarization feature to transcribe and summarize phone calls before providing call participants with a phone call summary via SMS.
+- [Getting Started with Deepgram Whisper Cloud](https://developers.deepgram.com/docs/deepgram-whisper-cloud.mdx): Deepgram Whisper Cloud is a fully managed API that gives you access to Deepgram’s version of OpenAI’s Whisper model.
+- [Generating and Saving Transcripts From the Terminal](https://developers.deepgram.com/docs/generating-and-saving-transcripts-from-the-terminal.mdx): It can be helpful to know how to see and save Deepgram transcripts directly in your terminal. Learn how to use bash commands and scripts to execute directly in your terminal.
+- [Using Callbacks to Return Transcripts to Your Server](https://developers.deepgram.com/docs/using-callbacks-to-return-transcripts-to-your-server.mdx): Learn how to return transcripts to a callback URL sent to Deepgram's API.
+- [When Callback Is Not Received](https://developers.deepgram.com/docs/payload-too-large.mdx): How to troubleshoot issues when a callback is not received.
+- [When To Use Multichannel and Diarization](https://developers.deepgram.com/docs/multichannel-vs-diarization.mdx): Compare Deepgram's Multichannel and Diarization features to better understand when to use each feature.
+- [When To Use Keywords and Search](https://developers.deepgram.com/docs/keywords-vs-search.mdx): Compare Deepgram's Keywords and Search features to better understand when to use each feature.
+- [Getting Started with Flux](https://developers.deepgram.com/docs/flux/quickstart.mdx): Flux is the first conversational speech recognition model built specifically for voice agents. Unlike traditional STT that just transcribes words, Flux understands conversational flow and automatically handles turn-taking.
+- [Flux Feature Overview](https://developers.deepgram.com/docs/flux/feature-overview.mdx): Below is a matrix of Deepgram's Flux Speech-to-text feature compatibility.
+- [Template Apps](https://developers.deepgram.com/docs/flux-template-apps.mdx): Get up and running fast with our Flux conversational STT template applications, fully integrated with Deepgram out-of-the-box.
+- [End-of-Turn Detection Parameters](https://developers.deepgram.com/docs/flux/configuration.mdx): Configure Flux's end-of-turn detection behavior with eot_threshold, eager_eot_threshold, and eot_timeout_ms.
+- [Build a Flux-enabled Voice Agent](https://developers.deepgram.com/docs/flux/agent.mdx): Build a cascaded voice agent using Flux conversational speech to text, an OpenAI LLM, and Deepgram Aura-2 text to speech.
+- [Understanding the Flux State Machine](https://developers.deepgram.com/docs/flux/state.mdx): Traditional STT+VAD requires you to build complex interruption logic. Flux handles this natively.
+- [Configure](https://developers.deepgram.com/docs/flux/configure.mdx): Send a Configure message to update Flux stream settings in real-time without reconnecting.
+- [Close Stream](https://developers.deepgram.com/docs/flux/close-stream.mdx): Send a CloseStream message to close the WebSocket stream.
+- [Migrating from Nova-3 to Flux](https://developers.deepgram.com/docs/flux/nova-3-migration.mdx): Migrate from Nova-3 to Flux, Deepgram's conversational speech recognition purpose-built for interactive voice agents.
+- [Optimize Voice Agent Latency with Eager End of Turn](https://developers.deepgram.com/docs/flux/voice-agent-eager-eot.mdx): Reduce end-to-end latency by preparing responses early with Eager End of Turn events.
+- [Getting Started](https://developers.deepgram.com/docs/live-streaming-audio.mdx): An introduction to getting transcription data from live streaming audio in real time.
+- [Feature Overview](https://developers.deepgram.com/docs/stt-streaming-feature-overview.mdx): Below is a matrix of Deepgram's Speech-to-Text Streaming features. Please refer to the corresponding documentation for more details.
+- [Live Streaming Starter Kit](https://developers.deepgram.com/docs/getting-started-with-the-streaming-test-suite.mdx): Deepgram's Live Streaming Starter Kit will take you step by step through the process of getting up and running with Deepgram's live streaming API.
+- [Template Apps](https://developers.deepgram.com/docs/stt-streaming-template-apps.mdx): Get up and running fast with our streaming speech-to-text template applications, fully integrated with Deepgram out-of-the-box.
+- [Close Stream](https://developers.deepgram.com/docs/close-stream.mdx): Send a CloseStream message to close the WebSocket stream.
+- [Finalize](https://developers.deepgram.com/docs/finalize.mdx): Send a Finalize message to flush the WebSocket stream.
+- [Audio Keep Alive](https://developers.deepgram.com/docs/audio-keep-alive.mdx): Send keep alive messages while streaming audio to keep the connection open.
+- [Speech Started](https://developers.deepgram.com/docs/speech-started.mdx): Speech Started sends a message when the start of speech is detected in live streaming audio.
+- [Utterance End](https://developers.deepgram.com/docs/utterance-end.mdx): Utterance End sends a message when the end of speech is detected in live streaming audio.
+- [Endpointing](https://developers.deepgram.com/docs/endpointing.mdx): Endpointing returns transcripts when pauses in speech are detected.
+- [Interim Results](https://developers.deepgram.com/docs/interim-results.mdx): Interim Results provides preliminary results for streaming audio.
+- [End of Speech Detection While Live Streaming](https://developers.deepgram.com/docs/understanding-end-of-speech-detection.mdx): Learn how to use End of Speech when transcribing live streaming audio with Deepgram.
+- [Using Interim Results](https://developers.deepgram.com/docs/using-interim-results.mdx): Learn how Interim Results can be useful for streaming audio.
+- [Configure Endpointing and Interim Results](https://developers.deepgram.com/docs/understand-endpointing-interim-results.mdx): Control when transcripts are returned during live streaming audio.
+- [Determining Your Audio Format for Live Streaming Audio](https://developers.deepgram.com/docs/determining-your-audio-format-for-live-streaming-audio.mdx): Learn how to determine if your audio is containerized or raw, and what this means for correctly formatting your requests to Deepgram's API.
+- [Measuring STT Latency](https://developers.deepgram.com/docs/measuring-streaming-latency.mdx): Learn how to measure and analyze latency in speech-to-text transcription using Deepgram.
+- [STT Troubleshooting WebSocket, NET, and DATA Errors](https://developers.deepgram.com/docs/stt-troubleshooting-websocket-data-and-net-errors.mdx): Learn how to debug common real-time, live streaming transcription errors.
+- [Recovering From Connection Errors & Timeouts When Live Streaming](https://developers.deepgram.com/docs/recovering-from-connection-errors-and-timeouts-when-live-streaming-audio.mdx): Learn how to implement real-time, live streaming transcription solutions for long-running audio streams.
+- [Using Lower-Level Websockets with the Streaming API](https://developers.deepgram.com/docs/lower-level-websockets.mdx): Learn how to implement using lower-level websockets with Deepgram's Streaming API.
+- [Compare Flux to Nova-3](https://developers.deepgram.com/docs/flux/flux-nova-3-comparison.mdx): Compare Flux to Nova-3 to understand the differences so you can choose the right model for your use case.
+- [Models & Languages Overview](https://developers.deepgram.com/docs/models-languages-overview.mdx): An overview of Deepgram's speech-to-text models and supported languages.
+- [Languages Support](https://developers.deepgram.com/docs/language.mdx): An overview of Deepgram's speech-to-text supported languages.
+- [Language Detection](https://developers.deepgram.com/docs/language-detection.mdx): Language Detection identifies the dominant language spoken in submitted audio.
+- [Multilingual Codeswitching](https://developers.deepgram.com/docs/multilingual-code-switching.mdx): Transcribe conversations where speakers switch between multiple languages.
+- [Model Options](https://developers.deepgram.com/docs/model.mdx): Model options allows you to supply a model to use for speech-to-text.
+- [Version](https://developers.deepgram.com/docs/version.mdx): Version allows you to specify the version of the model you want to use to process your submitted audio.
+- [Speaker Diarization](https://developers.deepgram.com/docs/diarization.mdx): Diarize recognizes speaker changes and assigns a speaker to each word in the transcript.
+- [Dictation](https://developers.deepgram.com/docs/dictation.mdx): Dictation automatically formats spoken commands for punctuation into their respective punctuation marks.
+- [Filler Words](https://developers.deepgram.com/docs/filler-words.mdx): Filler Words can help transcribe interruptions in your audio, like "uh" and "um".
+- [Measurements](https://developers.deepgram.com/docs/measurements.mdx): Measurements automatically formats spoken measurement units into their respective abbreviations.
+- [Numerals](https://developers.deepgram.com/docs/numerals.mdx): Numerals converts numbers from written format to numerical format.
+- [Paragraphs](https://developers.deepgram.com/docs/paragraphs.mdx): Paragraphs splits audio into paragraphs to improve transcript readability.
+- [Profanity Filtering](https://developers.deepgram.com/docs/profanity-filter.mdx): Profanity Filter looks for recognized profanity and replaces it with asterisks.
+- [Punctuation](https://developers.deepgram.com/docs/punctuation.mdx): Punctuation adds punctuation and capitalization to your transcript.
+- [Redaction](https://developers.deepgram.com/docs/redaction.mdx): Redaction removes sensitive information from your transcripts.
+- [Smart Formatting](https://developers.deepgram.com/docs/smart-format.mdx): Smart Format can automatically format transcripts to improve readability.
+- [Supported Entity Types](https://developers.deepgram.com/docs/supported-entity-types.mdx): A list of supported entity types.
+- [Utterances](https://developers.deepgram.com/docs/utterances.mdx): Utterances segments speech into meaningful semantic units.
+- [Utterance Split](https://developers.deepgram.com/docs/utterance-split.mdx): Utterance Split detects pauses between words in submitted audio. Used when the Utterances feature is enabled for pre-recorded audio.
+- [Find and Replace](https://developers.deepgram.com/docs/find-and-replace.mdx): Find and Replace searches for terms or phrases in submitted audio and replaces them.
+- [Keyterm Prompting](https://developers.deepgram.com/docs/keyterm.mdx): Keyterm Prompting allows you to improve Keyword Recall Rate (KRR) for important keyterms or phrases up to 90%.
+- [Keywords](https://developers.deepgram.com/docs/keywords.mdx): Keywords can boost or suppress specialized terminology.
+- [Search](https://developers.deepgram.com/docs/search.mdx): Search searches for terms or phrases in submitted audio.
+- [Media Input Settings](https://developers.deepgram.com/docs/media-input-settings.mdx): Media input settings allow you to define the parameters for audio data submitted to for processing.
+- [Channels](https://developers.deepgram.com/docs/channels.mdx): Channels allows you to specify the number of independent audio channels your submitted audio contains.
+- [Encoding](https://developers.deepgram.com/docs/encoding.mdx): Encoding allows you to specify the expected encoding of your submitted audio.
+- [Multichannel](https://developers.deepgram.com/docs/multichannel.mdx): Multichannel transcribes each channel in submitted audio independently.
+- [Sample Rate](https://developers.deepgram.com/docs/sample-rate.mdx): Sample Rate allows you to specify the sample rate of your submitted audio.
+- [STT Callback](https://developers.deepgram.com/docs/callback.mdx): Speech-to-text Callback allows you to have your submitted audio processed asynchronously.
+- [Tagging STT Requests](https://developers.deepgram.com/docs/stt-tagging.mdx): Tagging allows you to label your requests for grouping & filtering usage reports.
+- [Extra Metadata](https://developers.deepgram.com/docs/extra-metadata.mdx): Extra Metadata allows you to label your requests for the purpose of identification in downstream processing.
+- [Migrating From Amazon Web Services (AWS) Transcribe to Deepgram](https://developers.deepgram.com/docs/migrating-from-amazon-web-services-aws-transcribe-to-deepgram.mdx): Learn how to migrate from Amazon Web Services (AWS) Transcribe to Deepgram. For developers who are using AWS Transcribe and and want to migrate to Deepgram.
+- [Migrating From Google Speech-to-Text (STT) to Deepgram](https://developers.deepgram.com/docs/migrating-from-google-speech-to-text-stt-to-deepgram.mdx): Learn how to migrate from Google's Speech-to-Text to Deepgram. For developers who are using Google Speech-to-Text and want to migrate to Deepgram.
+- [Migrating From OpenAI Whisper to Deepgram](https://developers.deepgram.com/docs/migrating-from-openai-whisper-to-deepgram.mdx): Learn how to migrate from OpenAI Whisper to Deepgram. For developers or practitioners who are using OpenAI Whisper for transcription and are considering or actively moving to Deepgram.
+- [Migrating from AssemblyAI Speech-to-Text to Deepgram](https://developers.deepgram.com/docs/migrating-from-assembly-ai-speech-to-text-to-deepgram.mdx): A step-by-step guide for developers to migrate from AssemblyAI to Deepgram Speech-to-Text.
+- [Text-to-Speech REST](https://developers.deepgram.com/docs/tts-rest.mdx): An introduction to using Deepgram's Aura Text-to-Speech API to convert text into audio using REST.
+- [Getting Started](https://developers.deepgram.com/docs/text-to-speech.mdx): An introduction to using Deepgram's Aura Text-to-Speech REST API to convert text into audio.
+- [Feature Overview](https://developers.deepgram.com/docs/tts-feature-overview.mdx): Below is a matrix of Deepgram's Aura text-to-speech REST features. Please refer to the corresponding documentation for more details.
+- [Template Apps](https://developers.deepgram.com/docs/tts-rest-template-apps.mdx): Get up and running fast with our text-to-speech REST template applications, fully integrated with Deepgram out-of-the-box.
+- [Text-to-Speech Streaming](https://developers.deepgram.com/docs/tts-websocket.mdx): An introduction to using Deepgram's Aura Text-to-Speech API to convert streaming text into audio using WebSockets.
+- [Getting Started](https://developers.deepgram.com/docs/streaming-text-to-speech.mdx): An introduction to using Deepgram's Aura Streaming Text-to-Speech Websocket API to convert streaming text into audio.
+- [Feature Overview](https://developers.deepgram.com/docs/tts-streaming-feature-overview.mdx): Below is a matrix of Deepgram's Aura streaming text-to-speech Websocket API features. Please refer to the corresponding documentation for more details.
+- [Template Apps](https://developers.deepgram.com/docs/tts-streaming-template-apps.mdx): Get up and running fast with our streaming text-to-speech template applications, fully integrated with Deepgram out-of-the-box.
+- [Flush](https://developers.deepgram.com/docs/tts-ws-flush.mdx): Flush forces the generation of audio from Deepgram's internal text buffer.
+- [Clear](https://developers.deepgram.com/docs/tts-ws-clear.mdx): Clear will clear out Deepgram's internal text buffer.
+- [Close](https://developers.deepgram.com/docs/tts-ws-close.mdx): Close will close the websocket connection immediately.
+- [Voices and Languages](https://developers.deepgram.com/docs/tts-models.mdx): An overview of Deepgram's Aura text-to-speech voice models
+- [Media Output Settings](https://developers.deepgram.com/docs/tts-media-output-settings.mdx): Deepgram provides support for generating audio output in various formats, each with specific encoding options.
+- [Encoding](https://developers.deepgram.com/docs/tts-encoding.mdx): Encoding allows you to specify the expected encoding of your audio output.
+- [Bit Rate](https://developers.deepgram.com/docs/tts-bit-rate.mdx): Bit Rate specifies the bit rate of the audio output.
+- [Container](https://developers.deepgram.com/docs/tts-container.mdx): Container specifies the file format wrapper for the output audio.
+- [Sample Rate](https://developers.deepgram.com/docs/tts-sample-rate.mdx): Sample Rate specifies the sample rate for the output audio.
+- [Tagging TTS Requests](https://developers.deepgram.com/docs/tts-tagging.mdx): Tagging allows you to label your requests for grouping & filtering usage reports.
+- [TTS Callback](https://developers.deepgram.com/docs/tts-callback.mdx): A text-to-speech Callback allows you to have your submitted text processed asynchronously.
+- [Audio Output Streaming](https://developers.deepgram.com/docs/streaming-the-audio-output.mdx): Start streaming your text-to-speech REST audio as soon as the first byte arrives.
+- [Real-Time TTS with WebSockets](https://developers.deepgram.com/docs/tts-websocket-streaming.mdx): Implement low-latency streaming Text-to-Speech using Deepgram's WebSocket API.
+- [Text Chunking for TTS](https://developers.deepgram.com/docs/tts-text-chunking.mdx): Basic techniques for breaking text into chunks to reduce latency in Text-to-Speech applications.
+- [Formatting Text for Aura-2](https://developers.deepgram.com/docs/improving-aura-2-formatting.mdx): Optimize Aura-2 Text-to-Speech Generation Quality
+- [Handling Audio Issues in Text To Speech](https://developers.deepgram.com/docs/handling-audio-issues-in-text-to-speech.mdx): Learn how to better handle audio issues when processing text-to-speech.
+- [Sending LLM Outputs to a WebSocket](https://developers.deepgram.com/docs/send-llm-outputs-to-the-tts-web-socket.mdx): Learn some tips and strategies to send LLM outputs to a Web Socket.
+- [Text Chunking for TTS REST Optimization](https://developers.deepgram.com/docs/text-chunking-for-tts-optimization.mdx): Text chunking is the process of breaking down text inputs into smaller, manageable chunks before processing.
+- [Text to Speech Latency](https://developers.deepgram.com/docs/text-to-speech-latency.mdx): Learn some tips and strategies for minimizing latency in text-to-speech requests.
+- [Text to Speech Prompting](https://developers.deepgram.com/docs/text-to-speech-prompting.mdx): Prompting text-to-speech with natural pauses or filler words can help to make your audio sound more natural.
+- [TTS Voice Controls](https://developers.deepgram.com/docs/tts-voice-controls.mdx): Adjust speaking speed and override pronunciation for specific words using Aura-2 controls.
+- [TTS Troubleshooting WebSocket, NET, and DATA Errors](https://developers.deepgram.com/docs/tts-troubleshooting-websocket-net-and-data-errors.mdx): Learn how to debug common real-time, live streaming text-to-speech errors.
+- [Getting Started](https://developers.deepgram.com/docs/audio-intelligence.mdx): An introduction to using Deepgram's audio intelligence features to analyze audio using Deepgram SDKs.
+- [Feature Overview](https://developers.deepgram.com/docs/stt-intelligence-feature-overview.mdx): Below is a matrix of Deepgram's Speech-to-Text Intelligence features. Please refer to the corresponding documentation for more details.
+- [Entity Detection](https://developers.deepgram.com/docs/detect-entities.mdx): Entity Detection identifies and extracts key entities from content in submitted audio.
+- [Intent Recognition](https://developers.deepgram.com/docs/intent-recognition.mdx): Intent Recognition recognizes speaker intent throughout a transcript.
+- [Sentiment Analysis](https://developers.deepgram.com/docs/sentiment-analysis.mdx): Sentiment Analysis recognizes the sentiment throughout an entire transcript.
+- [Summarization](https://developers.deepgram.com/docs/summarization.mdx): Summarization provides a brief summary of the audio.
+- [Topic Detection](https://developers.deepgram.com/docs/topic-detection.mdx): Detects topics throughout a transcript.
+- [Getting Started](https://developers.deepgram.com/docs/text-intelligence.mdx): An introduction to using Deepgram's text intelligence features to analyze text using Deepgram SDKs.
+- [Feature Overview](https://developers.deepgram.com/docs/text-intelligence-feature-overview.mdx): Below is a matrix of Deepgram's Text Intelligence features. Please refer to the corresponding documentation for more details.
+- [Template Apps](https://developers.deepgram.com/docs/text-intelligence-template-apps.mdx): Get up and running fast with our text intelligence template applications, fully integrated with Deepgram out-of-the-box.
+- [Intent Recognition](https://developers.deepgram.com/docs/text-intention-recognition.mdx): Intent Recognition recognizes intent throughout the input text.
+- [Sentiment Analysis](https://developers.deepgram.com/docs/text-sentiment-analysis.mdx): Sentiment Analysis recognizes sentiment throughout the inputed text.
+- [Summarization](https://developers.deepgram.com/docs/text-summarization.mdx): Summarization provides a brief summary of the input text.
+- [Topic Detection](https://developers.deepgram.com/docs/text-topic-detection.mdx): Topic Detection detects topics throughout the input text.
+- [Tagging Intelligence Requests](https://developers.deepgram.com/docs/text-intelligence-tagging.mdx): Tagging allows you to label your requests for grouping & filtering usage reports.
+- [Text Intelligence Callback](https://developers.deepgram.com/docs/text-intelligence-callback.mdx): Text Intelligence Callback allows you to have your submitted text processed asynchronously.
+- [Introduction](https://developers.deepgram.com/docs/self-hosted-introduction.mdx): Deepgram supports a variety of deployment methods, including a self-hosted offering, which is an isolated service deployed to customer-requisitioned cloud instances or on-premises data centers.
+- [Deployment Environments](https://developers.deepgram.com/docs/self-hosted-deployment-environments.mdx): Deepgram's self-hosted offering can be used with Virtual Private Cloud providers, such as AWS, GCP, Oracle, or Azure, as well as with on-premises/bare-metal deployments.
+- [Docker/Podman](https://developers.deepgram.com/docs/dockerpodman.mdx): Docker and  are popular container runtimes that allows you to run applications in isolated environments. This guide section discusses running Deepgram products in a self-hosted environment using Docker or Podman.
+- [Amazon Web Services](https://developers.deepgram.com/docs/aws-docker-podman.mdx): With Docker/Podman
+- [Google Cloud Platform](https://developers.deepgram.com/docs/gcp-docker-podman.mdx): With Docker/Podman
+- [Oracle Cloud Infrastructure](https://developers.deepgram.com/docs/oci-docker-podman.mdx): With Docker/Podman
+- [Microsoft Azure](https://developers.deepgram.com/docs/azure-docker-podman.mdx): With Docker/Podman
+- [Bare-Metal Servers](https://developers.deepgram.com/docs/bare-metal.mdx): With Docker/Podman
+- [Drivers and Container Orchestration Tools](https://developers.deepgram.com/docs/drivers-and-containerization-platforms.mdx): With Docker/Podman
+- [Kubernetes](https://developers.deepgram.com/docs/kubernetes.mdx): Kubernetes, also known as K8s, is an open source system for automating deployment, scaling, and management of containerized applications. This guide section discusses running Deepgram products in a self-hosted environment using Kubernetes.
+- [Amazon Web Services](https://developers.deepgram.com/docs/aws-k8s.mdx): With Kubernetes
+- [Google Cloud Platform](https://developers.deepgram.com/docs/gcp-k8s.mdx): With Kubernetes
+- [Self-Managed Kubernetes](https://developers.deepgram.com/docs/self-managed-kubernetes.mdx): You can deploy Deepgram using Kubernetes which will provide a scalable instance of Deepgram's API and Engine services running on your own hardware or in your Kubernetes cloud environment. In this guide, we will look at how to deploy Deepgram on-premises with Kubernetes on a system with a Ubuntu operating system installed. ​
+- [Securing Your Cluster](https://developers.deepgram.com/docs/securing-your-cluster.mdx): Deepgram strongly recommends regular reviews of the security posture of your self-hosted environment. In a Kubernetes context, this may include reviewing the  of the official Kubernetes documentation, as well as any security guidance from your cloud provider.
+- [Troubleshooting](https://developers.deepgram.com/docs/k8s-troubleshooting.mdx): If you encounter any challenges while deploying or maintaining your Deepgram self-hosted services on Kubernetes, please consult this guide.
+- [Self Service Licensing & Credentials](https://developers.deepgram.com/docs/self-hosted-self-service-tutorial.mdx): Learn how to deploy Deepgram self-hosted using self service. Deepgram’s self-serve self-hosted solution is available through both the Deepgram Console and the Deepgram API.
+- [Deploy Speech-to-Text (STT) Services](https://developers.deepgram.com/docs/deploy-stt-services.mdx): With Docker/Podman
+- [Using the Flux Model](https://developers.deepgram.com/docs/flux-self-hosted.mdx): Flux is a purpose-built, low-latency streaming speech-to-text model tailored for voice agent use cases. This article describes how to ensure Flux is present in your self-hosted Deepgram environment, the configuration steps, and key considerations unique to Flux.
+- [Deploy Text-to-Speech (TTS) Services](https://developers.deepgram.com/docs/deploy-tts-services.mdx): Deploy Deepgram's TTS services including Aura-2 for conversational AI voice synthesis
+- [Status Endpoint](https://developers.deepgram.com/docs/self-hosted-status-endpoint.mdx): Monitor self-hosted node health and readiness.
+- [Scaling and Deployment Strategies](https://developers.deepgram.com/docs/scaling-and-deployment-strategies.mdx): Once you have a basic running environment, there are a number of considerations to iterate towards a true production environment. Unlike our hosted offerings, concerns around scaling, maintenance, and security are fully managed by your team. However, we are happy to advise, including the information included in the following guides.
+- [System Maintenance](https://developers.deepgram.com/docs/maintaining.mdx): Periodically, you will update configuration files and models, install product updates for your self-hosted deployment, and rotate licensing credentials. A regularly updated system will be both more secure and more performant than a lagging one.
+- [Blue-Green Deployment](https://developers.deepgram.com/docs/blue-green-deployment.mdx): Blue-green deployments are an effective strategy for managing self-hosted updates, especially in cases when backwards compatibility is not maintained and multiple container dependencies exist.
+- [Auto-Scaling](https://developers.deepgram.com/docs/autoscaling-best-practices.mdx): Auto-scaling is a complex endeavor. It is highly dependent on the application deployed, the use case of that application, and business needs and constraints. As such, this guide does not attempt to address all scenarios. A basic understanding of containerized infrastructure is assumed, and specific implementation details are out of scope save for some selected example configurations. References to other materials may also be provided where appropriate.
+- [Metrics Guide](https://developers.deepgram.com/docs/metrics-guide.mdx): Monitoring system metrics is an important part of maintaining a healthy Deepgram self-hosted deployment. Metrics can also aid in decision making around scaling and performance concerns. To this end, Deepgram services publish a variety of metrics on exposed endpoints that you can query to determine system health.
+- [Ingress Authentication](https://developers.deepgram.com/docs/self-hosted-ingress-auth.mdx): When deploying Deepgram's self-hosted API container with our  and  guides, your environment will only be accessible from within your private network. This should be sufficient for the majority of enterprise use cases. You can send requests from other services within your private network, or setup a proxy to allow requests from the public internet to pass through your existing application before being passed into your Deepgram self-hosted environment.
+- [Redact Usage](https://developers.deepgram.com/docs/self-hosted-redact-usage.mdx): Configure usage data redaction in your self-hosted Deepgram deployment to enhance privacy and comply with security requirements.
+- [Using Private Container Registries](https://developers.deepgram.com/docs/using-private-container-registries.mdx)
+- [Deploy Deepgram on Amazon SageMaker](https://developers.deepgram.com/docs/deploy-amazon-sagemaker.mdx): Deepgram can be deployed into your own Amazon Virtual Private Cloud (VPC) environment using Amazon SageMaker AI. Simply subscribe to the Deepgram product in the AWS Marketplace and then deploy a SageMaker Endpoint, using our pre-made SageMaker Model Package.
+- [Self-Hosted Add Ons](https://developers.deepgram.com/docs/self-hosted-add-ons.mdx): Learn about the different Deepgram Self-Hosted Add Ons you can leverage.
+- [License Proxy](https://developers.deepgram.com/docs/license-proxy.mdx): For customers self-hosted Deepgram in production, we recommend the License Proxy, which is a caching proxy that communicates with the Deepgram-hosted license server to ensure uptime and simplify network security.
+- [Prometheus Integration](https://developers.deepgram.com/docs/prometheus-integration.mdx): Prometheus is a powerful monitoring and alerting toolkit, often used for collecting and querying various system metrics. This guide outlines the steps required to integrate Prometheus with an self-hosted instance.
+- [Deepgram UniMRCP Plugin](https://developers.deepgram.com/docs/deepgram-unimrcp-plugin.mdx): Deepgram offers a plugin for speech recognition for the UniMRCP Server (UMS), which is a popular open-source project that offers cross-platform MRCP services. To use this plugin with self-hosted deployments, you must take some additional steps.
+- [Using SDKs with Self-Hosted](https://developers.deepgram.com/docs/using-sdks-with-self-hosted.mdx): Learn about how to use Deepgram SDKs with Deepgram self-hosted deployments.
+
+## API Docs
+
+- REST API > Voice Agent [Build a Voice Agent](https://developers.deepgram.com/reference/voice-agent/voice-agent.mdx)
+- REST API > Voice Agent [Think Models](https://developers.deepgram.com/reference/voice-agent/think-models.mdx)
+- REST API > Speech to Text [Live Audio](https://developers.deepgram.com/reference/speech-to-text/listen-streaming.mdx)
+- REST API > Speech to Text [Pre-Recorded Audio](https://developers.deepgram.com/reference/speech-to-text/listen-pre-recorded.mdx)
+- REST API > Speech to Text [Turn-based Audio (Flux)](https://developers.deepgram.com/reference/speech-to-text/listen-flux.mdx)
+- REST API > Text to Speech [Continuous Text Stream](https://developers.deepgram.com/reference/text-to-speech/speak-streaming.mdx)
+- REST API > Text to Speech [Single Text Request](https://developers.deepgram.com/reference/text-to-speech/speak-request.mdx)
+- REST API > Text Intelligence [Analyze Text](https://developers.deepgram.com/reference/text-intelligence/analyze-text.mdx)
+- REST API > Manage > Projects [List Projects](https://developers.deepgram.com/reference/manage/projects/list.mdx)
+- REST API > Manage > Projects [Get a Project](https://developers.deepgram.com/reference/manage/projects/get.mdx)
+- REST API > Manage > Projects [Update a Project](https://developers.deepgram.com/reference/manage/projects/update.mdx)
+- REST API > Manage > Projects [Delete a Project](https://developers.deepgram.com/reference/manage/projects/delete.mdx)
+- REST API > Manage > Projects [Leave a Project](https://developers.deepgram.com/reference/manage/projects/leave.mdx)
+- REST API > Manage > Projects [List Project Models](https://developers.deepgram.com/reference/manage/projects/models/list.mdx)
+- REST API > Manage > Projects [Get a Project Model](https://developers.deepgram.com/reference/manage/projects/models/get.mdx)
+- REST API > Manage > Models [List All Available Models](https://developers.deepgram.com/reference/manage/models/list.mdx)
+- REST API > Manage > Models [Get an Available Model](https://developers.deepgram.com/reference/manage/models/get.mdx)
+- REST API > Manage > Keys [List Project Keys](https://developers.deepgram.com/reference/manage/keys/list.mdx)
+- REST API > Manage > Keys [Create a Project Key](https://developers.deepgram.com/reference/manage/keys/create.mdx)
+- REST API > Manage > Keys [Get a Project Key](https://developers.deepgram.com/reference/manage/keys/get.mdx)
+- REST API > Manage > Keys [Delete a Project Key](https://developers.deepgram.com/reference/manage/keys/delete.mdx)
+- REST API > Manage > Members [List Project Members](https://developers.deepgram.com/reference/manage/members/list.mdx)
+- REST API > Manage > Members [Delete a Project Member](https://developers.deepgram.com/reference/manage/members/delete.mdx)
+- REST API > Manage > Members [List Project Member Scopes](https://developers.deepgram.com/reference/manage/members/scopes/list.mdx)
+- REST API > Manage > Members [Update Project Member Scopes](https://developers.deepgram.com/reference/manage/members/scopes/update.mdx)
+- REST API > Manage > Invites [List Project Invites](https://developers.deepgram.com/reference/manage/invites/list.mdx)
+- REST API > Manage > Invites [Create a Project Invite](https://developers.deepgram.com/reference/manage/invites/create.mdx)
+- REST API > Manage > Invites [Delete a Project Invite](https://developers.deepgram.com/reference/manage/invites/delete.mdx)
+- REST API > Manage > Requests [List Project Requests](https://developers.deepgram.com/reference/manage/requests/list.mdx)
+- REST API > Manage > Requests [Get a Project Request](https://developers.deepgram.com/reference/manage/requests/get.mdx)
+- REST API > Manage > Usage [Get Project Usage](https://developers.deepgram.com/reference/manage/usage/get.mdx)
+- REST API > Manage > Usage [List Project Usage Fields](https://developers.deepgram.com/reference/manage/usage/list.mdx)
+- REST API > Manage > Usage [Get Project Usage Breakdown](https://developers.deepgram.com/reference/manage/usage/breakdown/get.mdx)
+- REST API > Manage > Billing [Get Project Balances](https://developers.deepgram.com/reference/manage/billing/list.mdx)
+- REST API > Manage > Billing [Get a Project Balance](https://developers.deepgram.com/reference/manage/billing/get.mdx)
+- REST API > Manage > Billing [Get Project Billing Breakdown](https://developers.deepgram.com/reference/manage/billing/breakdown/get.mdx)
+- REST API > Manage > Billing [List Project Billing Fields](https://developers.deepgram.com/reference/manage/billing/fields/get.mdx)
+- REST API > Manage > Billing [List Project Purchases](https://developers.deepgram.com/reference/manage/billing/purchases/get.mdx)
+- REST API > Self-Hosted [List Project Self-Hosted Distribution Credentials](https://developers.deepgram.com/reference/self-hosted/distribution-credentials/list.mdx)
+- REST API > Self-Hosted [Create a Project Self-Hosted Distribution Credential](https://developers.deepgram.com/reference/self-hosted/distribution-credentials/create.mdx)
+- REST API > Self-Hosted [Get a Project Self-Hosted Distribution Credential](https://developers.deepgram.com/reference/self-hosted/distribution-credentials/get.mdx)
+- REST API > Self-Hosted [Delete a Project Self-Hosted Distribution Credential](https://developers.deepgram.com/reference/self-hosted/distribution-credentials/delete.mdx)
+- REST API > Auth [Token-Based Authentication](https://developers.deepgram.com/reference/auth/tokens/grant.mdx)
+
+## OpenAPI Specification
+
+The raw OpenAPI 3.1 specification for this API is available at:
+- [OpenAPI JSON](https://developers.deepgram.com/openapi.json)
+- [OpenAPI YAML](https://developers.deepgram.com/openapi.yaml)

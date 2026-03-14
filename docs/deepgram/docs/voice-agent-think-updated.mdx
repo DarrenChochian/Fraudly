@@ -1,0 +1,30 @@
+***
+
+title: Think Updated
+subtitle: Confirms that a Think Configuration change has been applied.
+slug: docs/voice-agent-think-updated
+------------------------------------
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="headset" /> Voice Agent</span>
+  </span>
+</div>
+
+The `ThinkUpdated` message is sent by the server to the client to confirm that the Think Configuration has been updated.
+
+## Purpose
+
+When receiving a `ThinkUpdated` message, the new Think Configuration is immediately active and will be used for all subsequent requests. When receiving this message no action is required unless you need to verify the changes.
+
+## Example Payload
+
+If the client has sent an [`UpdateThink`](/docs/voice-agent-update-think) message, the server will respond with a `ThinkUpdated` message to confirm that the Think Configuration has been updated.
+
+<CodeGroup>
+  ```json JSON
+  {
+    "type": "ThinkUpdated"
+  }
+  ```
+</CodeGroup>

@@ -1,0 +1,334 @@
+***
+
+title: Voices and Languages
+subtitle: An overview of Deepgram's Aura text-to-speech voice models
+slug: docs/tts-models
+---------------------
+
+`model` *string*
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="megaphone" /> Text to Speech Request</span>
+  </span>
+
+  <span class="dg-badge">
+    <span><Icon icon="megaphone" /> Text to Speech Stream</span>
+  </span>
+</div>
+
+Deepgram offers a range of voices for its Aura text-to-speech API, each identified by a unique model name following the format `[modelname]-[voicename]-[language]`.
+
+To select a model, use the syntax `model=aura-2-thalia-en`
+
+## Example
+
+<CodeGroup>
+  ```curl CURL
+  curl "https://api.deepgram.com/v1/speak?model=aura-2-thalia-en" \
+  > -H "Content-Type: application/json" \
+  > -H "Authorization: Token YOUR_DEEPGRAM_API_KEY" \
+  > -d "{\"text\":\"Hello how are you?\"}" \
+  > --output outputfile_voice_model.wav \
+  > --fail-with-body \
+  > --silent || echo "Request failed"
+  ```
+</CodeGroup>
+
+<Warning>
+  Replace `YOUR_DEEPGRAM_API_KEY` with your [Deepgram API Key](/docs/create-additional-api-keys).
+</Warning>
+
+## Language Support
+
+Deepgram's Aura text-to-speech supports the following languages:
+
+* **English (en)** - American, British, Australian, Irish, Filipino accents
+* **Spanish (es)** - Mexican, Peninsular, Colombian, Latin American accents
+* **German (de)**
+* **French (fr)**
+* **Dutch (nl)**
+* **Italian (it)**
+* **Japanese (ja)**
+
+<Info>
+  We're constantly adding additional language support and making improvements to our voice models. Check back regularly for updates.
+</Info>
+
+***
+
+## Aura-2 English Voices
+
+### Featured Aura-2 English Voices
+
+These are our featured English voices, selected for their versatility and quality:
+
+<div>
+  | Model                 | Name      | Sample                                                                                            | Expressed Gender | Age   | Language | Accent   | Characteristics                            | Use Cases                          |
+  | :-------------------- | :-------- | :------------------------------------------------------------------------------------------------ | :--------------- | :---- | :------- | :------- | :----------------------------------------- | :--------------------------------- |
+  | `aura-2-thalia-en`    | thalia    | <audio id="thalia" controls src="https://static.deepgram.com/examples/Aura-2-thalia.wav" />       | feminine         | Adult | en-us    | American | Clear, Confident, Energetic, Enthusiastic  | Casual chat, customer service, IVR |
+  | `aura-2-andromeda-en` | andromeda | <audio id="andromeda" controls src="https://static.deepgram.com/examples/Aura-2-andromeda.wav" /> | feminine         | Adult | en-us    | American | Casual, Expressive, Comfortable            | Customer service, IVR              |
+  | `aura-2-helena-en`    | helena    | <audio id="helena" controls src="https://static.deepgram.com/examples/Aura-2-helena.wav" />       | feminine         | Adult | en-us    | American | Caring, Natural, Positive, Friendly, Raspy | IVR, casual chat                   |
+  | `aura-2-apollo-en`    | apollo    | <audio id="apollo" controls src="https://static.deepgram.com/examples/Aura-2-apollo.wav" />       | masculine        | Adult | en-us    | American | Confident, Comfortable, Casual             | Casual chat                        |
+  | `aura-2-arcas-en`     | arcas     | <audio id="arcas" controls src="https://static.deepgram.com/examples/Aura-2-arcas.wav" />         | masculine        | Adult | en-us    | American | Natural, Smooth, Clear, Comfortable        | Customer service, casual chat      |
+  | `aura-2-aries-en`     | aries     | <audio id="aries" controls src="https://static.deepgram.com/examples/Aura-2-aries.wav" />         | masculine        | Adult | en-us    | American | Warm, Energetic, Caring                    | Casual chat                        |
+</div>
+
+### Aura-2: All Available English Voices
+
+<div>
+  | Model                 | Name      | Sample                                                                                            | Expressed Gender | Age         | Language | Accent     | Characteristics                                 | Use Cases                                 |
+  | :-------------------- | :-------- | :------------------------------------------------------------------------------------------------ | :--------------- | :---------- | :------- | :--------- | :---------------------------------------------- | :---------------------------------------- |
+  | `aura-2-amalthea-en`  | amalthea  | <audio id="amalthea" controls src="https://static.deepgram.com/examples/Aura-2-amalthea.wav" />   | feminine         | Young Adult | en-ph    | Filipino   | Engaging, Natural, Cheerful                     | Casual chat                               |
+  | `aura-2-andromeda-en` | andromeda | <audio id="andromeda" controls src="https://static.deepgram.com/examples/Aura-2-andromeda.wav" /> | feminine         | Adult       | en-us    | American   | Casual, Expressive, Comfortable                 | Customer service, IVR                     |
+  | `aura-2-apollo-en`    | apollo    | <audio id="apollo" controls src="https://static.deepgram.com/examples/Aura-2-apollo.wav" />       | masculine        | Adult       | en-us    | American   | Confident, Comfortable, Casual                  | Casual chat                               |
+  | `aura-2-arcas-en`     | arcas     | <audio id="arcas" controls src="https://static.deepgram.com/examples/Aura-2-arcas.wav" />         | masculine        | Adult       | en-us    | American   | Natural, Smooth, Clear, Comfortable             | Customer service, casual chat             |
+  | `aura-2-aries-en`     | aries     | <audio id="aries" controls src="https://static.deepgram.com/examples/Aura-2-aries.wav" />         | masculine        | Adult       | en-us    | American   | Warm, Energetic, Caring                         | Casual chat                               |
+  | `aura-2-asteria-en`   | asteria   | <audio id="asteria" controls src="https://static.deepgram.com/examples/Aura-2-asteria.wav" />     | feminine         | Adult       | en-us    | American   | Clear, Confident, Knowledgeable, Energetic      | Advertising                               |
+  | `aura-2-athena-en`    | athena    | <audio id="athena" controls src="https://static.deepgram.com/examples/Aura-2-athena.wav" />       | feminine         | Mature      | en-us    | American   | Calm, Smooth, Professional                      | Storytelling                              |
+  | `aura-2-atlas-en`     | atlas     | <audio id="atlas" controls src="https://static.deepgram.com/examples/Aura-2-atlas.wav" />         | masculine        | Mature      | en-us    | American   | Enthusiastic, Confident, Approachable, Friendly | Advertising                               |
+  | `aura-2-aurora-en`    | aurora    | <audio id="aurora" controls src="https://static.deepgram.com/examples/Aura-2-aurora.wav" />       | feminine         | Adult       | en-us    | American   | Cheerful, Expressive, Energetic                 | Interview                                 |
+  | `aura-2-callista-en`  | callista  | <audio id="callista" controls src="https://static.deepgram.com/examples/Aura-2-callista.wav" />   | feminine         | Adult       | en-us    | American   | Clear, Energetic, Professional, Smooth          | IVR                                       |
+  | `aura-2-cora-en`      | cora      | <audio id="cora" controls src="https://static.deepgram.com/examples/Aura-2-cora.wav" />           | feminine         | Adult       | en-us    | American   | Smooth, Melodic, Caring                         | Storytelling                              |
+  | `aura-2-cordelia-en`  | cordelia  | <audio id="cordelia" controls src="https://static.deepgram.com/examples/Aura-2-cordelia.wav" />   | feminine         | Young Adult | en-us    | American   | Approachable, Warm, Polite                      | Storytelling                              |
+  | `aura-2-delia-en`     | delia     | <audio id="delia" controls src="https://static.deepgram.com/examples/Aura-2-delia.wav" />         | feminine         | Young Adult | en-us    | American   | Casual, Friendly, Cheerful, Breathy             | Interview                                 |
+  | `aura-2-draco-en`     | draco     | <audio id="draco" controls src="https://static.deepgram.com/examples/Aura-2-draco.wav" />         | masculine        | Adult       | en-gb    | British    | Warm, Approachable, Trustworthy, Baritone       | Storytelling                              |
+  | `aura-2-electra-en`   | electra   | <audio id="electra" controls src="https://static.deepgram.com/examples/Aura-2-electra.wav" />     | feminine         | Adult       | en-us    | American   | Professional, Engaging, Knowledgeable           | IVR, advertising, customer service        |
+  | `aura-2-harmonia-en`  | harmonia  | <audio id="harmonia" controls src="https://static.deepgram.com/examples/Aura-2-harmonia.wav" />   | feminine         | Adult       | en-us    | American   | Empathetic, Clear, Calm, Confident              | Customer service                          |
+  | `aura-2-helena-en`    | helena    | <audio id="helena" controls src="https://static.deepgram.com/examples/Aura-2-helena.wav" />       | feminine         | Adult       | en-us    | American   | Caring, Natural, Positive, Friendly, Raspy      | IVR, casual chat                          |
+  | `aura-2-hera-en`      | hera      | <audio id="hera" controls src="https://static.deepgram.com/examples/Aura-2-hera.wav" />           | feminine         | Adult       | en-us    | American   | Smooth, Warm, Professional                      | Informative                               |
+  | `aura-2-hermes-en`    | hermes    | <audio id="hermes" controls src="https://static.deepgram.com/examples/Aura-2-hermes.wav" />       | masculine        | Adult       | en-us    | American   | Expressive, Engaging, Professional              | Informative                               |
+  | `aura-2-hyperion-en`  | hyperion  | <audio id="hyperion" controls src="https://static.deepgram.com/examples/Aura-2-hyperion.wav" />   | masculine        | Adult       | en-au    | Australian | Caring, Warm, Empathetic                        | Interview                                 |
+  | `aura-2-iris-en`      | iris      | <audio id="iris" controls src="https://static.deepgram.com/examples/Aura-2-iris.wav" />           | feminine         | Young Adult | en-us    | American   | Cheerful, Positive, Approachable                | IVR, advertising, customer service        |
+  | `aura-2-janus-en`     | janus     | <audio id="janus" controls src="https://static.deepgram.com/examples/Aura-2-janus.wav" />         | feminine         | Adult       | en-us    | American   | Southern, Smooth, Trustworthy                   | Storytelling                              |
+  | `aura-2-juno-en`      | juno      | <audio id="juno" controls src="https://static.deepgram.com/examples/Aura-2-juno.wav" />           | feminine         | Adult       | en-us    | American   | Natural, Engaging, Melodic, Breathy             | Interview                                 |
+  | `aura-2-jupiter-en`   | jupiter   | <audio id="jupiter" controls src="https://static.deepgram.com/examples/Aura-2-jupiter.wav" />     | masculine        | Adult       | en-us    | American   | Expressive, Knowledgeable, Baritone             | Informative                               |
+  | `aura-2-luna-en`      | luna      | <audio id="luna" controls src="https://static.deepgram.com/examples/Aura-2-luna.wav" />           | feminine         | Young Adult | en-us    | American   | Friendly, Natural, Engaging                     | IVR                                       |
+  | `aura-2-mars-en`      | mars      | <audio id="mars" controls src="https://static.deepgram.com/examples/Aura-2-mars.wav" />           | masculine        | Adult       | en-us    | American   | Smooth, Patient, Trustworthy, Baritone          | Customer service                          |
+  | `aura-2-minerva-en`   | minerva   | <audio id="minerva" controls src="https://static.deepgram.com/examples/Aura-2-minerva.wav" />     | feminine         | Adult       | en-us    | American   | Positive, Friendly, Natural                     | Storytelling                              |
+  | `aura-2-neptune-en`   | neptune   | <audio id="neptune" controls src="https://static.deepgram.com/examples/Aura-2-neptune.wav" />     | masculine        | Adult       | en-us    | American   | Professional, Patient, Polite                   | Customer service                          |
+  | `aura-2-odysseus-en`  | odysseus  | <audio id="odysseus" controls src="https://static.deepgram.com/examples/Aura-2-odysseus.wav" />   | masculine        | Adult       | en-us    | American   | Calm, Smooth, Comfortable, Professional         | Advertising                               |
+  | `aura-2-ophelia-en`   | ophelia   | <audio id="ophelia" controls src="https://static.deepgram.com/examples/Aura-2-ophelia.wav" />     | feminine         | Adult       | en-us    | American   | Expressive, Enthusiastic, Cheerful              | Interview                                 |
+  | `aura-2-orion-en`     | orion     | <audio id="orion" controls src="https://static.deepgram.com/examples/Aura-2-orion.wav" />         | masculine        | Adult       | en-us    | American   | Approachable, Comfortable, Calm, Polite         | Informative                               |
+  | `aura-2-orpheus-en`   | orpheus   | <audio id="orpheus" controls src="https://static.deepgram.com/examples/Aura-2-orpheus.wav" />     | masculine        | Adult       | en-us    | American   | Professional, Clear, Confident, Trustworthy     | Customer service, storytelling            |
+  | `aura-2-pandora-en`   | pandora   | <audio id="pandora" controls src="https://static.deepgram.com/examples/Aura-2-pandora.wav" />     | feminine         | Adult       | en-gb    | British    | Smooth, Calm, Melodic, Breathy                  | IVR, informative                          |
+  | `aura-2-phoebe-en`    | phoebe    | <audio id="phoebe" controls src="https://static.deepgram.com/examples/Aura-2-phoebe.wav" />       | feminine         | Adult       | en-us    | American   | Energetic, Warm, Casual                         | Customer service                          |
+  | `aura-2-pluto-en`     | pluto     | <audio id="pluto" controls src="https://static.deepgram.com/examples/Aura-2-pluto.wav" />         | masculine        | Adult       | en-us    | American   | Smooth, Calm, Empathetic, Baritone              | Interview, storytelling                   |
+  | `aura-2-saturn-en`    | saturn    | <audio id="saturn" controls src="https://static.deepgram.com/examples/Aura-2-saturn.wav" />       | masculine        | Adult       | en-us    | American   | Knowledgeable, Confident, Baritone              | Customer service                          |
+  | `aura-2-selene-en`    | selene    | <audio id="selene" controls src="https://static.deepgram.com/examples/Aura-2-selene.wav" />       | feminine         | Adult       | en-us    | American   | Expressive, Engaging, Energetic                 | Informative                               |
+  | `aura-2-thalia-en`    | thalia    | <audio id="thalia" controls src="https://static.deepgram.com/examples/Aura-2-thalia.wav" />       | feminine         | Adult       | en-us    | American   | Clear, Confident, Energetic, Enthusiastic       | Casual chat, customer service, IVR        |
+  | `aura-2-theia-en`     | theia     | <audio id="theia" controls src="https://static.deepgram.com/examples/Aura-2-theia.wav" />         | feminine         | Adult       | en-au    | Australian | Expressive, Polite, Sincere                     | Informative                               |
+  | `aura-2-vesta-en`     | vesta     | <audio id="vesta" controls src="https://static.deepgram.com/examples/Aura-2-vesta.wav" />         | feminine         | Adult       | en-us    | American   | Natural, Expressive, Patient, Empathetic        | Customer service, interview, storytelling |
+  | `aura-2-zeus-en`      | zeus      | <audio id="zeus" controls src="https://static.deepgram.com/examples/Aura-2-zeus.wav" />           | masculine        | Adult       | en-us    | American   | Deep, Trustworthy, Smooth                       | IVR                                       |
+</div>
+
+***
+
+## Aura-2 Spanish Voices (EA)
+
+### Featured Aura-2 Spanish Voices
+
+These are our featured Spanish voices, selected for their versatility and quality:
+
+<div>
+  | Model                | Name     | Sample                                                                                   | Expressed Gender | Age         | Language | Accent     | Characteristics                                      | Use Cases                     |
+  | :------------------- | :------- | :--------------------------------------------------------------------------------------- | :--------------- | :---------- | :------- | :--------- | :--------------------------------------------------- | :---------------------------- |
+  | `aura-2-celeste-es`  | celeste  | <audio id="celeste" controls src="https://static.deepgram.com/examples/Celeste.wav" />   | feminine         | Young Adult | es-co    | Colombian  | Clear, Energetic, Positive, Friendly, Enthusiastic   | Casual Chat, Advertising, IVR |
+  | `aura-2-estrella-es` | estrella | <audio id="estrella" controls src="https://static.deepgram.com/examples/Estrella.wav" /> | feminine         | Mature      | es-mx    | Mexican    | Approachable, Natural, Calm, Comfortable, Expressive | Casual Chat, Interview        |
+  | `aura-2-nestor-es`   | nestor   | <audio id="nestor" controls src="https://static.deepgram.com/examples/Nestor.wav" />     | masculine        | Adult       | es-es    | Peninsular | Calm, Professional, Approachable, Clear, Confident   | Casual Chat, Customer Service |
+</div>
+
+### Aura-2: All Available Spanish Voices
+
+<div>
+  | Model                | Name     | Sample                                                                                                       | Expressed Gender | Age         | Language | Accent         | Characteristics                                             | Use Cases                                |
+  | :------------------- | :------- | :----------------------------------------------------------------------------------------------------------- | :--------------- | :---------- | :------- | :------------- | :---------------------------------------------------------- | :--------------------------------------- |
+  | `aura-2-sirio-es`    | sirio    | <audio id="sirio" controls src="https://static.deepgram.com/examples/Sirio.wav" />                           | masculine        | Adult       | es-mx    | Mexican        | Calm, Professional, Comfortable, Empathetic, Baritone       | Casual Chat, Interview                   |
+  | `aura-2-nestor-es`   | nestor   | <audio id="nestor" controls src="https://static.deepgram.com/examples/Nestor.wav" />                         | masculine        | Adult       | es-es    | Peninsular     | Calm, Professional, Approachable, Clear, Confident          | Casual Chat, Customer Service            |
+  | `aura-2-carina-es`   | carina   | <audio id="carina" controls src="https://static.deepgram.com/examples/Carina.wav" />                         | feminine         | Adult       | es-es    | Peninsular     | Professional, Raspy, Energetic, Breathy, Confident          | Interview, Customer Service, IVR         |
+  | `aura-2-celeste-es`  | celeste  | <audio id="celeste" controls src="https://static.deepgram.com/examples/Celeste.wav" />                       | feminine         | Young Adult | es-co    | Colombian      | Clear, Energetic, Positive, Friendly, Enthusiastic          | Casual Chat, Advertising, IVR            |
+  | `aura-2-alvaro-es`   | alvaro   | <audio id="alvaro" controls src="https://static.deepgram.com/examples/Alvaro.wav" />                         | masculine        | Adult       | es-es    | Peninsular     | Calm, Professional, Clear, Knowledgeable, Approachable      | Interview, Customer Service              |
+  | `aura-2-diana-es`    | diana    | <audio id="diana" controls src="https://static.deepgram.com/examples/Diana.wav" />                           | feminine         | Adult       | es-es    | Peninsular     | Professional, Confident, Expressive, Polite, Knowledgeable  | Storytelling, Advertising                |
+  | `aura-2-aquila-es`   | aquila   | <audio id="aquila" controls src="https://static.deepgram.com/examples/Aquila.wav" />                         | masculine        | Adult       | es-419   | Latin American | Expressive, Enthusiastic, Confident, Casual, Comfortable    | Casual Chat, Informative                 |
+  | `aura-2-selena-es`   | selena   | <audio id="selena" controls src="https://static.deepgram.com/examples/Selena.wav" />                         | feminine         | Young Adult | es-419   | Latin American | Approachable, Casual, Friendly, Calm, Positive              | Customer Service, Informative            |
+  | `aura-2-estrella-es` | estrella | <audio id="estrella" controls src="https://static.deepgram.com/examples/Estrella.wav" />                     | feminine         | Mature      | es-mx    | Mexican        | Approachable, Natural, Calm, Comfortable, Expressive        | Casual Chat, Interview                   |
+  | `aura-2-javier-es`   | javier   | <audio id="javier" controls src="https://static.deepgram.com/examples/Javier.wav" />                         | masculine        | Adult       | es-mx    | Mexican        | Approachable, Professional, Friendly, Comfortable, Calm     | Casual Chat, IVR, Storytelling           |
+  | `aura-2-agustina-es` | agustina | <audio id="agustina" controls src="https://static.deepgram.com/examples/Spanish_speaker_725_Agustina.wav" /> | feminine         | Adult       | es-es    | Peninsular     | Calm, Clear, Expressive, Knowledgeable, Professional        | Interview, Casual Chat                   |
+  | `aura-2-antonia-es`  | antonia  | <audio id="antonia" controls src="https://static.deepgram.com/examples/Spanish_speaker_724_Antonia.wav" />   | feminine         | Adult       | es-ar    | Argentine      | Approachable, Enthusiastic, Friendly, Natural, Professional | Customer Service, Interview, Casual Chat |
+  | `aura-2-gloria-es`   | gloria   | <audio id="gloria" controls src="https://static.deepgram.com/examples/Spanish_speaker_671_Gloria.wav" />     | feminine         | Young Adult | es-co    | Colombian      | Casual, Clear, Expressive, Natural, Smooth                  | Customer Service, Casual Chat            |
+  | `aura-2-luciano-es`  | luciano  | <audio id="luciano" controls src="https://static.deepgram.com/examples/Spanish_speaker_695_Luciano.wav" />   | masculine        | Adult       | es-mx    | Mexican        | Charismatic, Cheerful, Energetic, Expressive, Friendly      | Customer Service, Casual Chat            |
+  | `aura-2-olivia-es`   | olivia   | <audio id="olivia" controls src="https://static.deepgram.com/examples/Spanish_speaker_750_Olivia.wav" />     | feminine         | Adult       | es-mx    | Mexican        | Breathy, Calm, Casual, Expressive, Warm                     | Customer Service, Casual Chat            |
+  | `aura-2-silvia-es`   | silvia   | <audio id="silvia" controls src="https://static.deepgram.com/examples/Spanish_speaker_737_Silvia.wav" />     | feminine         | Adult       | es-es    | Peninsular     | Charismatic, Clear, Expressive, Natural, Warm               | Customer Service, Casual Chat            |
+  | `aura-2-valerio-es`  | valerio  | <audio id="valerio" controls src="https://static.deepgram.com/examples/Spanish_speaker_743_Valerio.wav" />   | masculine        | Adult       | es-mx    | Mexican        | Deep, Knowledgeable, Natural, Polite, Professional          | Customer Service, Informative            |
+</div>
+
+<Info>
+  **Codeswitching Voices**: The following Spanish voices can seamlessly switch between English and Spanish: Aquila, Carina, Diana, Javier, and Selena.
+</Info>
+
+***
+
+## Aura-2 Dutch Voices
+
+### Featured Aura-2 Dutch Voices
+
+These are our featured Dutch voices, selected for their versatility and quality:
+
+<div>
+  | Model               | Name    | Sample                                                                                                   | Expressed Gender | Age   | Language | Accent | Characteristics                                     | Use Cases        |
+  | :------------------ | :------ | :------------------------------------------------------------------------------------------------------- | :--------------- | :---- | :------- | :----- | :-------------------------------------------------- | :--------------- |
+  | `aura-2-rhea-nl`    | rhea    | <audio id="rhea" controls src="https://static.deepgram.com/examples/Dutch_speaker_731_Rhea.wav" />       | feminine         | Adult | nl-nl    | Dutch  | Caring, Knowledgeable, Positive, Smooth, Warm       | Customer Service |
+  | `aura-2-sander-nl`  | sander  | <audio id="sander" controls src="https://static.deepgram.com/examples/Dutch_speaker_706_Sander.wav" />   | masculine        | Adult | nl-nl    | Dutch  | Calm, Clear, Deep, Professional, Smooth             | Customer Service |
+  | `aura-2-beatrix-nl` | beatrix | <audio id="beatrix" controls src="https://static.deepgram.com/examples/Dutch_speaker_761_Beatrix.wav" /> | feminine         | Adult | nl-nl    | Dutch  | Cheerful, Enthusiastic, Friendly, Trustworthy, Warm | Customer Service |
+</div>
+
+### Aura-2: All Available Dutch Voices
+
+<div>
+  | Model                | Name     | Sample                                                                                                     | Expressed Gender | Age   | Language | Accent | Characteristics                                           | Use Cases                                     |
+  | :------------------- | :------- | :--------------------------------------------------------------------------------------------------------- | :--------------- | :---- | :------- | :----- | :-------------------------------------------------------- | :-------------------------------------------- |
+  | `aura-2-beatrix-nl`  | beatrix  | <audio id="beatrix" controls src="https://static.deepgram.com/examples/Dutch_speaker_761_Beatrix.wav" />   | feminine         | Adult | nl-nl    | Dutch  | Cheerful, Enthusiastic, Friendly, Trustworthy, Warm       | Customer Service                              |
+  | `aura-2-daphne-nl`   | daphne   | <audio id="daphne" controls src="https://static.deepgram.com/examples/Dutch_speaker_769_Daphne.wav" />     | feminine         | Adult | nl-nl    | Dutch  | Calm, Clear, Confident, Professional, Smooth              | Healthcare, Interview, Casual Chat, Audiobook |
+  | `aura-2-cornelia-nl` | cornelia | <audio id="cornelia" controls src="https://static.deepgram.com/examples/Dutch_speaker_686_Cornelia.wav" /> | feminine         | Adult | nl-nl    | Dutch  | Approachable, Friendly, Polite, Positive, Warm            | Customer Service                              |
+  | `aura-2-sander-nl`   | sander   | <audio id="sander" controls src="https://static.deepgram.com/examples/Dutch_speaker_706_Sander.wav" />     | masculine        | Adult | nl-nl    | Dutch  | Calm, Clear, Deep, Professional, Smooth                   | Customer Service                              |
+  | `aura-2-hestia-nl`   | hestia   | <audio id="hestia" controls src="https://static.deepgram.com/examples/Dutch_speaker_779_Hestia.wav" />     | feminine         | Adult | nl-nl    | Dutch  | Approachable, Caring, Expressive, Friendly, Knowledgeable | Customer Service                              |
+  | `aura-2-lars-nl`     | lars     | <audio id="lars" controls src="https://static.deepgram.com/examples/Dutch_speaker_778_Lars.wav" />         | masculine        | Adult | nl-nl    | Dutch  | Breathy, Casual, Comfortable, Sincere, Trustworthy        | Customer Service                              |
+  | `aura-2-roman-nl`    | roman    | <audio id="roman" controls src="https://static.deepgram.com/examples/Dutch_speaker_708_Roman.wav" />       | masculine        | Adult | nl-nl    | Dutch  | Calm, Casual, Deep, Natural, Patient                      | Customer Service                              |
+  | `aura-2-rhea-nl`     | rhea     | <audio id="rhea" controls src="https://static.deepgram.com/examples/Dutch_speaker_731_Rhea.wav" />         | feminine         | Adult | nl-nl    | Dutch  | Caring, Knowledgeable, Positive, Smooth, Warm             | Customer Service                              |
+  | `aura-2-leda-nl`     | leda     | <audio id="leda" controls src="https://static.deepgram.com/examples/Dutch_speaker_699_Leda.wav" />         | feminine         | Adult | nl-nl    | Dutch  | Caring, Comfortable, Empathetic, Friendly, Sincere        | Sales                                         |
+</div>
+
+***
+
+## Aura-2 French Voices
+
+### Featured Aura-2 French Voices
+
+These are our featured French voices, selected for their versatility and quality:
+
+<div>
+  | Model              | Name   | Sample                                                                                                  | Expressed Gender | Age   | Language | Accent | Characteristics                                        | Use Cases        |
+  | :----------------- | :----- | :------------------------------------------------------------------------------------------------------ | :--------------- | :---- | :------- | :----- | :----------------------------------------------------- | :--------------- |
+  | `aura-2-agathe-fr` | agathe | <audio id="agathe" controls src="https://static.deepgram.com/examples/French_speaker_689_Agathe.wav" /> | feminine         | Adult | fr-fr    | French | Charismatic, Cheerful, Enthusiastic, Friendly, Natural | Customer Service |
+  | `aura-2-hector-fr` | hector | <audio id="hector" controls src="https://static.deepgram.com/examples/French_speaker_754_Hector.wav" /> | masculine        | Adult | fr-fr    | French | Confident, Empathetic, Expressive, Friendly, Patient   | Customer Service |
+</div>
+
+### Aura-2: All Available French Voices
+
+<div>
+  | Model              | Name   | Sample                                                                                                  | Expressed Gender | Age   | Language | Accent | Characteristics                                        | Use Cases        |
+  | :----------------- | :----- | :------------------------------------------------------------------------------------------------------ | :--------------- | :---- | :------- | :----- | :----------------------------------------------------- | :--------------- |
+  | `aura-2-agathe-fr` | agathe | <audio id="agathe" controls src="https://static.deepgram.com/examples/French_speaker_689_Agathe.wav" /> | feminine         | Adult | fr-fr    | French | Charismatic, Cheerful, Enthusiastic, Friendly, Natural | Customer Service |
+  | `aura-2-hector-fr` | hector | <audio id="hector" controls src="https://static.deepgram.com/examples/French_speaker_754_Hector.wav" /> | masculine        | Adult | fr-fr    | French | Confident, Empathetic, Expressive, Friendly, Patient   | Customer Service |
+</div>
+
+***
+
+## Aura-2 German Voices
+
+### Featured Aura-2 German Voices
+
+These are our featured German voices, selected for their versatility and quality:
+
+<div>
+  | Model                | Name     | Sample                                                                                                      | Expressed Gender | Age   | Language | Accent | Characteristics                                     | Use Cases        |
+  | :------------------- | :------- | :---------------------------------------------------------------------------------------------------------- | :--------------- | :---- | :------- | :----- | :-------------------------------------------------- | :--------------- |
+  | `aura-2-julius-de`   | julius   | <audio id="julius" controls src="https://static.deepgram.com/examples/German_speaker_723_Julius.wav" />     | masculine        | Adult | de-de    | German | Casual, Cheerful, Engaging, Expressive, Friendly    | Customer Service |
+  | `aura-2-viktoria-de` | viktoria | <audio id="viktoria" controls src="https://static.deepgram.com/examples/German_speaker_705_Viktoria.wav" /> | feminine         | Adult | de-de    | German | Charismatic, Cheerful, Enthusiastic, Friendly, Warm | Customer Service |
+</div>
+
+### Aura-2: All Available German Voices
+
+<div>
+  | Model                | Name     | Sample                                                                                                      | Expressed Gender | Age         | Language | Accent | Characteristics                                         | Use Cases                                               |
+  | :------------------- | :------- | :---------------------------------------------------------------------------------------------------------- | :--------------- | :---------- | :------- | :----- | :------------------------------------------------------ | :------------------------------------------------------ |
+  | `aura-2-elara-de`    | elara    | <audio id="elara" controls src="https://static.deepgram.com/examples/German_speaker_742_Elara.wav" />       | feminine         | Adult       | de-de    | German | Calm, Clear, Natural, Patient, Trustworthy              | Healthcare, Customer Service, Sales, Financial Services |
+  | `aura-2-aurelia-de`  | aurelia  | <audio id="aurelia" controls src="https://static.deepgram.com/examples/German_speaker_772_Aurelia.wav" />   | feminine         | Young Adult | de-de    | German | Approachable, Casual, Comfortable, Natural, Sincere     | Healthcare, Customer Service, Sales, Financial Services |
+  | `aura-2-lara-de`     | lara     | <audio id="lara" controls src="https://static.deepgram.com/examples/German_speaker_758_Lara.wav" />         | feminine         | Young Adult | de-de    | German | Caring, Cheerful, Empathetic, Expressive, Warm          | Healthcare, Customer Service, Sales, Financial Services |
+  | `aura-2-julius-de`   | julius   | <audio id="julius" controls src="https://static.deepgram.com/examples/German_speaker_723_Julius.wav" />     | masculine        | Adult       | de-de    | German | Casual, Cheerful, Engaging, Expressive, Friendly        | Healthcare, Customer Service, Sales, Financial Services |
+  | `aura-2-fabian-de`   | fabian   | <audio id="fabian" controls src="https://static.deepgram.com/examples/German_speaker_751_Fabian.wav" />     | masculine        | Mature      | de-de    | German | Confident, Knowledgeable, Natural, Polite, Professional | Healthcare, Customer Service, Sales, Financial Services |
+  | `aura-2-kara-de`     | kara     | <audio id="kara" controls src="https://static.deepgram.com/examples/German_speaker_773_Kara.wav" />         | feminine         | Young Adult | de-de    | German | Caring, Empathetic, Expressive, Professional, Warm      | Healthcare, Customer Service, Sales, Financial Services |
+  | `aura-2-viktoria-de` | viktoria | <audio id="viktoria" controls src="https://static.deepgram.com/examples/German_speaker_705_Viktoria.wav" /> | feminine         | Adult       | de-de    | German | Charismatic, Cheerful, Enthusiastic, Friendly, Warm     | Healthcare, Customer Service, Sales, Financial Services |
+</div>
+
+***
+
+## Aura-2 Italian Voices
+
+### Featured Aura-2 Italian Voices
+
+These are our featured Italian voices, selected for their versatility and quality:
+
+<div>
+  | Model                | Name     | Sample                                                                                                       | Expressed Gender | Age   | Language | Accent  | Characteristics                                     | Use Cases        |
+  | :------------------- | :------- | :----------------------------------------------------------------------------------------------------------- | :--------------- | :---- | :------- | :------ | :-------------------------------------------------- | :--------------- |
+  | `aura-2-livia-it`    | livia    | <audio id="livia" controls src="https://static.deepgram.com/examples/Italian_speaker_721_Livia.wav" />       | feminine         | Adult | it-it    | Italian | Approachable, Cheerful, Clear, Engaging, Expressive | Customer Service |
+  | `aura-2-dionisio-it` | dionisio | <audio id="dionisio" controls src="https://static.deepgram.com/examples/Italian_speaker_767_Dionisio.wav" /> | masculine        | Adult | it-it    | Italian | Confident, Engaging, Friendly, Melodic, Positive    | Sales            |
+</div>
+
+### Aura-2: All Available Italian Voices
+
+<div>
+  | Model                | Name     | Sample                                                                                                       | Expressed Gender | Age         | Language | Accent  | Characteristics                                        | Use Cases                                     |
+  | :------------------- | :------- | :----------------------------------------------------------------------------------------------------------- | :--------------- | :---------- | :------- | :------ | :----------------------------------------------------- | :-------------------------------------------- |
+  | `aura-2-melia-it`    | melia    | <audio id="melia" controls src="https://static.deepgram.com/examples/Italian_speaker_771_Melia.wav" />       | feminine         | Adult       | it-it    | Italian | Clear, Comfortable, Engaging, Friendly, Natural        | Casual Chat, Customer Service, Interview      |
+  | `aura-2-elio-it`     | elio     | <audio id="elio" controls src="https://static.deepgram.com/examples/Italian_speaker_736_Elio.wav" />         | masculine        | Adult       | it-it    | Italian | Breathy, Calm, Professional, Smooth, Trustworthy       | Interview, Casual Chat, Customer Service      |
+  | `aura-2-flavio-it`   | flavio   | <audio id="flavio" controls src="https://static.deepgram.com/examples/Italian_speaker_709_Flavio.wav" />     | masculine        | Adult       | it-it    | Italian | Confident, Deep, Empathetic, Professional, Trustworthy | Casual Chat, Interview, Customer Service      |
+  | `aura-2-maia-it`     | maia     | <audio id="maia" controls src="https://static.deepgram.com/examples/Italian_speaker_745_Maia.wav" />         | feminine         | Young Adult | it-it    | Italian | Caring, Energetic, Expressive, Professional, Warm      | Interview, Casual Chat, Customer Service      |
+  | `aura-2-cinzia-it`   | cinzia   | <audio id="cinzia" controls src="https://static.deepgram.com/examples/Italian_speaker_763_Cinzia.wav" />     | feminine         | Mature      | it-it    | Italian | Approachable, Friendly, Smooth, Trustworthy, Warm      | Customer Service, Interview, Narration        |
+  | `aura-2-cesare-it`   | cesare   | <audio id="cesare" controls src="https://static.deepgram.com/examples/Italian_speaker_770_Cesare.wav" />     | masculine        | Adult       | it-it    | Italian | Clear, Empathetic, Knowledgeable, Natural, Smooth      | Casual Chat, Customer Service, Interview, IVR |
+  | `aura-2-livia-it`    | livia    | <audio id="livia" controls src="https://static.deepgram.com/examples/Italian_speaker_721_Livia.wav" />       | feminine         | Adult       | it-it    | Italian | Approachable, Cheerful, Clear, Engaging, Expressive    | Customer Service, Interview, Audiobook        |
+  | `aura-2-perseo-it`   | perseo   | <audio id="perseo" controls src="https://static.deepgram.com/examples/Italian_speaker_735_Perseo.wav" />     | masculine        | Young Adult | it-it    | Italian | Casual, Clear, Natural, Polite, Smooth                 | Casual Chat, Customer Service                 |
+  | `aura-2-dionisio-it` | dionisio | <audio id="dionisio" controls src="https://static.deepgram.com/examples/Italian_speaker_767_Dionisio.wav" /> | masculine        | Adult       | it-it    | Italian | Confident, Engaging, Friendly, Melodic, Positive       | Interview, Casual Chat, Customer Service      |
+  | `aura-2-demetra-it`  | demetra  | <audio id="demetra" controls src="https://static.deepgram.com/examples/Italian_speaker_718_Demetra.wav" />   | feminine         | Adult       | it-it    | Italian | Calm, Comfortable, Patient                             | Casual Chat, Interview, Narration             |
+</div>
+
+***
+
+## Aura-2 Japanese Voices
+
+### Featured Aura-2 Japanese Voices
+
+These are our featured Japanese voices, selected for their versatility and quality:
+
+<div>
+  | Model               | Name    | Sample                                                                                                  | Expressed Gender | Age   | Language | Accent   | Characteristics                                          | Use Cases                                     |
+  | :------------------ | :------ | :------------------------------------------------------------------------------------------------------ | :--------------- | :---- | :------- | :------- | :------------------------------------------------------- | :-------------------------------------------- |
+  | `aura-2-fujin-ja`   | fujin   | <audio id="fujin" controls src="https://static.deepgram.com/examples/Japanese_speaker_727_Fujin.wav" /> | masculine        | Adult | ja-jp    | Japanese | Calm, Confident, Knowledgeable, Professional, Smooth     | Interview, Casual Chat, IVR                   |
+  | `aura-2-izanami-ja` | izanami | <audio id="izanami" controls src="https://static.deepgram.com/examples/Japanese_speaker_749_Izanami" /> | feminine         | Adult | ja-jp    | Japanese | Approachable, Clear, Knowledgeable, Polite, Professional | Casual Chat, Customer Service, Interview, IVR |
+</div>
+
+## Aura-2: All Available Japanese Voices
+
+<div>
+  | Model               | Name    | Sample                                                                                                  | Expressed Gender | Age         | Language | Accent   | Characteristics                                          | Use Cases                                     |
+  | :------------------ | :------ | :------------------------------------------------------------------------------------------------------ | :--------------- | :---------- | :------- | :------- | :------------------------------------------------------- | :-------------------------------------------- |
+  | `aura-2-uzume-ja`   | uzume   | <audio id="uzume" controls src="https://static.deepgram.com/examples/Japanese_speaker_679_Uzume" />     | feminine         | Young Adult | ja-jp    | Japanese | Approachable, Clear, Polite, Professional, Trustworthy   | Customer Service, Interview, IVR, Commercial  |
+  | `aura-2-ebisu-ja`   | ebisu   | <audio id="ebisu" controls src="https://static.deepgram.com/examples/Japanese_speaker_734_Ebisu.wav" /> | masculine        | Young Adult | ja-jp    | Japanese | Calm, Deep, Natural, Patient, Sincere                    | Casual Chat, Customer Service                 |
+  | `aura-2-fujin-ja`   | fujin   | <audio id="fujin" controls src="https://static.deepgram.com/examples/Japanese_speaker_727_Fujin.wav" /> | masculine        | Adult       | ja-jp    | Japanese | Calm, Confident, Knowledgeable, Professional, Smooth     | Interview, Casual Chat, IVR                   |
+  | `aura-2-izanami-ja` | izanami | <audio id="izanami" controls src="https://static.deepgram.com/examples/Japanese_speaker_749_Izanami" /> | feminine         | Adult       | ja-jp    | Japanese | Approachable, Clear, Knowledgeable, Polite, Professional | Casual Chat, Customer Service, Interview, IVR |
+  | `aura-2-ama-ja`     | ama     | <audio id="ama" controls src="https://static.deepgram.com/examples/Japanese_speaker_693_Ama.wav" />     | feminine         | Adult       | ja-jp    | Japanese | Casual, Comfortable, Confident, Knowledgeable, Natural   | Interview, IVR                                |
+</div>
+
+***
+
+## Aura 1: All Available English Voices
+
+<div>
+  | Model             | Name    | Sample                                                                                                                          | Expressed Gender | Age         | Language | Accent   | Characteristics                             | Use Cases                      |
+  | :---------------- | :------ | :------------------------------------------------------------------------------------------------------------------------------ | :--------------- | :---------- | :------- | :------- | :------------------------------------------ | :----------------------------- |
+  | `aura-asteria-en` | asteria | <audio id="asteria" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565353/aura/asteria_docs_venw0r.wav" /> | feminine         | Adult       | en-us    | American | Clear, Confident, Knowledgeable, Energetic  | Advertising                    |
+  | `aura-luna-en`    | luna    | <audio id="luna" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565351/aura/luna_docs_clom0e.wav" />       | feminine         | Young Adult | en-us    | American | Friendly, Natural, Engaging                 | IVR                            |
+  | `aura-stella-en`  | stella  | <audio id="stella" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565349/aura/stella_docs_xh5jbv.wav" />   | feminine         | Adult       | en-us    | American | Clear, Professional, Engaging               | Customer service               |
+  | `aura-athena-en`  | athena  | <audio id="athena" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565613/aura/athena_docs_wyznud.wav" />   | feminine         | Mature      | en-gb    | British  | Calm, Smooth, Professional                  | Storytelling                   |
+  | `aura-hera-en`    | hera    | <audio id="hera" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565347/aura/hera_docs_xjkt4x.wav" />       | feminine         | Adult       | en-us    | American | Smooth, Warm, Professional                  | Informative                    |
+  | `aura-orion-en`   | orion   | <audio id="orion" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565346/aura/orion_docs_aljv1q.mp3" />     | masculine        | Adult       | en-us    | American | Approachable, Comfortable, Calm, Polite     | Informative                    |
+  | `aura-arcas-en`   | arcas   | <audio id="arcas" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565348/aura/arcas_docs_pc9hxp.mp3" />     | masculine        | Adult       | en-us    | American | Natural, Smooth, Clear, Comfortable         | Customer service, casual chat  |
+  | `aura-perseus-en` | perseus | <audio id="perseus" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565350/aura/perseus_docs_ap7fc0.wav" /> | masculine        | Adult       | en-us    | American | Confident, Professional, Clear              | Customer service               |
+  | `aura-angus-en`   | angus   | <audio id="angus" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565352/aura/angus_docs_lgse2b.wav" />     | masculine        | Adult       | en-ie    | Irish    | Warm, Friendly, Natural                     | Storytelling                   |
+  | `aura-orpheus-en` | orpheus | <audio id="orpheus" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565350/aura/orpheus_docs_zdlpcf.wav" /> | masculine        | Adult       | en-us    | American | Professional, Clear, Confident, Trustworthy | Customer service, storytelling |
+  | `aura-helios-en`  | helios  | <audio id="helios" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565346/aura/helios_docs_ycjwoo.wav" />   | masculine        | Adult       | en-gb    | British  | Professional, Clear, Confident              | Customer service               |
+  | `aura-zeus-en`    | zeus    | <audio id="zeus" controls src="https://res.cloudinary.com/deepgram/video/upload/v1709565347/aura/zeus_docs_fupdiv.wav" />       | masculine        | Adult       | en-us    | American | Deep, Trustworthy, Smooth                   | IVR                            |
+</div>
+
+***

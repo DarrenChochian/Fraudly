@@ -1,0 +1,2126 @@
+{
+  "seed_file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/docs/deepgram/root.md",
+  "output_dir": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram",
+  "saved_count": 522,
+  "failed_count": 7,
+  "saved": [
+    {
+      "url": "https://developers.deepgram.com/ask-ai.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/ask-ai.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/agent-keep-alive.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/agent-keep-alive.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/amazon-bedrock-and-deepgram-voice-agent.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/amazon-bedrock-and-deepgram-voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/audio-intelligence.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/audio-intelligence.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/audio-keep-alive.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/audio-keep-alive.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/automatically-generating-webvtt-and-srt-captions.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/automatically-generating-webvtt-and-srt-captions.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/automatically-transcribing-and-summarizing-phone-calls.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/automatically-transcribing-and-summarizing-phone-calls.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/autoscaling-best-practices.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/autoscaling-best-practices.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/aws-docker-podman.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/aws-docker-podman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/aws-k8s.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/aws-k8s.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/azure-docker-podman.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/azure-docker-podman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/bare-metal.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/bare-metal.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/blue-green-deployment.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/blue-green-deployment.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/build-a-function-call.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/build-a-function-call.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/build-voice-agent-with-twilio-deepgram-openai.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/build-voice-agent-with-twilio-deepgram-openai.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/calculate-talk-time-analytics.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/calculate-talk-time-analytics.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/callback.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/callback.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/channels.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/channels.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/close-stream.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/close-stream.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/configure-voice-agent.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/configure-voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/create-additional-api-keys.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/create-additional-api-keys.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deepgram-unimrcp-plugin.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deepgram-unimrcp-plugin.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deepgram-whisper-cloud.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deepgram-whisper-cloud.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deepgram-with-amazon-connect.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deepgram-with-amazon-connect.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deploy-amazon-sagemaker.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deploy-amazon-sagemaker.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deploy-stt-services.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deploy-stt-services.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deploy-tts-services.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deploy-tts-services.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deployment-options.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deployment-options.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/detect-entities.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/detect-entities.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/determining-your-audio-format-for-live-streaming-audio.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/determining-your-audio-format-for-live-streaming-audio.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/diarization.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/diarization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/dictation.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/dictation.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/dockerpodman.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/dockerpodman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/drivers-and-containerization-platforms.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/drivers-and-containerization-platforms.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/encoding.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/encoding.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/endpointing.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/endpointing.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/errors.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/errors.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/extra-metadata.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/extra-metadata.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/filler-words.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/filler-words.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/finalize.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/finalize.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/find-and-replace.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/find-and-replace.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux-self-hosted.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux-self-hosted.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux-template-apps.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux-template-apps.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/agent.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/close-stream.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/close-stream.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/configuration.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/configuration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/configure.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/configure.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/feature-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/flux-nova-3-comparison.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/flux-nova-3-comparison.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/nova-3-migration.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/nova-3-migration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/quickstart.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/quickstart.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/state.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/state.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/voice-agent-eager-eot.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/voice-agent-eager-eot.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/gcp-docker-podman.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/gcp-docker-podman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/gcp-k8s.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/gcp-k8s.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/generating-and-saving-transcripts-from-the-terminal.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/generating-and-saving-transcripts-from-the-terminal.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/genesys-deepgram.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/genesys-deepgram.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/getting-started-with-the-streaming-test-suite.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/getting-started-with-the-streaming-test-suite.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/handling-audio-issues-in-text-to-speech.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/handling-audio-issues-in-text-to-speech.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/improving-aura-2-formatting.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/improving-aura-2-formatting.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/integrate-deepgram-with-zoom.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/integrate-deepgram-with-zoom.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/intent-recognition.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/intent-recognition.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/interim-results.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/interim-results.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/k8s-troubleshooting.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/k8s-troubleshooting.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/keyterm.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/keyterm.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/keywords-vs-search.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/keywords-vs-search.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/keywords.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/keywords.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/kubernetes.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/kubernetes.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/language-detection.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/language-detection.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/language.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/language.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/license-proxy.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/license-proxy.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/live-streaming-audio.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/live-streaming-audio.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/lower-level-websockets.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/lower-level-websockets.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/maintaining.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/maintaining.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/makecom-deepgram-integration.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/makecom-deepgram-integration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/measurements.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/measurements.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/measuring-streaming-latency.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/measuring-streaming-latency.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/media-input-settings.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/media-input-settings.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/metrics-guide.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/metrics-guide.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/migrating-from-amazon-web-services-aws-transcribe-to-deepgram.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/migrating-from-amazon-web-services-aws-transcribe-to-deepgram.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/migrating-from-assembly-ai-speech-to-text-to-deepgram.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/migrating-from-assembly-ai-speech-to-text-to-deepgram.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/migrating-from-google-speech-to-text-stt-to-deepgram.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/migrating-from-google-speech-to-text-stt-to-deepgram.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/migrating-from-openai-whisper-to-deepgram.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/migrating-from-openai-whisper-to-deepgram.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/model.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/model.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/models-languages-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/models-languages-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/multi-agent-architecture.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/multi-agent-architecture.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/multichannel-vs-diarization.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/multichannel-vs-diarization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/multichannel.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/multichannel.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/multilingual-code-switching.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/multilingual-code-switching.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/multilingual-voice-agent.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/multilingual-voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/numerals.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/numerals.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/oci-docker-podman.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/oci-docker-podman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/on-premise-twilio-integration.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/on-premise-twilio-integration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/paragraphs.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/paragraphs.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/payload-too-large.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/payload-too-large.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/pre-recorded-audio.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/pre-recorded-audio.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/profanity-filter.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/profanity-filter.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/prometheus-integration.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/prometheus-integration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/punctuation.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/punctuation.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/recovering-from-connection-errors-and-timeouts-when-live-streaming-audio.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/recovering-from-connection-errors-and-timeouts-when-live-streaming-audio.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/redaction.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/redaction.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/sample-rate.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/sample-rate.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/scaling-and-deployment-strategies.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/scaling-and-deployment-strategies.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/search.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/search.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/securing-your-cluster.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/securing-your-cluster.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-add-ons.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-add-ons.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-deployment-environments.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-deployment-environments.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-ingress-auth.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-ingress-auth.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-introduction.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-introduction.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-redact-usage.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-redact-usage.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-self-service-tutorial.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-self-service-tutorial.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-status-endpoint.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-status-endpoint.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-managed-kubernetes.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-managed-kubernetes.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/send-llm-outputs-to-the-tts-web-socket.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/send-llm-outputs-to-the-tts-web-socket.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/sentiment-analysis.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/sentiment-analysis.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/smart-format.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/smart-format.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/speech-started.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/speech-started.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/streaming-text-to-speech.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/streaming-text-to-speech.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/streaming-the-audio-output.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/streaming-the-audio-output.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-intelligence-feature-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-intelligence-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-pre-recorded-feature-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-pre-recorded-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-pre-recorded-template-apps.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-pre-recorded-template-apps.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-streaming-feature-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-streaming-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-streaming-template-apps.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-streaming-template-apps.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-tagging.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-tagging.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-troubleshooting-websocket-data-and-net-errors.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-troubleshooting-websocket-data-and-net-errors.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt/getting-started.md",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt/getting-started.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/summarization.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/summarization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/supported-audio-formats.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/supported-audio-formats.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/supported-entity-types.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/supported-entity-types.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-chunking-for-tts-optimization.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-chunking-for-tts-optimization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-intelligence-callback.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-intelligence-callback.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-intelligence-feature-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-intelligence-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-intelligence-tagging.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-intelligence-tagging.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-intelligence-template-apps.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-intelligence-template-apps.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-intelligence.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-intelligence.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-intention-recognition.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-intention-recognition.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-sentiment-analysis.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-sentiment-analysis.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-summarization.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-summarization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-to-speech-latency.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-to-speech-latency.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-to-speech-prompting.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-to-speech-prompting.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-to-speech.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-to-speech.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-topic-detection.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-topic-detection.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/the-deepgram-model-improvement-partnership-program.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/the-deepgram-model-improvement-partnership-program.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/topic-detection.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/topic-detection.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/transcribe-meetings-in-realtime.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/transcribe-meetings-in-realtime.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/transcribe-recorded-calls-with-twilio.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/transcribe-recorded-calls-with-twilio.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-bit-rate.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-bit-rate.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-callback.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-callback.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-container.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-container.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-encoding.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-encoding.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-feature-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-media-output-settings.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-media-output-settings.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-models.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-models.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-rest-template-apps.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-rest-template-apps.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-rest.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-rest.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-sample-rate.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-sample-rate.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-streaming-feature-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-streaming-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-streaming-template-apps.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-streaming-template-apps.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-tagging.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-tagging.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-text-chunking.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-text-chunking.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-troubleshooting-websocket-net-and-data-errors.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-troubleshooting-websocket-net-and-data-errors.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-voice-controls.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-voice-controls.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-websocket-streaming.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-websocket-streaming.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-websocket.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-websocket.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-ws-clear.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-ws-clear.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-ws-close.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-ws-close.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-ws-flush.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-ws-flush.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/twilio-and-deepgram-tts.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/twilio-and-deepgram-tts.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/twilio-and-deepgram-voice-agent.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/twilio-and-deepgram-voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/understand-endpointing-interim-results.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/understand-endpointing-interim-results.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/understanding-end-of-speech-detection.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/understanding-end-of-speech-detection.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/use-deepgram-with-dialogflow-cx.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/use-deepgram-with-dialogflow-cx.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-aws-s3-presigned-urls-with-the-deepgram-api.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-aws-s3-presigned-urls-with-the-deepgram-api.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-callbacks-to-return-transcripts-to-your-server.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-callbacks-to-return-transcripts-to-your-server.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-interim-results.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-interim-results.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-logs-usage.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-logs-usage.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-private-container-registries.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-private-container-registries.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-sdks-with-self-hosted.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-sdks-with-self-hosted.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-the-sec-websocket-protocol.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-the-sec-websocket-protocol.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/utterance-end.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/utterance-end.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/utterance-split.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/utterance-split.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/utterances.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/utterances.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/version.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/version.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-agent-audio-done.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-agent-audio-done.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-agent-thinking.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-agent-thinking.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-audio-playback.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-audio-playback.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-conversation-text.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-conversation-text.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-echo-cancellation.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-echo-cancellation.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-errors.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-errors.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-feature-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-function-call-context.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-function-call-context.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-function-call-request.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-function-call-request.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-function-call-response.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-function-call-response.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-history.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-history.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-inject-agent-message.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-inject-agent-message.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-inject-user-message.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-inject-user-message.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-inputs.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-inputs.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-llm-models.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-llm-models.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-media-inputs-outputs.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-media-inputs-outputs.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-message-flow.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-message-flow.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-outputs.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-outputs.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-prompt-updated.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-prompt-updated.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-setting-applied-message.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-setting-applied-message.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-settings.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-settings.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-speak-updated.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-speak-updated.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-template-apps.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-template-apps.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-think-updated.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-think-updated.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-tts-models.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-tts-models.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-update-prompt.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-update-prompt.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-update-speak.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-update-speak.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-update-think.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-update-think.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-user-started-speaking.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-user-started-speaking.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-warning.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-warning.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-welcome-message.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-welcome-message.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agents-function-calling.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agents-function-calling.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/working-with-concurrency-rate-limits.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/working-with-concurrency-rate-limits.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/zapier-integration.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/zapier-integration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/deep-dives/managing-projects.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/deep-dives/managing-projects.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/deep-dives/safely-removing-team-members-with-active-api-keys.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/deep-dives/safely-removing-team-members-with-active-api-keys.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/deep-dives/using-multiple-projects.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/deep-dives/using-multiple-projects.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/deep-dives/working-with-roles.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/deep-dives/working-with-roles.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/authenticating.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/authenticating.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/make-your-first-api-request.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/make-your-first-api-request.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/model-metadata.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/model-metadata.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/tagging-your-usage-data.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/tagging-your-usage-data.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/token-based-authentication.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/token-based-authentication.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/using-custom-parameters-sdks.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/using-custom-parameters-sdks.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/integrations/amazon-connect-and-deepgram-voice-agent.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/integrations/amazon-connect-and-deepgram-voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/home.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/home.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/openapi.json",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/openapi.json"
+    },
+    {
+      "url": "https://developers.deepgram.com/openapi.yaml",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/openapi.yaml"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/api-rate-limits.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/api-rate-limits.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/auth/tokens/grant.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/auth/tokens/grant.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/authentication.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/authentication.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/custom-endpoints.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/custom-endpoints.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/deepgram-api-overview.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/deepgram-api-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/billing/breakdown/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/billing/breakdown/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/billing/fields/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/billing/fields/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/billing/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/billing/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/billing/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/billing/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/billing/purchases/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/billing/purchases/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/invites/create.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/invites/create.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/invites/delete.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/invites/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/invites/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/invites/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/keys/create.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/keys/create.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/keys/delete.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/keys/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/keys/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/keys/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/keys/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/keys/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/members/delete.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/members/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/members/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/members/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/members/scopes/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/members/scopes/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/members/scopes/update.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/members/scopes/update.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/models/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/models/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/models/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/models/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/delete.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/leave.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/leave.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/models/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/models/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/models/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/models/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/update.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/update.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/requests/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/requests/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/requests/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/requests/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/usage/breakdown/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/usage/breakdown/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/usage/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/usage/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/usage/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/usage/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/self-hosted/distribution-credentials/create.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/self-hosted/distribution-credentials/create.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/self-hosted/distribution-credentials/delete.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/self-hosted/distribution-credentials/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/self-hosted/distribution-credentials/get.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/self-hosted/distribution-credentials/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/self-hosted/distribution-credentials/list.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/self-hosted/distribution-credentials/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/speech-to-text/listen-flux.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/speech-to-text/listen-flux.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/speech-to-text/listen-pre-recorded.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/speech-to-text/listen-pre-recorded.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/speech-to-text/listen-streaming.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/speech-to-text/listen-streaming.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/text-intelligence/analyze-text.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/text-intelligence/analyze-text.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/text-to-speech/speak-request.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/text-to-speech/speak-request.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/text-to-speech/speak-streaming.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/text-to-speech/speak-streaming.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/voice-agent/think-models.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/voice-agent/think-models.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/voice-agent/voice-agent.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/voice-agent/voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/sdks/sdk-features.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/sdks/sdk-features.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/support.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/support.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/trust-security/data-privacy-compliance.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/trust-security/data-privacy-compliance.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/trust-security/information-security-privacy.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/trust-security/information-security-privacy.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/trust-security/security-policy.mdx",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/trust-security/security-policy.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/make-your-first-api-request",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/make-your-first-api-request.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/configure-voice-agent",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/configure-voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/home",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/home.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/summarization",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/summarization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/topic-detection",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/topic-detection.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/intent-recognition",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/intent-recognition.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/sentiment-analysis",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/sentiment-analysis.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/create-additional-api-keys",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/create-additional-api-keys.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/utterances/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/utterances/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/summarization/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/summarization/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/metrics-guide",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/metrics-guide.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/measuring-streaming-latency",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/measuring-streaming-latency.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deploy-tts-services",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deploy-tts-services.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux-self-hosted",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux-self-hosted.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-introduction",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-introduction.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-deployment-environments",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-deployment-environments.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/drivers-and-containerization-platforms",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/drivers-and-containerization-platforms.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/securing-your-cluster",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/securing-your-cluster.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-self-service-tutorial",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-self-service-tutorial.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/scaling-and-deployment-strategies",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/scaling-and-deployment-strategies.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-add-ons",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-add-ons.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/autoscaling-best-practices",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/autoscaling-best-practices.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/maintaining",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/maintaining.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/voice-agent/voice-agent",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/voice-agent/voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/authenticating",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/authenticating.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/encoding/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/encoding/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-settings",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-settings.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/models-languages-overview",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/models-languages-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/keyterm",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/keyterm.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-llm-models",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-llm-models.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-tts-models",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-tts-models.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-message-flow",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-message-flow.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/deep-dives/managing-projects",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/deep-dives/managing-projects.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/deep-dives/working-with-roles",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/deep-dives/working-with-roles.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/deep-dives/using-multiple-projects",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/deep-dives/using-multiple-projects.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/keys/create",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/keys/create.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/token-based-authentication",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/token-based-authentication.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/live-streaming-audio",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/live-streaming-audio.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/pre-recorded-audio",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/pre-recorded-audio.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/language/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/language/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-models",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-models.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/changelog",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/changelog.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/callback",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/callback.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/license-proxy",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/license-proxy.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deploy-stt-services",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deploy-stt-services.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/punctuation",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/punctuation.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/finalize",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/finalize.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/smart-format",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/smart-format.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/supported-entity-types",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/supported-entity-types.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/sample-rate/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/sample-rate/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/supported-audio-formats",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/supported-audio-formats.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/punctuation/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/punctuation/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/multichannel-vs-diarization",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/multichannel-vs-diarization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/kubernetes",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/kubernetes.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/aws-docker-podman",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/aws-docker-podman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/gcp-docker-podman",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/gcp-docker-podman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/oci-docker-podman",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/oci-docker-podman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/azure-docker-podman",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/azure-docker-podman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/bare-metal",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/bare-metal.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/sample-rate",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/sample-rate.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/interim-results/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/interim-results/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/understand-endpointing-interim-results/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/understand-endpointing-interim-results/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-tagging",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-tagging.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/quickstart",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/quickstart.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/voice-agent-eager-eot",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/voice-agent-eager-eot.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/configuration",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/configuration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/configure",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/configure.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/auth/tokens/grant",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/auth/tokens/grant.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/state",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/state.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/agent",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/nova-3-migration",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/nova-3-migration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/flux/close-stream",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/flux/close-stream.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/model",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/model.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/version",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/version.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/encoding",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/encoding.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/api-rate-limits",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/api-rate-limits.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/speech-to-text/listen-streaming",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/speech-to-text/listen-streaming.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/deepgram-api-overview",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/deepgram-api-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-chunking-for-tts-optimization",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-chunking-for-tts-optimization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-encoding",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-encoding.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/endpointing/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/endpointing/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/understand-endpointing-interim-results",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/understand-endpointing-interim-results.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-interim-results",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-interim-results.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/keywords",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/keywords.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/keywords/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/keywords/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/dockerpodman",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/dockerpodman.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/aws-k8s",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/aws-k8s.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/gcp-k8s",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/gcp-k8s.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-managed-kubernetes",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-managed-kubernetes.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/multilingual-code-switching",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/multilingual-code-switching.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/support",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/support.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/callback/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/callback/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/audio-keep-alive",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/audio-keep-alive.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/language",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/language.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-streaming-feature-overview",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-streaming-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/understanding-end-of-speech-detection",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/understanding-end-of-speech-detection.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/determining-your-audio-format-for-live-streaming-audio/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/determining-your-audio-format-for-live-streaming-audio/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/getting-started-with-the-streaming-test-suite",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/getting-started-with-the-streaming-test-suite.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/transcribe-recorded-calls-with-twilio",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/transcribe-recorded-calls-with-twilio.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/speech-to-text/listen-pre-recorded",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/speech-to-text/listen-pre-recorded.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/channels",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/channels.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/multichannel",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/multichannel.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/model-metadata",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/model-metadata.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/prometheus-integration",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/prometheus-integration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/model/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/model/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/sdks/sdk-features",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/sdks/sdk-features.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/find-and-replace/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/find-and-replace/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deepgram-whisper-cloud",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deepgram-whisper-cloud.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/multichannel/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/multichannel/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/diarization/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/diarization/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/stt-pre-recorded-feature-overview",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/stt-pre-recorded-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/blue-green-deployment",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/blue-green-deployment.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/self-hosted-ingress-auth",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/self-hosted-ingress-auth.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-private-container-registries",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-private-container-registries.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deepgram-unimrcp-plugin",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deepgram-unimrcp-plugin.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/deploy-amazon-sagemaker",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/deploy-amazon-sagemaker.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/authentication",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/authentication.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/self-hosted/distribution-credentials/create",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/self-hosted/distribution-credentials/create.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/paragraphs/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/paragraphs/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/numerals",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/numerals.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/measurements",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/measurements.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/dictation",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/dictation.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-media-output-settings",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-media-output-settings.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/text-to-speech/speak-streaming",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/text-to-speech/speak-streaming.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/errors",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/errors.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-ws-flush",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-ws-flush.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/working-with-concurrency-rate-limits",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/working-with-concurrency-rate-limits.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/send-llm-outputs-to-the-tts-web-socket",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/send-llm-outputs-to-the-tts-web-socket.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/audio-intelligence",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/audio-intelligence.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/detect-entities",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/detect-entities.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/language-detection",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/language-detection.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/diarization",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/diarization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/filler-words",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/filler-words.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/paragraphs",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/paragraphs.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/profanity-filter",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/profanity-filter.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/redaction",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/redaction.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/utterances",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/utterances.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/utterance-split",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/utterance-split.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/find-and-replace",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/find-and-replace.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/search",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/search.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/extra-metadata",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/extra-metadata.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/endpointing",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/endpointing.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/utterance-end",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/utterance-end.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/speech-started",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/speech-started.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/interim-results",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/interim-results.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/close-stream",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/close-stream.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/requests/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/requests/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/requests/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/requests/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/billing/fields/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/billing/fields/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/usage/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/usage/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/determining-your-audio-format-for-live-streaming-audio",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/determining-your-audio-format-for-live-streaming-audio.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/generating-and-saving-transcripts-from-the-terminal",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/generating-and-saving-transcripts-from-the-terminal.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-to-speech",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-to-speech.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/streaming-the-audio-output",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/streaming-the-audio-output.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-intelligence",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-intelligence.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-sentiment-analysis",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-sentiment-analysis.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-intention-recognition",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-intention-recognition.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-topic-detection",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-topic-detection.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-summarization",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-summarization.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-bit-rate",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-bit-rate.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-container",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-container.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-rest-template-apps",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-rest-template-apps.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-callback",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-callback.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-feature-overview",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/guides/fundamentals/using-custom-parameters-sdks",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/guides/fundamentals/using-custom-parameters-sdks.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/on-premise-twilio-integration",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/on-premise-twilio-integration.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-sample-rate",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-sample-rate.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/text-to-speech/speak-request",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/text-to-speech/speak-request.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-ws-clear",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-ws-clear.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-ws-close",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-ws-close.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-websocket-streaming",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-websocket-streaming.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-text-chunking",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-text-chunking.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/streaming-text-to-speech",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/streaming-text-to-speech.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-streaming-feature-overview",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-streaming-feature-overview.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-media-inputs-outputs",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-media-inputs-outputs.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/trust-security/security-policy",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/trust-security/security-policy.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/custom-endpoints",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/custom-endpoints.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-setting-applied-message",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-setting-applied-message.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-update-speak",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-update-speak.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-update-think",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-update-think.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-update-prompt",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-update-prompt.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-inject-agent-message",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-inject-agent-message.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-inject-user-message",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-inject-user-message.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/agent-keep-alive",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/agent-keep-alive.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-welcome-message",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-welcome-message.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-conversation-text",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-conversation-text.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-user-started-speaking",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-user-started-speaking.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-agent-thinking",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-agent-thinking.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-prompt-updated",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-prompt-updated.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-think-updated",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-think-updated.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-speak-updated",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-speak-updated.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-agent-audio-done",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-agent-audio-done.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-errors",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-errors.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-warning",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-warning.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-function-call-request",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-function-call-request.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-function-call-response",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-function-call-response.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-history",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-history.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/media-input-settings",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/media-input-settings.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-outputs",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/voice-agent-outputs.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/twilio-and-deepgram-voice-agent",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/twilio-and-deepgram-voice-agent.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/support/",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/support/index.md"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/keys/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/keys/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-logs-usage",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-logs-usage.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/text-intelligence-tagging",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/text-intelligence-tagging.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/tts-tagging",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/tts-tagging.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/usage/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/usage/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/usage/breakdown/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/usage/breakdown/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/billing/breakdown/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/billing/breakdown/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/text-intelligence/analyze-text",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/text-intelligence/analyze-text.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/trust-security/data-privacy-compliance",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/trust-security/data-privacy-compliance.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/trust-security/information-security-privacy",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/trust-security/information-security-privacy.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/speech-to-text/listen-flux",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/speech-to-text/listen-flux.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/models/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/models/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/models/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/models/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/members/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/members/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/invites/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/invites/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/members/scopes/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/members/scopes/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/billing/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/billing/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/self-hosted/distribution-credentials/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/self-hosted/distribution-credentials/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/delete",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/invites/delete",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/invites/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/keys/delete",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/keys/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/billing/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/billing/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/keys/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/keys/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/models/list",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/models/list.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/models/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/models/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/leave",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/leave.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/members/delete",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/members/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/invites/create",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/invites/create.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/manage/projects/update",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/manage/projects/update.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/using-sdks-with-self-hosted",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/docs/using-sdks-with-self-hosted.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/self-hosted/distribution-credentials/delete",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/self-hosted/distribution-credentials/delete.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/reference/self-hosted/distribution-credentials/get",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/reference/self-hosted/distribution-credentials/get.mdx"
+    },
+    {
+      "url": "https://developers.deepgram.com/code-of-conduct",
+      "file": "/Users/q/Desktop/projects/TD-Hackathon-Fraud-Detection/deepgram/code-of-conduct.mdx"
+    }
+  ],
+  "failed": [
+    {
+      "url": "https://developers.deepgram.com/docs/docs/language",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/getting-started-with-pre-recorded-audio",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/custom-vocabulary/keyterm",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-api-guide",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://developers.deepgram.com/docs/voice-agent-media-input-output",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://developers.deepgram.com/voice-agent/function-calling",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://developers.deepgram.com/support/code-of-conduct",
+      "error": "HTTP Error 404: Not Found"
+    }
+  ]
+}

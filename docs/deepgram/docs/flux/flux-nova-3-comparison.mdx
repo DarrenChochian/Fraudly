@@ -1,0 +1,71 @@
+***
+
+title: Compare Flux to Nova-3
+subtitle: >-
+Compare Flux to Nova-3 to understand the differences so you can choose the
+right model for your use case.
+slug: docs/flux/flux-nova-3-comparison
+--------------------------------------
+
+# Feature Matrix Comparison
+
+It's important to understand the differences between [Flux](/docs/models-languages-overview#flux) and [Nova-3](/docs/models-languages-overview#nova-3) so you can choose the right model for your use case. Below is a feature matrix comparison to help you understand the differences.
+
+## Use Cases
+
+| Feature                 | Flux | Nova-3 |
+| ----------------------- | ---- | ------ |
+| Voice Agents            | ✅    | ✅      |
+| IVR Systems             | ✅    | ✅      |
+| Agent Assist            | ✅    | ✅      |
+| Real-time Transcription | ✅    | ✅      |
+| Meeting Transcription   | 🚫   | ✅      |
+| Event Captioning        | 🚫   | ✅      |
+| Pre-recorded Audio      | 🚫   | ✅      |
+| Call Analytics          | 🚫   | ✅      |
+
+## Language Support
+
+| Feature         | Flux | Nova-3                                                           |
+| --------------- | ---- | ---------------------------------------------------------------- |
+| English         | ✅    | ✅                                                                |
+| Other Languages | 🚫   | ✅ [See language support](/docs/models-languages-overview#nova-3) |
+
+## Technical Details
+
+| Feature                  | Flux         | Nova-3       |
+| ------------------------ | ------------ | ------------ |
+| Self-hosted Availability | ✅            | ✅            |
+| Endpoint                 | `/v2/listen` | `/v1/listen` |
+
+## Conversation Features
+
+| Feature           | Flux | Nova-3 |
+| ----------------- | ---- | ------ |
+| Start of Turn     | ✅    | 🚫     |
+| Speech Resumed    | ✅    | 🚫     |
+| End of Turn       | ✅    | 🚫     |
+| Eager End of Turn | ✅    | 🚫     |
+
+## Transcription Features
+
+| Feature                  | Flux                     | Nova-3 |
+| ------------------------ | ------------------------ | ------ |
+| Word Times               | 🚫                       | ✅      |
+| Smart Formatting         | 🚫                       | ✅      |
+| Speaker Diarization      | 🚫                       | ✅      |
+| Filler Words             | ✅ Transcribed by default | 🚫     |
+| Profanity Filtering      | 🚫                       | ✅      |
+| Redaction                | 🚫                       | ✅      |
+| Find and Replace         | 🚫                       | ✅      |
+| Keyterm Prompting        | ✅                        | ✅      |
+| Search                   | 🚫                       | ✅      |
+| Turn-based Transcription | ✅                        | 🚫     |
+
+## Connection Management
+
+| Feature                     | Flux                                            | Nova-3          |
+| --------------------------- | ----------------------------------------------- | --------------- |
+| Endpointing + Utterance End | ✅ (Replaced by model integrated turn detection) | ✅               |
+| Interim Results             | ✅ (Replaced by Update Messages)                 | ✅               |
+| Keep Alive                  | ✅ (Replaced by pings, 60s timeout)              | ✅ (12s timeout) |

@@ -1,0 +1,43 @@
+***
+
+title: Update Prompt
+subtitle: Send a message to update the system prompt of the agent.
+slug: docs/voice-agent-update-prompt
+------------------------------------
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="headset" /> Voice Agent</span>
+  </span>
+</div>
+
+The `UpdatePrompt` message is a JSON message that you can use to update the system prompt of the agent.
+
+## Purpose
+
+The `UpdatePrompt` message is a JSON message that allows you to update the system prompt of the agent. `UpdatePrompt` will add to – not replace – the current prompt. This flexibility enables real-time adjustments to the agent's behavior, ensuring a more dynamic and responsive interaction tailored to the evolving needs of the conversation.
+
+Prompt length is limited to 25,000 characters for managed LLMs and unlimited for BYO LLMs.
+
+## Example Payloads
+
+To send the `UpdatePrompt` message, you need to send the following JSON message to the server:
+
+<CodeGroup>
+  ```json JSON
+  {
+    "type": "UpdatePrompt",
+    "prompt": "" // The new system prompt
+  }
+  ```
+</CodeGroup>
+
+Upon receiving the `UpdatePrompt` message, the server will process all remaining audio data and return a [`PromptUpdated`](/docs/voice-agent-prompt-updated) message.
+
+<CodeGroup>
+  ```json JSON
+  {
+      "type": "PromptUpdated"
+  }
+  ```
+</CodeGroup>

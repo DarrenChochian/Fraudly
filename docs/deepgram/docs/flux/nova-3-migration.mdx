@@ -1,0 +1,161 @@
+***
+
+title: Migrating from Nova-3 to Flux
+subtitle: >-
+Migrate from Nova-3 to Flux, Deepgram's conversational speech recognition
+purpose-built for interactive voice agents.
+slug: docs/flux/nova-3-migration
+--------------------------------
+
+## Key Benefits of Flux
+
+* **Model-integrated turn detection** (`StartOfTurn`, `EagerEndOfTurn`, `TurnResumed`, `EndOfTurn`)
+* **Ultra-low latency** \~260ms end-of-turn detection (p50 at defaults)
+* **EagerEndOfTurn events** let you **start LLM responses early**
+* **Turn-based transcripts** for clean agent logic
+* **Same Nova 3 transcription quality**
+* **Simplified development** one API replaces complex STT+VAD+endpointing pipelines, and conversation-native events.
+* **High configurability** - Configurable end-of-turn detection sensitivity, eager response thresholds, and turn-taking dynamics for optimized conversational flow
+
+## Audio Requirements
+
+* **Encoding:** See [Audio Format Requirements](#audio-format-requirements) table below
+* **Sample rates:** See [Audio Format Requirements](#audio-format-requirements) table below
+* **Channels:** Mono only
+* **Chunk size:** **80ms strongly recommended** for optimal model performance and latency.
+
+### Audio Format Requirements
+
+| Audio Type    | Encoding                                                    | Container | `encoding` param | `sample_rate` param | Supported Sample Rates                     |
+| ------------- | ----------------------------------------------------------- | --------- | ---------------- | ------------------- | ------------------------------------------ |
+| Raw           | `linear16`, `linear32`, `mulaw`, `alaw`, `opus`, `ogg-opus` | None      | **Required**     | **Required**        | `8000`, `16000`, `24000`, `44100`, `48000` |
+| Containerized | `linear16`                                                  | WAV       | **Omit**         | **Omit**            | Auto-detected from container               |
+| Containerized | `opus`                                                      | Ogg       | **Omit**         | **Omit**            | Auto-detected from container               |
+| Containerized | `opus`                                                      | WebM      | **Omit**         | **Omit**            | Auto-detected from container               |
+
+## Migrating from Nova 3 to Flux
+
+This guide will help you migrate from Nova 3 to Flux by highlighting key differences, setup changes, and implementation patterns.
+
+### Differences
+
+| Nova 3                                             | Flux                                        |
+| -------------------------------------------------- | ------------------------------------------- |
+| Streams transcripts continuously                   | Emits structured turn events                |
+| Requires custom logic for barge-in and turn-taking | Has built-in turn state machine             |
+| Returns transcripts only                           | Returns conversation events and transcripts |
+| Designed for general real-time transcription       | Designed for conversational voice agents    |
+| Focuses on accuracy and speed                      | Focuses on accuracy and turn awareness      |
+
+#### Endpoint Usage
+
+**Nova 3:**
+
+Uses the listen v1 endpoint with the `nova-3` model option.
+
+```
+wss://api.deepgram.com/v1/listen?model=nova-3
+```
+
+**Flux:**
+
+Uses the listen v2 endpoint with the `flux-general-en` model option.
+
+```
+wss://api.deepgram.com/v2/listen?model=flux-general-en
+```
+
+### Response Message Structure
+
+#### Nova 3
+
+```json
+{
+  "type": "Results",
+  "channel": "transcript",
+  "alternatives": [...]
+}
+```
+
+#### Flux
+
+```json
+{
+  "type": "TurnInfo",
+  "request_id": "2ba892a1-6c0d-4d92-9b89-0000000000",
+  "event": "Update",
+  "turn_index": 0,
+  "audio_window_start": 0,
+  "audio_window_end": 0.47999996,
+  "transcript": "",
+  "words": [...],
+  "end_of_turn_confidence": 0.0009,
+  "sequence_id": 2
+}
+```
+
+In addition to the transcript, flux responses include the:
+
+* `event` field for turn-state changes
+* `turn_index` to track turn lifecycle
+* `audio_window_start` and `audio_window_end` to track the audio window.
+* `end_of_turn_confidence` to track the confidence of the end of turn.
+* `sequence_id` to track the sequence id of the messages.
+
+### Implementation Pattern Changes
+
+#### Nova 3 Approach
+
+> Requires custom logic for barge-in and turn-taking.
+
+* Send audio
+* Receive streaming partial transcripts
+* Decide when to interrupt your agent manually
+
+#### Flux Approach
+
+> Listens for structured events and removes the need for custom VAD or barge-in logic.
+
+* `StartOfTurn`: Interrupt agent if it’s speaking
+* `EagerEndOfTurn`: Medium-confidence end → start LLM reply
+* `TurnResumed`: User kept talking → cancel reply
+* `EndOfTurn`: High-confidence end → send transcript to LLM
+
+By default, Flux only emits `Update`, `StartOfTurn`, and `EndOfTurn`.
+
+### Simple Approach: Enabling End of Turn
+
+<Info>
+  For more information on using Flux with EndOfTurn only see the [Flux Getting Started Guide](/docs/flux/quickstart)
+</Info>
+
+This is a simple approach using only `EndOfTurn` (lower latency, less complex, less LLM calls).
+
+To enable end of turn use the `eot_threshold` parameter which allows for a confidence of (0.5–0.9) for `EndOfTurn` events.
+
+#### Example
+
+```curl
+wss://api.deepgram.com/v2/listen?model=flux-general-en&sample_rate=16000&encoding=linear16&eot_threshold=0.8
+```
+
+### Optimized Approach: Enabling EagerEndOfTurn + EndOfTurn
+
+This is an optimized approach using both EagerEndOfTurn and EndOfTurn (lower latency, slightly more complex, more LLM calls)
+
+To enable eager end of turn use the `eager_eot_threshold` parameter which allows for a Confidence of (0.3–0.9). You can also set the `eot_threshold` with a confidence of (0.5–0.9) to handle `EndOfTurn` events and use the `eot_timeout_ms` which defaults to 5000 ms to force a timeout after a specified time.
+
+#### Example
+
+```curl
+wss://api.deepgram.com/v2/listen?model=flux-general-en&sample_rate=16000&encoding=linear16&eager_eot_threshold=0.6&eot_threshold=0.8&eot_timeout_ms=7000
+```
+
+### Nova 3 Migration Checklist
+
+* [ ] Update WebSocket endpoint to `/v2/listen`
+* [ ] Set `model=flux-general-en` and `encoding=linear16`
+* [ ] Adjust client to parse `TurnInfo` messages
+* [ ] Implement turn event handling (start, eager end of turn, turn resumed, end)
+* [ ] Tune `eager_eot_threshold` and `eot_threshold` for your use case
+* [ ] Remove custom VAD/barge-in logic (Flux handles this natively!)
