@@ -59,15 +59,11 @@ function registerAllHotkeys() {
   globalShortcut.unregisterAll()
   const settingsOk = globalShortcut.register(currentSettingsAccelerator, () => {
     if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.show()
-      mainWindow.focus()
       mainWindow.webContents.send('settings:open')
     }
   })
   const mainPanelOk = globalShortcut.register(currentMainPanelAccelerator, () => {
-    if (mainWindow && !mainWindow.isDestroyed()) {  
-      mainWindow.show()
-      mainWindow.focus()
+    if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.send('main-panel:open')
     }
   })

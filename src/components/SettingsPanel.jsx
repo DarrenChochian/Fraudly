@@ -152,7 +152,7 @@ export default function SettingsPanel({ currentHotkey: propHotkey = 'Alt+K', onH
     <div
       onMouseEnter={onInteractiveEnter}
       onMouseLeave={onInteractiveLeave}
-      className="overlay-interactive absolute top-24 left-1/2 -translate-x-1/2 w-80 rounded-2xl border-2 overflow-hidden z-20"
+      className="overlay-interactive absolute right-4 top-[130px] w-80 rounded-2xl border-2 overflow-hidden z-20"
       style={{
         backgroundColor: BG_PANEL,
         borderColor: BORDER_PINK,
