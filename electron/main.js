@@ -5,9 +5,8 @@ const { registerResearchAgentIpc } = require('./research-agent/ipc')
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 
 const PADDING = 10
-/** Modal size as decimal of screen (e.g. 0.8 = 80% of work area width and height) */
-const MODAL_SCREEN_PERCENT = 0.8
-let mainWindow
+/** Modal size as decimal of screen (e.g. 0.9 = 90% of work area width and height) */
+const MODAL_SCREEN_PERCENT = 0.98
 
 /** Position a window of the given size at the top-right of the work area with padding. */
 function getButtonBounds(width, height) {
