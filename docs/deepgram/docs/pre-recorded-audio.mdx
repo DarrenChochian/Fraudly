@@ -1,0 +1,577 @@
+***
+
+title: Getting Started
+subtitle: An introduction to getting transcription data from pre-recorded audio files.
+slug: docs/pre-recorded-audio
+-----------------------------
+
+<Card href="https://playground.deepgram.com/?endpoint=listen">
+  <div class="t-default text-base font-semibold">Deepgram API Playground</div>
+  Try this feature out in our API Playground.
+</Card>
+
+<br />
+
+This guide walks you through transcribing pre-recorded audio with the Deepgram API using cURL or one of Deepgram's SDKs.
+
+<Info>
+  Before you start, you'll need to follow the steps in the [Make Your First API Request](/guides/fundamentals/make-your-first-api-request) guide to obtain a Deepgram API key, and configure your environment if you are choosing to use a Deepgram SDK.
+</Info>
+
+## cURL
+
+Replace `YOUR_DEEPGRAM_API_KEY` with your API key and run the following in a terminal or API client.
+
+### Remote file
+
+<CodeGroup>
+  ```curl
+  curl \
+    --request POST \
+    --header 'Authorization: Token YOUR_DEEPGRAM_API_KEY' \
+    --header 'Content-Type: application/json' \
+    --data '{"url":"https://dpgr.am/spacewalk.wav"}' \
+    --url 'https://api.deepgram.com/v1/listen?model=nova-3&smart_format=true'
+  ```
+</CodeGroup>
+
+### Local file
+
+Replace `@youraudio.wav` with the path to an audio file on your computer. See [Supported Audio Formats](/docs/supported-audio-formats) for accepted formats.
+
+<CodeGroup>
+  ```curl
+  curl \
+    --request POST \
+    --header 'Authorization: Token YOUR_DEEPGRAM_API_KEY' \
+    --header 'Content-Type: audio/wav' \
+    --data-binary @youraudio.wav \
+    --url 'https://api.deepgram.com/v1/listen?model=nova-3&smart_format=true'
+  ```
+</CodeGroup>
+
+<Info>
+  The above examples include `model=nova-3`, which tells the API to use Deepgram's latest model. Removing this parameter defaults to `model=base`.
+
+  They also include Deepgram's [Smart Formatting](/docs/smart-format) feature (`smart_format=true`), which formats currency amounts, phone numbers, email addresses, and more for enhanced readability.
+</Info>
+
+## SDKs
+
+To transcribe pre-recorded audio using one of Deepgram's SDKs, follow these steps.
+
+### Install the SDK and dependencies
+
+Open your terminal, navigate to your project directory, and install the Deepgram SDK along with any required dependencies.
+
+<CodeGroup>
+  ```shell JavaScript
+  # Install the Deepgram JS SDK and dotenv
+  # https://github.com/deepgram/deepgram-js-sdk
+
+  npm install @deepgram/sdk dotenv
+  ```
+
+  ```shell Python
+  # Install the Deepgram Python SDK and python-dotenv
+  # https://github.com/deepgram/deepgram-python-sdk
+
+  pip install deepgram-sdk python-dotenv
+  ```
+
+  ```shell C#
+  # Install the Deepgram .NET SDK
+  # https://github.com/deepgram/deepgram-dotnet-sdk
+
+  dotnet add package Deepgram
+  ```
+
+  ```shell Go
+  # Install the Deepgram Go SDK
+  # https://github.com/deepgram/deepgram-go-sdk
+
+  go get github.com/deepgram/deepgram-go-sdk
+  ```
+</CodeGroup>
+
+### Transcribe a remote file
+
+Create a new file in your project and add the following code to transcribe a remote audio file by URL:
+
+<CodeGroup>
+  ```javascript JavaScript
+  // index.js (node example)
+
+  const { DeepgramClient } = require("@deepgram/sdk");
+  require("dotenv").config();
+
+  const transcribeUrl = async () => {
+    // STEP 1: Create a Deepgram client using the API key
+    const deepgram = new DeepgramClient({ apiKey: process.env.DEEPGRAM_API_KEY });
+
+    // STEP 2: Call the transcribeUrl method with the audio payload and options
+    // STEP 3: Configure Deepgram options for audio analysis
+    const result = await deepgram.listen.v1.media.transcribeUrl({
+      url: "https://dpgr.am/spacewalk.wav",
+      model: "nova-3",
+      smart_format: true,
+    });
+
+    // STEP 4: Print the results
+    console.dir(result, { depth: null });
+  };
+
+  transcribeUrl();
+  ```
+
+  ```python Python
+  # main.py (python example)
+
+  import os
+  import logging
+
+  from deepgram import (
+      DeepgramClient,
+  )
+
+  def main():
+      try:
+          # STEP 1 Create a Deepgram client using the DEEPGRAM_API_KEY from your environment variables
+          deepgram: DeepgramClient = DeepgramClient()
+
+          # STEP 2 Call the transcribe_url method with the audio URL and options
+          response = deepgram.listen.v1.media.transcribe_url(
+              url="https://dpgr.am/bueller.wav",
+              model="nova-3",
+              smart_format=True,
+          )
+          print(f"response: {response}\n\n")
+
+      except Exception as e:
+          print(f"Exception: {e}")
+
+  if __name__ == "__main__":
+      main()
+  ```
+
+  ```csharp C#
+  // Program.cs (.NET example)
+
+  using Deepgram.Models.Listen.v1.REST;
+
+  namespace PreRecorded
+  {
+      class Program
+      {
+          static async Task Main(string[] args)
+          {
+              // Initialize Library with default logging
+              // Normal logging is "Info" level
+              Library.Initialize();
+
+              // create a ListenRESTClient directly (without using the factory method) with a API Key
+              // set using the "DEEPGRAM_API_KEY" environment variable
+              var deepgramClient = new ListenRESTClient();
+
+              var response = await deepgramClient.TranscribeUrl(
+                  new UrlSource("https://dpgr.am/bueller.wav"),
+                  new PreRecordedSchema()
+                  {
+                      Model = "nova-3",
+                  });
+
+              Console.WriteLine(response);
+              Console.ReadKey();
+
+              // Teardown Library
+              Library.Terminate();
+          }
+      }
+  }
+  ```
+
+  ```go Go
+  // main.go (Go example)
+
+  package main
+
+  import (
+  	"context"
+  	"encoding/json"
+  	"fmt"
+  	"os"
+
+  	prettyjson "github.com/hokaccha/go-prettyjson"
+
+  	prerecorded "github.com/deepgram/deepgram-go-sdk/pkg/api/prerecorded/v1"
+  	interfaces "github.com/deepgram/deepgram-go-sdk/pkg/client/interfaces"
+  	client "github.com/deepgram/deepgram-go-sdk/pkg/client/prerecorded"
+  )
+
+  // URL to the audio file to analyze
+  const (
+  	url string = "https://dpgr.am/spacewalk.wav"
+  )
+
+  func main() {
+  	// STEP 1: init Deepgram client library
+  	client.InitWithDefault()
+
+  	// STEP 2: define context to manage the lifecycle of the request
+  	ctx := context.Background()
+
+  	// STEP 3: define options for the request
+  	options := interfaces.PreRecordedTranscriptionOptions{
+  		Model:       "nova-3",
+  		SmartFormat: true,
+  	}
+
+  	// STEP 4: create a Deepgram client using default settings
+          // NOTE: you can set your API KEY in your bash profile by typing the following line in your shell:
+  	// export DEEPGRAM_API_KEY = "YOUR_DEEPGRAM_API_KEY"
+  	c := client.NewWithDefaults()
+  	dg := prerecorded.New(c)
+
+  	// STEP 5: send/process file to Deepgram
+  	res, err := dg.FromURL(ctx, url, options)
+  	if err != nil {
+  		fmt.Printf("FromURL failed. Err: %v\n", err)
+  		os.Exit(1)
+  	}
+
+  	// STEP 6: get the JSON response
+  	data, err := json.Marshal(res)
+  	if err != nil {
+  		fmt.Printf("json.Marshal failed. Err: %v\n", err)
+  		os.Exit(1)
+  	}
+
+  	// STEP 7: make the JSON pretty
+  	prettyJson, err := prettyjson.Format(data)
+  	if err != nil {
+  		fmt.Printf("prettyjson.Marshal failed. Err: %v\n", err)
+  		os.Exit(1)
+  	}
+  	fmt.Printf("\n\nResult:\n%s\n\n", prettyJson)
+  }
+  ```
+</CodeGroup>
+
+<Info>
+  To transcribe a **local file** instead of a remote URL, use the `transcribeFile` (JavaScript), `transcribe_file` (Python), `TranscribeFile` (C#), or `FromFile` (Go) method. Pass the file's binary content and the same options. See the [Pre-Recorded Audio API reference](/reference/speech-to-text/listen-pre-recorded) for details.
+</Info>
+
+## Non-SDK code examples
+
+<CodeGroup>
+  ```javascript JavaScript
+  // index.js (node example)
+
+  const { DeepgramClient } = require("@deepgram/sdk");
+  const fs = require("fs");
+
+  const transcribeFile = async () => {
+    // STEP 1: Create a Deepgram client using the API key
+    const deepgram = new DeepgramClient({ apiKey: process.env.DEEPGRAM_API_KEY });
+
+    // STEP 2: Call the transcribeFile method with the audio payload and options
+    // STEP 3: Configure Deepgram options for audio analysis
+    const result = await deepgram.listen.v1.media.transcribeFile(
+      // path to the audio file
+      fs.createReadStream("spacewalk.mp3"),
+      {
+        model: "nova-3",
+        smart_format: true,
+      }
+    );
+
+    // STEP 4: Print the results
+    console.dir(result, { depth: null });
+  };
+
+  transcribeFile();
+  ```
+
+  ```python Python
+  # For more Python SDK migration guides, visit:
+  # https://github.com/deepgram/deepgram-python-sdk/tree/main/docs
+
+  # main.py (python example)
+
+  import os
+
+  from deepgram import (
+      DeepgramClient,
+  )
+
+  # Path to the audio file
+  AUDIO_FILE = "spacewalk.mp3"
+
+  def main():
+      try:
+          # STEP 1 Create a Deepgram client using the API key
+          deepgram = DeepgramClient()
+
+          # STEP 2: Call the transcribe_file method with the audio file and options
+          with open(AUDIO_FILE, "rb") as audio_file:
+              response = deepgram.listen.v1.media.transcribe_file(
+                  request=audio_file.read(),
+                  model="nova-3",
+                  smart_format=True,
+              )
+
+          # STEP 3: Print the response
+          print(response.to_json(indent=4))
+
+      except Exception as e:
+          print(f"Exception: {e}")
+
+  if __name__ == "__main__":
+      main()
+  ```
+
+  ```csharp C#
+  // Program.cs (.NET example)
+
+  using Deepgram.Models.Listen.v1.REST;
+
+  namespace PreRecorded
+  {
+      class Program
+      {
+          static async Task Main(string[] args)
+          {
+              // Initialize Library with default logging
+              // Normal logging is "Info" level
+              Library.Initialize();
+
+              // use the client factory with a API Key set with the "DEEPGRAM_API_KEY" environment variable
+              var deepgramClient = ClientFactory.CreateListenRESTClient();
+
+              // check to see if the file exists
+              if (!File.Exists(@"Bueller-Life-moves-pretty-fast.wav"))
+              {
+                  Console.WriteLine("Error: File 'Bueller-Life-moves-pretty-fast.wav' not found.");
+                  return;
+              }
+
+              var audioData = File.ReadAllBytes(@"Bueller-Life-moves-pretty-fast.wav");
+              var response = await deepgramClient.TranscribeFile(
+                  audioData,
+                  new PreRecordedSchema()
+                  {
+                      Model = "nova-3",
+                  });
+
+              Console.WriteLine($"\n\n{response}\n\n");
+              Console.WriteLine("Press any key to exit...");
+              Console.ReadKey();
+
+              // Teardown Library
+              Library.Terminate();
+          }
+      }
+  }
+  ```
+
+  ```go Go
+  // main.go (Go example)
+
+  package main
+
+  import (
+  	"context"
+  	"encoding/json"
+  	"fmt"
+  	"os"
+
+  	prettyjson "github.com/hokaccha/go-prettyjson"
+
+  	prerecorded "github.com/deepgram/deepgram-go-sdk/pkg/api/prerecorded/v1"
+  	interfaces "github.com/deepgram/deepgram-go-sdk/pkg/client/interfaces"
+  	client "github.com/deepgram/deepgram-go-sdk/pkg/client/prerecorded"
+  )
+
+  // path to the audio file
+  const (
+  	filePath string = "spacewalk.mp3"
+  )
+
+  func main() {
+  	// STEP 1: init Deepgram client library
+  	client.InitWithDefault()
+
+  	// STEP 2: define context to manage the lifecycle of the request
+  	ctx := context.Background()
+
+  	// STEP 3: define options for the request
+  	options := interfaces.PreRecordedTranscriptionOptions{
+  		Model:       "nova-3",
+  		SmartFormat: true,
+  	}
+
+  	// STEP 4: create a Deepgram client using default settings
+  	// NOTE: you can set your API KEY in your bash profile by typing the following line in your shell:
+  	// export DEEPGRAM_API_KEY = "YOUR_DEEPGRAM_API_KEY"
+  	c := client.NewWithDefaults()
+  	dg := prerecorded.New(c)
+
+  	// STEP 5: send/process file to Deepgram
+  	res, err := dg.FromFile(ctx, filePath, &options)
+  	if err != nil {
+  		fmt.Printf("FromStream failed. Err: %v\n", err)
+  		os.Exit(1)
+  	}
+
+  	// STEP 6: get the JSON response
+  	data, err := json.Marshal(res)
+  	if err != nil {
+  		fmt.Printf("json.Marshal failed. Err: %v\n", err)
+  		os.Exit(1)
+  	}
+
+  	// STEP 7: make the JSON pretty
+  	prettyJson, err := prettyjson.Format(data)
+  	if err != nil {
+  		fmt.Printf("prettyjson.Marshal failed. Err: %v\n", err)
+  		os.Exit(1)
+  	}
+  	fmt.Printf("\n\nResult:\n%s\n\n", prettyJson)
+  }
+  ```
+</CodeGroup>
+
+## Non-SDK Code Examples
+
+If you would like to try out making a Deepgram speech-to-text request in a specific language (but not using Deepgram's SDKs), we offer a library of code-samples in this [Github repo](https://github.com/deepgram-devs/code-samples). However, we recommend first trying out our SDKs.
+For language-specific examples without Deepgram's SDKs, see the [code-samples repository](https://github.com/deepgram-devs/code-samples). We recommend trying the SDKs first.
+
+## Results
+
+Run your application from the terminal. Your transcript appears in your shell.
+
+<CodeGroup>
+  ```shell JavaScript
+  node index.js
+  ```
+
+  ```shell Python
+  python main.py
+  ```
+
+  ```shell C#
+  dotnet run
+  ```
+
+  ```shell Go
+  go run main.go
+  ```
+</CodeGroup>
+
+<Warning>
+  Deepgram does not store transcripts, so the API response is the only opportunity to retrieve the transcript. Save output or [return transcriptions to a callback URL for custom processing](/docs/callback/).
+</Warning>
+
+### Analyze the response
+
+When the file finishes processing (often after only a few seconds), you receive a JSON response:
+
+<CodeGroup>
+  ```json JSON
+  {
+    "metadata": {
+      "transaction_key": "deprecated",
+      "request_id": "2479c8c8-8185-40ac-9ac6-f0874419f793",
+      "sha256": "154e291ecfa8be6ab8343560bcc109008fa7853eb5372533e8efdefc9b504c33",
+      "created": "2024-02-06T19:56:16.180Z",
+      "duration": 25.933313,
+      "channels": 1,
+      "models": [
+        "30089e05-99d1-4376-b32e-c263170674af"
+      ],
+      "model_info": {
+        "30089e05-99d1-4376-b32e-c263170674af": {
+          "name": "2-general-nova",
+          "version": "2024-01-09.29447",
+          "arch": "nova-3"
+        }
+      }
+    },
+    "results": {
+      "channels": [
+        {
+          "alternatives": [
+            {
+              "transcript": "Yeah. As as much as, it's worth celebrating, the first, spacewalk, with an all female team, I think many of us are looking forward to it just being normal. And, I think if it signifies anything, It is, to honor the the women who came before us who, were skilled and qualified, and didn't get the the same opportunities that we have today.",
+              "confidence": 0.99902344,
+              "words": [
+                {
+                  "word": "yeah",
+                  "start": 0.08,
+                  "end": 0.32,
+                  "confidence": 0.9975586,
+                  "punctuated_word": "Yeah."
+                },
+                {
+                  "word": "as",
+                  "start": 0.32,
+                  "end": 0.79999995,
+                  "confidence": 0.9921875,
+                  "punctuated_word": "As"
+                }
+              ],
+              "paragraphs": {
+                "transcript": "\nYeah. As as much as, it's worth celebrating...",
+                "paragraphs": [
+                  {
+                    "sentences": [
+                      {
+                        "text": "Yeah.",
+                        "start": 0.08,
+                        "end": 0.32
+                      }
+                    ],
+                    "num_words": 63,
+                    "start": 0.08,
+                    "end": 25.52
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+  ```
+</CodeGroup>
+
+<Info>
+  The response above is truncated for brevity. The full response includes a `words` entry for every word in the transcript and all sentences in the `paragraphs` object.
+</Info>
+
+In this response:
+
+* `transcript`: the transcript for the audio segment being processed.
+* `confidence`: a floating point value between 0 and 1 that indicates overall transcript reliability. Larger values indicate higher confidence.
+* `words`: an object containing each `word` in the transcript, along with its `start` time and `end` time (in seconds) from the beginning of the audio stream, and a `confidence` value.
+  * Because we passed the `smart_format: true` option, each word object also includes its `punctuated_word` value, which contains the transformed word after punctuation and capitalization are applied.
+
+<Info>
+  The `transaction_key` in the `metadata` field can be ignored. The result is always `"transaction_key": "deprecated"`.
+</Info>
+
+## Limits
+
+* **File size**: Maximum 2 GB. For large video files, extract the audio stream first.
+* **Rate limits**: Up to 100 concurrent requests per project for Nova, Base, and Enhanced models. For full details, see [API Rate Limits](/reference/api-rate-limits).
+* **Processing time**: Requests exceeding 10 minutes (Nova/Base/Enhanced) or 20 minutes (Whisper) return a `504: Gateway Timeout` error.
+
+## What's next?
+
+* [Feature overview](/docs/stt-pre-recorded-feature-overview): Review the full list of features available for pre-recorded speech-to-text.
+* [Language](/docs/language): Transcribe audio in other languages.
+* [Streaming audio](/docs/live-streaming-audio): Transcribe audio in real time.
+* [Use cases](/docs/transcribe-recorded-calls-with-twilio): Explore ways to use Deepgram products.
+
+***

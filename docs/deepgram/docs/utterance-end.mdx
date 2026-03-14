@@ -1,0 +1,217 @@
+***
+
+title: Utterance End
+subtitle: >-
+Utterance End sends a message when the end of speech is detected in live
+streaming audio.
+slug: docs/utterance-end
+------------------------
+
+`utterance_end_ms` *string*
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge unavailable strike-through">
+    <span><Icon icon="file" /> Pre-recorded</span>
+  </span>
+
+  <span class="dg-badge">
+    <span><Icon icon="waveform-lines" /> Streaming:Nova</span>
+  </span>
+
+  <span class="dg-badge pink">
+    <span><Icon icon="language" /> All available languages</span>
+  </span>
+</div>
+
+The utterance end feature can be used for speech detection and can be enabled to help detect the end of speech while transcribing live streaming audio.
+
+Utterance end analyzes your interim and final results to identify a gap of the configured length after the last finalized word. The feature operates by analyzing interim and final transcripts to detect a sufficient silence gap following the last finalized word, requiring interim results to identify gaps that meet the configured duration. Utterance end provides a convenient server-side implementation of gap detection that could alternatively be implemented client-side by analyzing the timing of transcription results, allowing developers to choose the approach that best fits their application architecture.
+
+## Enable Feature
+
+To enable this feature, add `utterance_end_ms=1000` to your request. Replace `1000` with the number of milliseconds you want Deepgram to wait before sending the UtteranceEnd message. Utterance end analyzes your interim and final results to detect when there is a gap of the configured length after the last finalized word, then sends the UtteranceEnd message.
+
+For example, if you set `utterance_end_ms=1000`, Deepgram will wait for a 1000 millisecond gap between transcribed words before sending the UtteranceEnd message.
+
+### How It Works: A Concrete Example
+
+Here's how utterance end works with interim and finalized results:
+
+1. **Speaker says:** "Hello there" (pauses for 1.5 seconds) "How are you?"
+2. **With `utterance_end_ms=1000`:**
+   * **0.5s:** Interim result: `"Hello"`
+   * **1.0s:** Interim result: `"Hello there"`
+   * **2.0s:** Final result: `"Hello there"` with word timings:
+     * "Hello": start=0.1s, end=0.6s
+     * "there": start=0.7s, end=1.2s
+   * **🕒 Utterance end clock starts:** At 1.2s (end time of last finalized word "there")
+   * **2.2s:** 1000ms gap reached → **UtteranceEnd message sent** (`last_word_end=1.2`)
+   * **3.5s:** New speech detected, interim result: `"How are you?"`
+
+The utterance end "clock" only starts counting after receiving the end timestamp of the last finalized word, ensuring accurate gap detection.
+
+## Technical Notes
+
+While utterance end provides convenient server-side gap detection, there are some technical considerations to keep in mind:
+
+### Gap Detection Within Final Results
+
+Utterance end only analyzes gaps that occur after finalized words. It does not detect gaps that are contained entirely within a single final result. This design extends beyond just internal word gaps: if a final result's last word ends at 7.5 seconds but the result itself doesn't end until 10.0 seconds, utterance end will wait for an additional interim result before considering the gap—because the entire gap is contained within that single final result.
+
+This means you could potentially get faster gap detection by implementing client-side analysis that includes gaps within final transcripts.
+
+For example, if a final result contains "Hello... there" with a 2-second pause represented in the word timings, utterance end would not fire based on that internal gap—it only analyzes gaps that occur after the final result is processed.
+
+### Voice Agent Use Case Considerations
+
+Utterance end fires based on detecting a gap even if it determines that speech is continuing after the gap. This can make it less ideal for voice agent applications where you want to wait for truly complete utterances.
+
+**Example with `utterance_end_ms=2000`:**
+
+```
+[Interim] Hello there. This
+[Interim] Hello there. This is a test.
+[Final] Hello there. This is a test. (last_word_end = 3.4s)
+[Interim] (result_end = 4.7s)
+[Interim] I'm going to continue (first_word_start = 5.5s)
+↑ UtteranceEnd fires here, even though speech continues
+```
+
+In this scenario, utterance end fires after detecting the 2-second gap (between when the last word ended at 3.4s and when new speech began at 5.5s), but the speaker was actually continuing their thought. For voice agents that need to wait for truly complete utterances, client-side implementation with additional logic may be more appropriate.
+
+### When to Use Server-Side vs Client-Side Implementation
+
+**Use Deepgram's utterance end when:**
+
+* You need simple, reliable gap detection after finalized words
+* You want to minimize client-side processing complexity
+* You're building transcription or note-taking applications
+
+**Consider client-side implementation when:**
+
+* You need to detect gaps within final results for faster response times
+* You're building voice agents that require precise utterance boundary detection
+* You want to add additional logic (e.g., analyzing speech patterns, semantic completeness)
+* You need to customize gap detection behavior beyond what the server provides
+
+**Configuration Requirements:**
+
+| Parameter | Value                          |
+| --------- | ------------------------------ |
+| Minimum   | 1,000 ms (default)             |
+| Maximum   | 5,000 ms                       |
+| Step size | Any integer value within range |
+
+<Info>
+  **Note for Self-Hosted and Deepgram Dedicated Users:** If your endpoint has a modified step size configuration, the minimum value becomes that step size instead of 1,000 ms. For example:
+
+  * Step size configured for 0.2 (200 ms) → minimum `utterance_end_ms` value is 200
+  * Step size configured for 1.5 (1500 ms) → minimum `utterance_end_ms` value is 1500
+
+  To learn more about [Deepgram Dedicated](https://deepgram.com/dedicated) or Self-Hosted offerings, reach out to your Deepgram account representative or [contact our sales team](https://deepgram.com/contact-us). For technical details on configuring custom endpoints, see our [Custom Endpoints documentation](https://developers.deepgram.com/reference/custom-endpoints).
+</Info>
+
+UtteranceEnd relies on Deepgram's `interim_results` feature and Deepgram's Interim Results are typically sent every second, so using a value of less 1000ms for `utterance_end_ms` will not offer you any benefits.
+
+<Info>
+  When using `utterance_end_ms`, setting `interim_results=true` is also required.
+</Info>
+
+<CodeGroup>
+  ```python Python
+
+  # see https://github.com/deepgram/deepgram-python-sdk/blob/main/examples/streaming/async_microphone/main.py
+  # for complete example code
+
+     # Create websocket connection with the required options
+     with deepgram.listen.v1.connect(
+         model="nova-3",
+         language="en-US",
+         # Apply smart formatting to the output
+         smart_format=True,
+         # Raw audio format details
+         encoding="linear16",
+         channels=1,
+         sample_rate=16000,
+         # To get UtteranceEnd, the following must be set:
+         interim_results=True,
+         utterance_end_ms="1000",
+         vad_events=True,
+         # Time in milliseconds of silence to wait for before finalizing speech
+         endpointing=300
+     ) as connection:
+  ```
+</CodeGroup>
+
+## Results
+
+The UtteranceEnd JSON message will look similar to this:
+
+<CodeGroup>
+  ```json JSON
+  {
+    "channel": [
+      0,
+      1
+    ],
+    "last_word_end": 2.395,
+    "type": "UtteranceEnd"
+  }
+  ```
+</CodeGroup>
+
+* The `type` field is always `UtteranceEnd` for this event.
+* The `channel` field is interpreted as `[A,B]`, where `A` is the channel index, and `B` is the total number of channels. The above example is channel 0 of single-channel audio.
+* The `last_word_end` field is the time at which end of speech was detected.
+
+<Warning>
+  **Special Case: `last_word_end: -1`**
+
+  If you receive `last_word_end: -1`, this indicates that the result was already finalized before the `utterance_end_ms` condition was met. In this case, you should ignore the UtteranceEnd message to avoid processing duplicate or stale utterance end notifications.
+</Warning>
+
+If you compare this to the Results response below, you will see that the `last_word_end` from the UtteranceEnd response matches the data in the `alternatives[0].words[1].end` field of the Results response. This is due to the gap identified after the final word.
+
+In addition, you can see `is_final=true`, which is sent because of the `interim_results` feature.
+
+<CodeGroup>
+  ```json JSON
+  {
+    "channel": {
+      "alternatives": [
+        {
+          "confidence": 0.77905273,
+          "transcript": "Testing. 123.",
+          "words": [
+            {
+              "confidence": 0.69189453,
+              "end": 1.57,
+              "punctuated_word": "Testing.",
+              "start": 1.07,
+              "word": "testing"
+            },
+            {
+              "confidence": 0.77905273,
+              "end": 2.395,
+              "punctuated_word": "123.",
+              "start": 1.895,
+              "word": "123"
+            }
+          ]
+        }
+      ]
+    },
+    "channel_index": [
+      0,
+      1
+    ],
+    "duration": 1.65,
+    "is_final": true,
+    "metadata": {
+     ...
+    "type": "Results"
+  }
+  ```
+</CodeGroup>
+
+***

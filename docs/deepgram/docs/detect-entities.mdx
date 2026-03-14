@@ -1,0 +1,449 @@
+***
+
+title: Entity Detection
+subtitle: >-
+Entity Detection identifies and extracts key entities from content in
+submitted audio.
+slug: docs/detect-entities
+--------------------------
+
+`detect_entities` *boolean*. Default: `false`
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="file" /> Pre-recorded</span>
+  </span>
+
+  <span class="dg-badge">
+    <span><Icon icon="waveform-lines" /> Streaming:Nova</span>
+  </span>
+
+  <span class="dg-badge pink">
+    <span><Icon icon="language" /> English (all available regions)</span>
+  </span>
+</div>
+
+# Entity Detection
+
+When Entity Detection is enabled, the [Punctuation](/docs/punctuation) feature will be enabled by default.
+
+## Model Support
+
+Entity Detection is available for both pre-recorded and streaming speech-to-text.
+
+<Info>
+  **Streaming:** Entity Detection for streaming is supported on **Nova**, **Nova-2**, **Nova-3**, and **Enhanced** models. It is not available for Base models or Flux.
+
+  **Pre-recorded:** Entity Detection for pre-recorded audio is available on all models.
+</Info>
+
+## Enable Feature
+
+To enable Entity Detection, when you call Deepgram's API, add a `detect_entities` parameter set to `true` in the query string:
+
+`detect_entities=true`
+
+<Info>
+  When Entity Detection is enabled, [Punctuation](/docs/punctuation) will also be enabled by default.
+</Info>
+
+### Pre-recorded Audio
+
+To transcribe audio from a file on your computer, run the following curl command in a terminal or your favorite API client.
+
+<CodeGroup>
+  ```bash cURL
+  curl \
+    --request POST \
+    --header 'Authorization: Token YOUR_DEEPGRAM_API_KEY' \
+    --header 'Content-Type: audio/wav' \
+    --data-binary @youraudio.wav \
+    --url 'https://api.deepgram.com/v1/listen?detect_entities=true'
+  ```
+</CodeGroup>
+
+<Warning>
+  Replace `YOUR_DEEPGRAM_API_KEY` with your [Deepgram API Key](https://console.deepgram.com/signup?jump=keys).
+</Warning>
+
+### Streaming Audio
+
+To enable Entity Detection for streaming audio, establish a WebSocket connection with the `detect_entities=true` parameter. Remember that streaming Entity Detection is supported on Nova, Nova-2, Nova-3, and Enhanced models.
+
+<CodeGroup>
+  ```javascript JavaScript
+  // Example filename: index.js
+
+  const { DeepgramClient } = require("@deepgram/sdk");
+  const fetch = require("cross-fetch");
+  const dotenv = require("dotenv");
+  dotenv.config();
+
+  // URL for the realtime streaming audio you would like to transcribe
+  const url = "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service";
+
+  const live = async () => {
+    // STEP 1: Create a Deepgram client using the API key
+    const deepgram = new DeepgramClient({ apiKey: process.env.DEEPGRAM_API_KEY });
+
+    // STEP 2: Create a live transcription connection with entity detection enabled
+    const connection = await deepgram.listen.v1.connect({
+      model: "nova-3",
+      language: "en-US",
+      smart_format: "true",
+      detect_entities: "true",
+    });
+
+    // STEP 3: Listen for events from the live transcription connection
+    connection.on("open", () => {
+      console.log("Connection opened.");
+
+      connection.on("close", () => {
+        console.log("Connection closed.");
+      });
+
+      connection.on("message", (data) => {
+        if (data.type === "Results") {
+          const transcript = data.channel.alternatives[0].transcript;
+
+          // Only process final results which contain entities
+          if (data.is_final) {
+            const entities = data.channel.alternatives[0].entities;
+
+            if (entities && entities.length > 0) {
+              console.log("\nTranscript:", transcript);
+              console.log("Entities detected:");
+              entities.forEach(entity => {
+                console.log(`  - ${entity.label}: ${entity.value} (confidence: ${entity.confidence})`);
+                // raw_value is only present when formatting features (like smart_format) are enabled
+                if (entity.raw_value) {
+                  console.log(`    Raw value: ${entity.raw_value}`);
+                }
+              });
+            }
+          }
+        }
+      });
+
+      connection.on("error", (err) => {
+        console.error("Error:", err);
+      });
+
+      // STEP 4: Fetch the audio stream and send it to the live transcription connection
+      fetch(url)
+        .then((r) => r.body)
+        .then((res) => {
+          res.on("readable", () => {
+            connection.sendMedia(res.read());
+          });
+        });
+    });
+
+    connection.connect();
+    await connection.waitForOpen();
+  };
+
+  live();
+  ```
+
+  ```python Python
+  # Example filename: main.py
+
+  import httpx
+  import threading
+
+  from deepgram import DeepgramClient
+  from deepgram.core.events import EventType
+  from deepgram.listen.v1.types import ListenV1Results
+
+  # URL for the realtime streaming audio you would like to transcribe
+  URL = "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
+
+  def main():
+      try:
+          # Create a Deepgram client
+          deepgram = DeepgramClient()
+
+          # Create a websocket connection with entity detection enabled
+          with deepgram.listen.v1.connect(
+              model="nova-3",
+              language="en-US",
+              smart_format=True,
+              detect_entities=True
+          ) as connection:
+
+              def on_message(message) -> None:
+                  # Only process final results which contain entities
+                  if hasattr(message, 'is_final') and message.is_final:
+                      if hasattr(message, 'channel') and hasattr(message.channel, 'alternatives'):
+                          transcript = message.channel.alternatives[0].transcript
+                          entities = message.channel.alternatives[0].entities
+
+                          if entities and len(entities) > 0:
+                              print(f"\nTranscript: {transcript}")
+                              print("Entities detected:")
+                              for entity in entities:
+                                  print(f"  - {entity.label}: {entity.value} (confidence: {entity.confidence})")
+                                  # raw_value is only present when formatting features (like smart_format) are enabled
+                                  if hasattr(entity, 'raw_value') and entity.raw_value:
+                                      print(f"    Raw value: {entity.raw_value}")
+
+              connection.on(EventType.OPEN, lambda _: print("Connection opened"))
+              connection.on(EventType.MESSAGE, on_message)
+              connection.on(EventType.CLOSE, lambda _: print("Connection closed"))
+              connection.on(EventType.ERROR, lambda error: print(f"Error: {error}"))
+
+              lock_exit = threading.Lock()
+              exit = False
+
+              # Define a thread for start_listening with error handling
+              def listening_thread():
+                  try:
+                      connection.start_listening()
+                  except Exception as e:
+                      print(f"Error in listening thread: {e}")
+
+              # Start listening in a separate thread
+              listen_thread = threading.Thread(target=listening_thread)
+              listen_thread.start()
+
+              # Define a worker thread for HTTP streaming with error handling
+              def http_stream_thread():
+                  try:
+                      with httpx.stream("GET", URL) as r:
+                          for data in r.iter_bytes():
+                              lock_exit.acquire()
+                              if exit:
+                                  break
+                              lock_exit.release()
+
+                              connection.send_media(data)
+                  except Exception as e:
+                      print(f"Error in HTTP streaming thread: {e}")
+
+              # Start the HTTP streaming thread
+              stream_thread = threading.Thread(target=http_stream_thread)
+              stream_thread.start()
+
+              # Wait for user input to stop
+              input("Press Enter to stop...\n")
+              lock_exit.acquire()
+              exit = True
+              lock_exit.release()
+
+              # Wait for both threads to close
+              stream_thread.join(timeout=5.0)
+              listen_thread.join(timeout=5.0)
+
+              print("Finished")
+
+      except Exception as e:
+          print(f"Could not open socket: {e}")
+          return
+
+  if __name__ == "__main__":
+      main()
+  ```
+</CodeGroup>
+
+## Analyze Response
+
+The response structure differs between pre-recorded and streaming transcription.
+
+### Pre-recorded Response
+
+When the file is finished processing (often after only a few seconds), you'll receive a JSON response that has the following basic structure:
+
+<CodeGroup>
+  ```json JSON
+  {
+    "metadata": {
+      "transaction_key": "string",
+      "request_id": "string",
+      "sha256": "string",
+      "created": "string",
+      "duration": 0,
+      "channels": 0
+    },
+    "results": {
+      "channels": [
+        {
+          "alternatives":[],
+        }
+      ]
+    }
+  }
+  ```
+</CodeGroup>
+
+Let's look more closely at the `alternatives` object:
+
+<CodeGroup>
+  ```json JSON
+  "alternatives":[
+    {
+      "transcript":"Welcome to the Ai show. I'm Scott Stephenson, cofounder of Deepgram...",
+      "confidence":0.9816771,
+      "words": [...],
+      "entities":[
+        {
+          "label":"NAME",
+          "value":" Scott Stephenson",
+          "confidence":0.9999924,
+          "start_word":6,
+          "end_word":8
+        },
+        {
+          "label":"ORGANIZATION",
+          "value":" Deepgram",
+          "confidence":0.9999757,
+          "start_word":10,
+          "end_word":11
+        },
+        {
+          "label": "CARDINAL",
+          "value": "one",
+          "confidence": 1,
+          "start_word": 186,
+          "end_word": 187
+        },
+        ...
+      ]
+    }
+  ]
+  ```
+</CodeGroup>
+
+### Streaming Response
+
+For streaming transcription, entities are included in **final results only** (when `is_final: true`). Interim results do not contain the `entities` array.
+
+Here's an example of a streaming response with Entity Detection enabled:
+
+<CodeGroup>
+  ```json JSON - Final Result with Entities
+  {
+    "type": "Results",
+    "channel_index": [0, 1],
+    "duration": 4.64,
+    "start": 0.0,
+    "is_final": true,
+    "speech_final": true,
+    "channel": {
+      "alternatives": [
+        {
+          "transcript": "Hi, I'm calling to update my account. My name is Jane Doe and my phone number is (555) 123-4567. You can reach me at jane.doe@email.com.",
+          "confidence": 0.99,
+          "words": [...],
+          "entities": [
+            {
+              "label": "NAME",
+              "value": "Jane Doe",
+              "raw_value": "jane doe",
+              "confidence": 0.9999,
+              "start_word": 9,
+              "end_word": 11
+            },
+            {
+              "label": "PHONE_NUMBER",
+              "value": "(555) 123-4567",
+              "raw_value": "five five five one two three four five six seven",
+              "confidence": 0.9998,
+              "start_word": 15,
+              "end_word": 16
+            },
+            {
+              "label": "EMAIL_ADDRESS",
+              "value": "jane.doe@email.com",
+              "raw_value": "jane dot doe at email dot com",
+              "confidence": 0.9999,
+              "start_word": 21,
+              "end_word": 22
+            }
+          ]
+        }
+      ]
+    }
+  }
+  ```
+</CodeGroup>
+
+<Info>
+  **Streaming Behavior:**
+
+  * The `entities` array is **only present in final results** (`is_final: true`).
+  * If `detect_entities` is enabled but no entities are detected, an empty array is returned: `"entities": []`.
+  * To ensure complete entities are detected, the system may wait for entity completion before finalizing. See [Streaming Finalization Behavior](#streaming-finalization-behavior) below.
+</Info>
+
+### Streaming Finalization Behavior
+
+When using Entity Detection with streaming audio, Deepgram will attempt to detect and format entities as they are spoken. For entities that seem like they may be incomplete, our system will:
+
+* Wait until the speaker continues to non-entity speech, OR
+* Finalize the transcript after **3 seconds of silence**, OR
+* Receive a [Finalize](/docs/finalize) control message
+* Return only completed entities based on the available audio at that point
+
+This approach ensures transcripts are returned promptly while maintaining entity detection precision.
+
+#### Using No Delay
+
+Setting `no_delay=true` forces immediate finalization of streaming transcripts without waiting for entity completion.
+
+<Warning>
+  This will result in entities being missed or incomplete in many cases. Only use `no_delay=true` if low latency is more important than entity detection accuracy.
+</Warning>
+
+To use `no_delay` with Entity Detection:
+
+<CodeGroup>
+  ```javascript JavaScript
+  const connection = await deepgram.listen.v1.connect({
+    model: "nova-3",
+    language: "en-US",
+    detect_entities: "true",
+    no_delay: "true"  // Forces immediate finalization, may miss entities
+  });
+  ```
+
+  ```python Python
+  with deepgram.listen.v1.connect(
+      model="nova-3",
+      language="en-US",
+      detect_entities=True,
+      no_delay=True  # Forces immediate finalization, may miss entities
+  ) as connection:
+  ```
+</CodeGroup>
+
+### Understanding Entity Fields
+
+Each entity object in the `entities` array contains the following fields:
+
+* `label`: Type of entity identified (e.g., NAME, PHONE\_NUMBER, EMAIL, ADDRESS).
+* `value`: The formatted text of the entity. When [Smart Formatting](/docs/smart-format) is enabled, this field reflects the formatted output.
+* `raw_value`: *(Streaming only, when formatting is enabled)* The original, non-formatted text as spoken. This field is only included when formatting features are enabled.
+* `confidence`: Floating point value between 0 and 1 that indicates overall transcript reliability. Larger values indicate higher confidence.
+* `start_word`: Index of the first word, inclusive, of the entity in the transcript.
+* `end_word`: Index of the last word, exclusive, of the entity in the transcript.
+
+**Key Differences Between Pre-recorded and Streaming:**
+
+| Field        | Pre-recorded    | Streaming                           |
+| ------------ | --------------- | ----------------------------------- |
+| `value`      | Always included | Always included                     |
+| `raw_value`  | Not included    | Included when formatting is enabled |
+| Availability | Always          | Only in `is_final: true` messages   |
+
+## Identifiable Entities
+
+View all options here: [Supported Entity Types](/docs/supported-entity-types)
+
+## Use Cases
+
+Some examples of uses for Entity Detection include:
+
+* Customers who want to improve Conversational AI and Voice Assistant by triggering particular workflows and responses based on identified name, address, location, and other key entities.
+* Customers who want to enhance customer service and user experience by extracting meaningful and relevant information about key entities such as a person, organization, email, and phone number.
+* Customers who want to derive meaningful and actionable insights from the audio data based on identified entities in conversations.

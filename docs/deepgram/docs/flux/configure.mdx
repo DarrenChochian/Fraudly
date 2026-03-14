@@ -1,0 +1,179 @@
+***
+
+title: Configure
+subtitle: >-
+Send a Configure message to update Flux stream settings in real-time without
+reconnecting.
+slug: docs/flux/configure
+-------------------------
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="stream" />Streaming:Flux</span>
+  </span>
+</div>
+
+## Introduction
+
+Real conversations aren't static. A call that starts with casual confirmation ("Can you verify your name?") shifts to strict authentication ("Please say your 6-digit PIN") and then to open-ended troubleshooting. Conversations evolve through discrete sections, intents, and steps—each with different demands on your speech recognition system.
+
+The `Configure` control message enables you to adapt Flux's behavior mid-stream as conversational context evolves, without disconnecting and reconnecting. This is essentially **context injection for speech recognition**: you inject the specific vocabulary, turn detection behavior, and timing parameters needed for each phase of the conversation.
+
+### Why This Matters for Voice Agents
+
+The ASR behavior you want at minute one isn't what you want at minute three. With dynamic configuration, you can:
+
+**Dynamically bias toward task-critical phrases.** Collecting a customer's name? Add it to keyterms right before you ask. Moving from appointment scheduling to pharmacy? Swap in medication names and medical terminology. Handling a product inquiry? Load the specific product names and feature terminology relevant to that conversation. You're no longer stuck with a generic keyterm list that's "good enough" for the whole call or loading hundreds of irrelevant terms upfront.
+
+**Adjust turn detection for critical flows.** When you're collecting a password, OTP, or account number, you don't want Flux cutting off the user mid-utterance. Increase `eot_timeout_ms` and `eot_threshold` values for that segment to allow longer pauses and wait for higher confidence before detecting turn end, then decrease them when you're back to natural conversation.
+
+**Reduce engineering complexity.** Without dynamic configuration, changing ASR behavior mid-call meant reconnecting (dropping audio, managing state transitions) or worse, managing multiple concurrent streams and swapping between them. That's a state machine you never wanted to build and definitely don't want to maintain. Configure gives you one connection with dynamic behavior.
+
+Configuration updates are processed in order with your audio stream and take effect immediately when processed. The stream continues uninterrupted, and you receive confirmation of successful updates via `ConfigureSuccess` messages.
+
+## Configurable Parameters
+
+You can update the following parameters mid-stream:
+
+| Parameter             | Type   | Range           | Description                                                                                                              |
+| --------------------- | ------ | --------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `keyterms`            | array  | Up to 100 terms | Custom vocabulary terms to boost recognition accuracy. **Note:** Sending keyterms replaces the entire list, not merge.   |
+| `eot_threshold`       | number | 0.5-0.9         | Confidence threshold for standard turn detection. Higher values mean more confidence required before detecting turn end. |
+| `eager_eot_threshold` | number | 0.3-0.9         | Confidence threshold for eager turn detection. Must be ≤ `eot_threshold`.                                                |
+| `eot_timeout_ms`      | number | 500-10000       | Maximum silence duration (in milliseconds) before forcing turn end.                                                      |
+
+All parameters are optional in a Configure message. Omitted parameters retain their current values.
+
+## Message Structure
+
+### Configure Message
+
+Thresholds must be nested under a `"thresholds"` object. Individual threshold properties can be sent without including all three.
+
+<CodeGroup>
+  ```json Update Thresholds Only
+  {
+    "type": "Configure",
+    "thresholds": {
+      "eot_threshold": 0.8,
+      "eot_timeout_ms": 5000
+    }
+  }
+  ```
+
+  ```json Update Keyterms Only
+  {
+    "type": "Configure",
+    "keyterms": ["product_name", "feature_name", "company_name"]
+  }
+  ```
+
+  ```json Update Both
+  {
+    "type": "Configure",
+    "thresholds": {
+      "eager_eot_threshold": 0.4,
+      "eot_threshold": 0.7,
+      "eot_timeout_ms": 6000
+    },
+    "keyterms": ["apple", "banana", "orange"]
+  }
+  ```
+
+  ```json Clear All Keyterms
+  {
+    "type": "Configure",
+    "keyterms": []
+  }
+  ```
+</CodeGroup>
+
+### Response Messages
+
+#### ConfigureSuccess
+
+Returned when configuration update is successfully applied. Echoes back the updated configuration.
+
+```json
+{
+  "type": "ConfigureSuccess",
+  "thresholds": {
+    "eager_eot_threshold": 0.4,
+    "eot_threshold": 0.7,
+    "eot_timeout_ms": 6000
+  },
+  "keyterms": ["apple", "banana", "orange"]
+}
+```
+
+#### ConfigureFailure
+
+Returned when configuration update fails validation. The stream continues with the previous configuration.
+
+```json
+{
+  "type": "ConfigureFailure",
+  "sequence_id": 42,
+  "code": "INVALID_THRESHOLD",
+  "description": "eager_eot_threshold must be less than or equal to eot_threshold"
+}
+```
+
+## Important Behaviors
+
+### Configuration Update Timing
+
+Key timing behaviors:
+
+* Updates apply immediately when the Configure message is processed
+* Updates persist until the stream ends or another Configure message is sent
+* Turn boundaries do not affect when updates take effect
+* Already-transcribed audio is NOT reprocessed with new configuration
+
+### Keyterm Overwrite Behavior
+
+<Warning>
+  **Critical:** When sending a Configure message with keyterms, the ENTIRE keyterms list is replaced, not merged. If you want to add terms, you must include both existing and new terms.
+</Warning>
+
+Example:
+
+```
+Initial keyterms:    ["apple", "banana", "orange"]
+Configure with:      {"keyterms": ["grape", "kiwi"]}
+Result:              ["grape", "kiwi"]
+                     // "apple", "banana", "orange" are REMOVED
+```
+
+To add terms while keeping existing ones, retrieve the current keyterms first (via application state tracking or the initial configuration), then send a Configure message with the combined list.
+
+### Exclusion vs. Clearing
+
+Different behaviors apply when you omit fields versus explicitly clearing them:
+
+| Scenario                      | JSON Example                                 | Behavior                      |
+| ----------------------------- | -------------------------------------------- | ----------------------------- |
+| Omit keyterms                 | `{"type": "Configure", "thresholds": {...}}` | No change to keyterms         |
+| Empty keyterms array          | `{"type": "Configure", "keyterms": []}`      | Clears all keyterms           |
+| Omit threshold property       | `{"thresholds": {"eot_threshold": 0.8}}`     | No change to other thresholds |
+| Omit entire thresholds object | `{"type": "Configure", "keyterms": [...]}`   | No change to any thresholds   |
+
+### Validation Rules
+
+Configure messages are validated using the same rules as initial connection parameters:
+
+* `eager_eot_threshold` must be ≤ `eot_threshold` (if both are specified in the message)
+* Threshold values must be within valid ranges
+* Keyterms array must contain ≤ 100 terms
+
+**Important:** A failed Configure message (returning `ConfigureFailure`) does NOT affect the stream. The connection continues with the previous configuration unchanged.
+
+## Related Resources
+
+* [Configuration Parameters](/docs/flux/configuration) - Complete reference for all Flux configuration options
+* [Keyterm Boosting](/docs/custom-vocabulary/keyterm) - Detailed guide to using keyterms for custom vocabulary
+* [State Messages](/docs/flux/state) - Understanding turn detection and state transitions
+* [Getting Started with Flux](/docs/flux/quickstart) - Quickstart guide with basic configuration
+* [Close Stream](/docs/flux/close-stream) - Force stream closure and final transcription
+
+***

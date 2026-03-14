@@ -1,0 +1,168 @@
+***
+
+title: History
+subtitle: >-
+Provide conversation and function call history when starting a new Voice Agent
+session.
+slug: docs/voice-agent-history
+------------------------------
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="headset" /> Voice Agent</span>
+  </span>
+</div>
+
+When starting a new conversation session with the Voice Agent, you can provide historical context about previous conversations and function calls using the `agent.context` parameter. This allows the agent to maintain awareness of prior interactions, enabling more coherent and contextual conversations.
+
+## Purpose
+
+History is particularly useful when:
+
+* Resuming a conversation from a previous session
+* Providing context about what has already been discussed
+* Maintaining personality and conversation style consistency
+* Enabling the agent to reference previous statements, topics, or function results
+* Providing background context about function calls already executed
+* Maintaining continuity in multi-session interactions
+
+<Info>
+  History can be disabled by setting `settings.flags.history` to `false` in the agent configuration. History is enabled by default.
+</Info>
+
+## Conversation Context History
+
+| Field     | Type   | Description                                                       |
+| --------- | ------ | ----------------------------------------------------------------- |
+| `type`    | String | Must be "History" to identify this as a history message           |
+| `role`    | String | Either "user" (human statements) or "assistant" (agent responses) |
+| `content` | String | The actual text content of what was said                          |
+
+### Example Payload
+
+<CodeGroup>
+  ```json Conversation History
+  {
+    "type": "Settings",
+    "settings": {
+      "flags": {
+        "history": true // true by default, set to false to disable
+      }
+    },
+    "agent": {
+      "context": {
+        "messages": [
+          {
+            "type": "History",
+            "role": "user",
+            "content": "Hello, I'm looking for help with my account."
+          },
+          {
+            "type": "History",
+            "role": "assistant",
+            "content": "Hello! I'd be happy to help you with your account. What specific issue are you experiencing?"
+          },
+          {
+            "type": "History",
+            "role": "user",
+            "content": "I can't remember my username."
+          },
+          {
+            "type": "History",
+            "role": "assistant",
+            "content": "I can help you recover your username. I'll need to verify a few details first. Could you provide the email address associated with your account?"
+          }
+        ]
+      },
+      "think": {
+        "provider": {
+          "type": "open_ai",
+          "model": "gpt-4o-mini"
+        }
+      }
+    }
+  }
+  ```
+</CodeGroup>
+
+## Function Call Context History
+
+| Field            | Type   | Description                                             |
+| ---------------- | ------ | ------------------------------------------------------- |
+| `type`           | String | Must be "History" to identify this as a history message |
+| `function_calls` | Array  | Array of function call objects with execution details   |
+
+Each function call in the history includes:
+
+| Field         | Type    | Description                                                       |
+| ------------- | ------- | ----------------------------------------------------------------- |
+| `id`          | String  | A unique identifier for the function call                         |
+| `name`        | String  | The name of the function that was called                          |
+| `client_side` | Boolean | Indicates if the function was executed client-side or server-side |
+| `arguments`   | String  | JSON string containing the arguments passed to the function       |
+| `response`    | String  | The response/result returned by the function                      |
+
+### Example Payload
+
+<CodeGroup>
+  ```json Function Call History
+  {
+    "type": "Settings",
+    "settings": {
+      "flags": {
+        "history": true // true by default, set to false to disable
+      }
+    },
+    "agent": {
+      "context": {
+        "messages": [
+          {
+            "type": "History",
+            "role": "user",
+            "content": "What's the weather like in New York?"
+          },
+          {
+            "type": "History",
+            "function_calls": [
+              {
+                "id": "fc_weather_12345",
+                "name": "get_weather",
+                "client_side": true,
+                "arguments": "{\"location\": \"New York\"}",
+                "response": "The current weather in New York is partly cloudy with a temperature of 295.15°K."
+              }
+            ]
+          },
+          {
+            "type": "History",
+            "role": "assistant",
+            "content": "The weather in New York is partly cloudy with a temperature of about 72°F (295.15°K)."
+          }
+        ]
+      },
+      "think": {
+        "provider": {
+          "type": "open_ai",
+          "model": "gpt-4o-mini"
+        },
+        "functions": [
+          {
+            "name": "get_weather",
+            "description": "Get the current weather for a specific location",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "type": "string",
+                  "description": "The city or location to get weather for"
+                }
+              },
+              "required": ["location"]
+            }
+          }
+        ]
+      }
+    }
+  }
+  ```
+</CodeGroup>

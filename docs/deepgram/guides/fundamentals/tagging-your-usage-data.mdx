@@ -1,0 +1,63 @@
+***
+
+title: Tagging Your Usage Data
+subtitle: >-
+Tagging allows you to label your requests for grouping & filtering usage
+reports.
+--------
+
+Tags are custom labels you can add to API requests to organize your Deepgram usage data. Use them to track usage by environment, application version, use case—any dimension that matters to your project.
+
+## Context
+
+Deepgram automatically aggregates your usage and billing data to power UI features in the Console like usage and billing charts. This data is sliced by a variety of Deepgram-defined dimensions, like API key identifier and deployment type. Tags are a way to add your own dimension to Deepgram data.
+
+## How to use
+
+Each Deepgram product supports tagging, though how you do it changes by product:
+
+* [STT](/docs/stt-tagging)
+* [Intelligence](/docs/text-intelligence-tagging)
+* [TTS](/docs/tts-tagging)
+* [Voice Agent](/docs/voice-agent-settings#example-payloads)
+
+When you set one or more tags on a request, those tags will flow through to your Deepgram-hosted usage data. For instance, if you made the following request:
+
+```sh
+curl \
+  --request POST \
+  --header 'Authorization: Token YOUR_DEEPGRAM_API_KEY' \
+  --data-binary @youraudio.wav \
+  --url 'https://api.deepgram.com/v1/listen?tag=prod&tag=discovery-page'
+```
+
+Then in usage and billing charts, you'll be able to filter by `prod` and/or `discovery-page`, and when grouping them by tags set this usage will show up in the `[prod, discovery-page]` bucket. This data is also propagated to CSV exports.
+
+### Common use cases
+
+* There's a good chance you want to distinguish your production data usage. So you may tag your usage as one of `prod`, `staging`, `dev-<devname>`, etc.
+* If you want to distinguish your "live" data usage from internal tooling, you could use tags like `app`, `backfill-2025-06-01`, `backfill-2025-05-01`, etc.
+* You may want to track spend for each version of your application. Just tag usage as `v1.2.3`, `v1.2.4`, etc.
+
+### Where your tags appear
+
+All tags you apply will be available in Deepgram's usage and billing data, which powers the Console usage/billing charts and CSV exports.
+
+You can also use the API directly to list tags used in the [usage fields](/reference/manage/usage/list) endpoint, or group/filter on tags in the [usage breakdown](/reference/manage/usage/breakdown/get) or [billing breakdown](/reference/manage/billing/breakdown/get) endpoints.
+
+## Best practices
+
+* **Use consistent naming:** Tags are immutable once applied to a request, so establish conventions early.
+* **Limit tags per request:** When grouping by tag set, requests will be aggregated according to *all* of their tags, so charts may become less useful if you have, say, 20 tags per request. Setting 1–3 tags per request is easiest to work with, but don't worry too much if you've overshot.
+* **Limit total unique tags:** The more unique tags you have, the harder it'll be to filter and visualize your data. If you're just downloading CSVs this becomes less of an issue, but see the [limits](#tag-limits-and-high-cardinality-data) section to be sure you won't run into limits as well.
+* **Tag keys when possible:** If you know the tags at time of API key creation (e.g. you tag deployments, and this key is specifically for your AWS us-east-1 deployment), you can add tags directly to keys. They'll be automatically applied to all usage for that key, eliminating the need to tag individual requests altogether.
+
+### Tag limits and high-cardinality data
+
+Effectively, tagging a request limits Deepgram's ability to aggregate. This is really useful when you want to distinguish subsets of usage that are unique to your project. But using a lot of tags effectively *disables* data aggregation. For this reason, there are a few per-project limits Deepgram places on tags:
+
+1. They can be up to 128 characters
+2. You can provide up to 500 unique tag values in a 24-hour period
+3. In charts, grouping by tags set will be disabled if 500+ tags are present in the given time period. This limit doesn't apply to direct API usage.
+
+One common (and totally valid!) "high cardinality" case where you might at first consider tags is tracing: you want to correlate your own logs with individual Deepgram requests. Whenever possible, we recommend taking the Deepgram request ID from your responses and using that internally for correlation, but when that isn't possible, the [extra metadata](/docs/extra-metadata) feature gives you an escape hatch to label Deepgram logs without breaking your graphs.

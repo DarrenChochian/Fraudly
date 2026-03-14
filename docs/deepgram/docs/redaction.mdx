@@ -1,0 +1,161 @@
+***
+
+title: Redaction
+subtitle: Redaction removes sensitive information from your transcripts.
+slug: docs/redaction
+--------------------
+
+<Card href="https://playground.deepgram.com/?endpoint=listen&redact=pci&language=en&model=nova-3">
+  <div class="t-default text-base font-semibold">Deepgram API Playground</div>
+  Try this feature out in our API Playground.
+</Card>
+
+<br />
+
+`redact` *string* Default: `False`
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="file" /> Pre-recorded</span>
+  </span>
+
+  <span class="dg-badge">
+    <span><Icon icon="waveform-lines" /> Streaming:Nova</span>
+  </span>
+
+  <span class="dg-badge unavailable strike-through">
+    <span><Icon icon="waveform-lines" />Streaming: Flux</span>
+  </span>
+
+  <span class="dg-badge pink">
+    <span><Icon icon="language" /> Specific languages only</span>
+  </span>
+</div>
+
+## Language Support
+
+Redaction language support varies by deployment type and processing method:
+
+| Deployment Type               | Processing Method    | Language Support        |
+| ----------------------------- | -------------------- | ----------------------- |
+| Hosted API (api.deepgram.com) | Pre-recorded (batch) | All available languages |
+| Hosted API (api.deepgram.com) | Streaming            | English only            |
+| Self-hosted                   | Pre-recorded (batch) | English only            |
+| Self-hosted                   | Streaming            | English only            |
+
+## Enable Feature
+
+To enable redaction, use the following parameter in the query string when you call Deepgram’s `/listen` endpoint:
+
+`redact=OPTION`
+
+### Pre-Recorded
+
+#### Redacting Common Entities
+
+Deepgram provides the following options to redact common groups of entities:
+
+* `pci`: Redacts credit card information, including credit card number, expiration date, and CVV.
+* `pii`: Redacts personally identifiable information, including names and locations and complete and 4 digit social security numbers.
+* `phi`: Redacts protected health information, including medical conditions, drugs, injuries, blood types, medical processes, and statistics.
+* `numbers` (or `true`): Redacts numerical entities, such as dates and account numbers.
+
+The `numbers` group includes the following entity types:
+
+| Field Name               | Grouping |
+| ------------------------ | -------- |
+| account\_number          | numbers  |
+| age                      | numbers  |
+| date                     | numbers  |
+| date\_interval           | numbers  |
+| dob                      | numbers  |
+| driver\_license          | numbers  |
+| healthcare\_number       | numbers  |
+| ip\_address              | numbers  |
+| location                 | numbers  |
+| location\_address        | numbers  |
+| location\_zip            | numbers  |
+| location\_coordinate     | numbers  |
+| money                    | numbers  |
+| numerical\_pii           | numbers  |
+| passport\_number         | numbers  |
+| password                 | numbers  |
+| phone\_number            | numbers  |
+| ssn                      | numbers  |
+| time                     | numbers  |
+| vehicle\_id              | numbers  |
+| statistics               | numbers  |
+| bank\_account            | numbers  |
+| credit\_card             | numbers  |
+| credit\_card\_expiration | numbers  |
+| cvv                      | numbers  |
+| routing\_number          | numbers  |
+
+#### Redacting Specific Entities
+
+When submitting pre-recorded audio to Deepgram's hosted endpoint (`api.deepgram.com`), you may select the types of entities you wish to redact from [over 50 supported entity types](/docs/supported-entity-types). This powerful functionality allows you total control over what is redacted in your transcript.
+
+Some options include `credit_card`, `credit_card_expiration`, `cvv`, and `email_address`.
+
+View all options here: [Supported Entity Types](/docs/supported-entity-types)
+
+#### Examples
+
+You can enable redaction by adding `redact=OPTION` as a query parameter.
+
+To transcribe audio and remove `PCI` data from an audio file run the following cURL command:
+
+<CodeGroup>
+  ```bash cURL
+  curl \
+    --request POST \
+    --header 'Authorization: Token YOUR_DEEPGRAM_API_KEY' \
+    --header 'Content-Type: audio/wav' \
+    --data-binary @youraudio.wav \
+    --url 'https://api.deepgram.com/v1/listen?redact=pci'
+  ```
+</CodeGroup>
+
+Multiple types of entities can be redacted with the syntax `redact=option_1&redact=option_2`. To transcribe audio and remove `PCI` and `PII` data from an audio file run the following cURL command:
+
+<CodeGroup>
+  ```bash cURL
+  curl \
+    --request POST \
+    --header 'Authorization: Token YOUR_DEEPGRAM_API_KEY' \
+    --header 'Content-Type: audio/wav' \
+    --data-binary @youraudio.wav \
+    --url 'https://api.deepgram.com/v1/listen?redact=pci&redact=pii'
+  ```
+</CodeGroup>
+
+<Warning>
+  Replace `YOUR_DEEPGRAM_API_KEY` with your [Deepgram API Key](/docs/create-additional-api-keys).
+</Warning>
+
+### Streaming
+
+<Info>
+  To ensure redaction operates with the highest accuracy, set `no_delay=false` or avoid including `no_delay` altogether. If `no_delay=true` is set, our system will opt for low latency at the risk of redaction performance.
+</Info>
+
+When live-streaming audio to Deepgram's hosted endpoint, redaction options include:
+
+* `pci`: Redacts sensitive credit card information, including credit card number, expiration date, and CVV.
+* `phi`: Redacts protected health information, including medical conditions, drugs, injuries, blood types, medical processes, and statistics.
+* `numbers` (or `true`): Redacts series of three or more consecutive numerals.
+* `aggressive_numbers`: Redacts all numerals.
+* `ssn`: Redacts complete social security numbers.
+* Multiple redaction values can be sent: `redact=pci&redact=numbers`
+
+In streaming redaction, Deepgram follows a two-phase approach. During interim results, the system returns a generic `[REDACTED]` placeholder for a redacted entity while it continues evaluating the spoken content. Once a segment is considered complete and Deepgram has high confidence in the detected entity, the placeholder is replaced with a specific entity tag (for example, `[CREDIT_CARD_1]`, `[SSN_1]`, or `[PHONE_NUMBER_1]`). This replacement may occur in a later interim result or in the final result. This approach enables real-time transcription with both low latency and accurate, contextual redaction.
+
+## Results
+
+For both Live-streaming and Pre-recorded audio, Redaction replaces redacted content with the type of entity redacted and the number of times that entity has been detected in the transcript. For example, if you choose to redact social security numbers, the phrase "My social security number is five five five two two one one one one and his is six six six two two one three three three" would appear in your transcript as "My social security number is \[SSN\_1] and his is \[SSN\_2]".
+
+Example with `redact=pci&redact=pii`:
+
+| Source                                                                                                                                                                                                                                                                                                                                                                                   | Before redact                                                                                                                                                                                                                                                                                                                                                                            | After redact                                                                                                                                                                                                                              |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| my credit card number is four four four four nine nine nine nine three three three three two two two two with an expiration date of one twenty three and the cvv code is one one one i live at one two three main street dallas texas seven five two zero one my phone number is five five five two one two nine three three three my date of birth is july twelfth nineteen seventy six | my credit card number is four four four four nine nine nine nine three three three three two two two two with an expiration date of one twenty three and the cvv code is one one one i live at one two three main street dallas texas seven five two zero one my phone number is five five five two one two nine three three three my date of birth is july twelfth nineteen seventy six | my credit card number is \[CREDIT\_CARD\_1] with an expiration date of \[CREDIT\_CARD\_EXPIRATION\_1] and the cv code is \[CVV\_1] i live at \[LOCATION\_ADDRESS\_1] my phone number is \[PHONE\_NUMBER\_1] my date of birth is \[DOB\_1] |

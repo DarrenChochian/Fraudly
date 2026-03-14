@@ -1,0 +1,273 @@
+***
+
+title: Configuring Custom Endpoints
+subtitle: >-
+Instructions for using Deepgram's EU endpoint, Dedicated endpoints, and
+self-hosted endpoints with your applications.
+---------------------------------------------
+
+This guide provides instructions for configuring your applications to use Deepgram's European Union (EU) endpoint, Deepgram Dedicated endpoints, or self-hosted endpoints.
+
+## EU Endpoint
+
+For customers requiring data processing within the EU, Deepgram provides an EU-specific endpoint at `api.eu.deepgram.com`. While Deepgram guarantees the service will be hosted within the EU, the specific country location may change over time. If you require hosting in a specific EU country, consider [Deepgram Dedicated](https://deepgram.com/dedicated) (see also our [technical documentation](#deepgram-dedicated-endpoints)).
+
+**Endpoint URL**: `api.eu.deepgram.com`
+
+### How to Configure
+
+1. **Replace the base URL**: In any SDK or API request, replace `api.deepgram.com` with `api.eu.deepgram.com`
+2. **Use your existing credentials**: You can use your existing API keys and tokens.
+
+### Feature Compatibility
+
+The EU endpoint supports the following Deepgram APIs:
+
+* Speech-to-Text: `/v1/listen` and `/v2/listen` (excluding Whisper models)
+* Text-to-Speech: `/v1/speak`
+* Voice Agent: `/v1/agent/converse`
+* Text Intelligence: `/v1/read`
+
+See our [API Documentation](/reference/deepgram-api-overview) for more information.
+
+## Deepgram Dedicated Endpoints
+
+[Deepgram Dedicated](https://deepgram.com/dedicated) allows you to run speech-to-text, text-to-speech, and voice agent workloads with performance, compliance, and regional control, without the complexity of managing infrastructure.
+
+If you have a Deepgram Dedicated (DGD) endpoint, you'll receive endpoint details similar to:
+
+**Endpoint URL**: `{SHORT_UID}.{REGION_SUBDOMAIN}.api.deepgram.com`
+
+### How to Configure
+
+1. **Replace the base URL**: In any SDK or API request, replace `api.deepgram.com` with your dedicated endpoint URL.
+2. **Use your existing credentials**: You can use your existing API keys and tokens.
+
+### Feature Compatibility
+
+All Deepgram API features are available on self-hosted deployments. See our [API Documentation](/reference/deepgram-api-overview) for more information.
+
+## Self-Hosted Endpoints
+
+For self-hosted Deepgram deployments, you'll use your own custom domain and infrastructure.
+
+**Common Endpoint Patterns**:
+
+* HTTPS: `https://your-deepgram-instance.com`
+* HTTP with alternate port 8080: `http://your-deepgram-instance.com:8080`
+* Internal network: `http://10.0.1.100:8080`
+
+### How to configure
+
+<Info>
+  For more information about self-hosted deployments, see our [Self-Hosted Documentation](/docs/self-hosted-introduction).
+</Info>
+
+1. **Replace the base URL**: In any SDK or API request, replace `api.deepgram.com` with your self-hosted endpoint
+2. **Use your distribution credentials**: Self-hosted deployments require specific credentials provided during setup.
+3. **Configure protocol and port**: Specify HTTP/HTTPS and custom ports as needed for your deployment.
+
+### Feature Compatibility
+
+All Deepgram API features are available on self-hosted deployments. See our [API Documentation](/reference/deepgram-api-overview) for more information.
+
+## Known Limitations
+
+Some features and configurations have limitations depending on the endpoint or region. Review the following before configuring your application.
+
+* **Flux is not currently available in the EU region.** Support for Flux in the EU region is actively being worked on and will be available in a future update.
+
+## WebSocket Connections
+
+For streaming features, update WebSocket connection URLs accordingly:
+
+* **Standard**: `wss://api.deepgram.com/v1/listen`
+* **Dedicated**: `wss://{YOUR_DEDICATED_ENDPOINT}/v1/listen`
+* **EU**: `wss://api.eu.deepgram.com/v1/listen`
+* **Self-hosted (HTTPS)**: `wss://your-deepgram-instance.com/v1/listen`
+* **Self-hosted (HTTP with custom port)**: `ws://your-deepgram-instance.com:8080/v1/listen`
+
+## SDK Configuration Examples
+
+### Python SDK
+
+```python
+# For more Python SDK migration guides, visit:
+# https://github.com/deepgram/deepgram-python-sdk/tree/main/docs
+
+from deepgram import DeepgramClient
+import httpx
+
+# Standard endpoint
+# client = DeepgramClient(api_key="YOUR_API_KEY")
+
+# Dedicated endpoint
+client = DeepgramClient(
+    api_key="YOUR_API_KEY",
+    httpx_client=httpx.Client(
+        base_url="https://YOUR_DEDICATED_ENDPOINT"
+    )
+)
+
+# EU endpoint
+client = DeepgramClient(
+    api_key="YOUR_API_KEY",
+    httpx_client=httpx.Client(
+        base_url="https://api.eu.deepgram.com"
+    )
+)
+
+# Self-hosted endpoint (HTTPS)
+client = DeepgramClient(
+    api_key="YOUR_API_KEY",
+    httpx_client=httpx.Client(
+        base_url="https://your-deepgram-instance.com"
+    )
+)
+
+# Self-hosted endpoint (HTTP with custom port)
+client = DeepgramClient(
+    api_key="YOUR_API_KEY",
+    httpx_client=httpx.Client(
+        base_url="http://your-deepgram-instance.com:8080"
+    )
+)
+```
+
+### JavaScript SDK
+
+```javascript
+import { DeepgramClient } from "@deepgram/sdk";
+
+// Standard endpoint
+// const deepgram = new DeepgramClient({ apiKey: "YOUR_API_KEY" });
+
+// Dedicated endpoint
+const deepgram = new DeepgramClient({
+  apiKey: "YOUR_API_KEY",
+  baseUrl: "https://{YOUR_DEDICATED_ENDPOINT}",
+});
+
+// EU endpoint
+const deepgram = new DeepgramClient({
+  apiKey: "YOUR_API_KEY",
+  baseUrl: "https://api.eu.deepgram.com",
+});
+
+// Self-hosted endpoint (HTTPS)
+const deepgram = new DeepgramClient({
+  apiKey: "YOUR_API_KEY",
+  baseUrl: "https://your-deepgram-instance.com",
+});
+
+// Self-hosted endpoint (HTTP with custom port)
+const deepgram = new DeepgramClient({
+  apiKey: "YOUR_API_KEY",
+  baseUrl: "http://your-deepgram-instance.com:8080",
+});
+```
+
+### .NET SDK
+
+```csharp
+using Deepgram;
+using Deepgram.Models.Authenticate.v1;
+
+// Standard endpoint (default)
+// var client = new AnalyzeClient("YOUR_API_KEY");
+
+// Dedicated endpoint
+var client = new AnalyzeClient("YOUR_API_KEY",
+    new DeepgramHttpClientOptions("YOUR_API_KEY", "https://{YOUR_DEDICATED_ENDPOINT}"));
+
+// EU endpoint
+var client = new AnalyzeClient("YOUR_API_KEY",
+    new DeepgramHttpClientOptions("YOUR_API_KEY", "https://api.eu.deepgram.com"));
+
+// Self-hosted endpoint (HTTPS)
+var client = new AnalyzeClient("YOUR_API_KEY",
+    new DeepgramHttpClientOptions("YOUR_API_KEY", "https://your-deepgram-instance.com"));
+
+// Self-hosted endpoint (HTTP with custom port)
+var client = new AnalyzeClient("YOUR_API_KEY",
+    new DeepgramHttpClientOptions("YOUR_API_KEY", "http://your-deepgram-instance.com:8080"));
+```
+
+### Go SDK
+
+```go
+import "github.com/deepgram/deepgram-go-sdk/pkg/client/interfaces"
+
+// Standard endpoint
+// client := client.NewWithDefaults()
+
+// Dedicated endpoint
+client := client.New("YOUR_API_KEY", &interfaces.ClientOptions{
+    Host: "{YOUR_DEDICATED_ENDPOINT}",
+})
+
+// EU endpoint
+client := client.New("YOUR_API_KEY", &interfaces.ClientOptions{
+    Host: "api.eu.deepgram.com",
+})
+
+// Self-hosted endpoint (HTTPS)
+client := client.New("YOUR_API_KEY", &interfaces.ClientOptions{
+    Host: "your-deepgram-instance.com",
+})
+
+// Self-hosted endpoint (HTTP with custom port)
+client := client.New("YOUR_API_KEY", &interfaces.ClientOptions{
+    Host: "http://your-deepgram-instance.com:8080",  // Protocol included in Host
+    APIVersion: "v1",
+})
+```
+
+## Direct API Calls
+
+### cURL Examples
+
+**Standard endpoint:**
+
+```bash
+curl -X POST "https://api.deepgram.com/v1/listen" \
+  -H "Authorization: Token YOUR_API_KEY" \
+  -H "Content-Type: audio/wav" \
+  --data-binary @audio.wav
+```
+
+**Dedicated endpoint:**
+
+```bash
+curl -X POST "https://{YOUR_DEDICATED_ENDPOINT}/v1/listen" \
+  -H "Authorization: Token YOUR_API_KEY" \
+  -H "Content-Type: audio/wav" \
+  --data-binary @audio.wav
+```
+
+**EU endpoint:**
+
+```bash
+curl -X POST "https://api.eu.deepgram.com/v1/listen" \
+  -H "Authorization: Token YOUR_API_KEY" \
+  -H "Content-Type: audio/wav" \
+  --data-binary @audio.wav
+```
+
+**Self-hosted endpoint (HTTPS):**
+
+```bash
+curl -X POST "https://your-deepgram-instance.com/v1/listen" \
+  -H "Authorization: Token YOUR_API_KEY" \
+  -H "Content-Type: audio/wav" \
+  --data-binary @audio.wav
+```
+
+**Self-hosted endpoint (HTTP with custom port):**
+
+```bash
+curl -X POST "http://your-deepgram-instance.com:8080/v1/listen" \
+  -H "Authorization: Token YOUR_API_KEY" \
+  -H "Content-Type: audio/wav" \
+  --data-binary @audio.wav
+```

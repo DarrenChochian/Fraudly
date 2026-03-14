@@ -1,0 +1,49 @@
+***
+
+title: Update Think
+subtitle: Send a message to replace the Think provider in the middle of a conversation.
+slug: docs/voice-agent-update-think
+-----------------------------------
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="headset" /> Voice Agent</span>
+  </span>
+</div>
+
+The `UpdateThink` message is a JSON message that you can use to replace the Think provider in the middle of a conversation.
+
+## Purpose
+
+The `UpdateThink` message is a JSON message that allows you to replace the entire Think provider configuration during a conversation, including the model, prompt, endpoint, and functions. This flexibility enables real-time adjustments to the agent's reasoning capabilities, ensuring a more dynamic and responsive interaction tailored to the evolving needs of the conversation.
+
+Unlike [`UpdatePrompt`](/docs/voice-agent-update-prompt), which adds to the existing prompt, `UpdateThink` replaces the entire Think provider configuration. This means you can switch to a different LLM provider, change the model, set a completely new prompt, and reconfigure functions all in a single message.
+
+## Example Payloads
+
+To send the `UpdateThink` message, you need to send the following JSON message to the server:
+
+<CodeGroup>
+  ```json JSON
+  {
+      "type": "UpdateThink",
+      "think": {
+          "provider": {
+              "type": "open_ai", // LLM provider to use.
+              "model": "gpt-4o-mini"
+          },
+          "prompt": "You are a helpful voice assistant."
+      }
+  }
+  ```
+</CodeGroup>
+
+Upon receiving the `UpdateThink` message, the server will process all remaining audio data and return a [`ThinkUpdated`](/docs/voice-agent-think-updated) message.
+
+<CodeGroup>
+  ```json JSON
+  {
+      "type": "ThinkUpdated"
+  }
+  ```
+</CodeGroup>

@@ -1,0 +1,174 @@
+***
+
+title: End-of-Turn Detection Parameters
+subtitle: >-
+Configure Flux's end-of-turn detection behavior with eot\_threshold,
+eager\_eot\_threshold, and eot\_timeout\_ms.
+slug: docs/flux/configuration
+-----------------------------
+
+Flux provides three configurable parameters that control end-of-turn detection behavior, allowing you to optimize your voice agent's conversational flow for your specific use case.
+
+## Overview
+
+Flux's end-of-turn detection is powered by three key parameters:
+
+| Parameter             | Range           | Default | Required       | Description                                                 |
+| --------------------- | --------------- | ------- | -------------- | ----------------------------------------------------------- |
+| `eot_threshold`       | `0.5` - `0.9`   | `0.7`   | No             | Confidence threshold for triggering `EndOfTurn` events      |
+| `eager_eot_threshold` | `0.3` - `0.9`   | *None*  | For eager mode | Confidence threshold for triggering `EagerEndOfTurn` events |
+| `eot_timeout_ms`      | `500` - `10000` | `5000`  | No             | Maximum silence duration (ms) before forcing `EndOfTurn`    |
+
+## Parameter Details
+
+### `eot_threshold`
+
+Confidence threshold required to trigger an `EndOfTurn` event, signaling that the user has finished speaking.
+
+**Valid Values:** `0.5` to `0.9`
+**Default:** `0.7`
+**Type:** Float (passed as string in URL or SDK)
+
+**Behavior:**
+
+* **Higher values** (e.g., `0.8` - `0.9`) = Higher certainty required before ending a turn, fewer false positives, slightly increased latency
+* **Lower values** (e.g., `0.5` - `0.7`) = Lower certainty required before ending a turn, faster responses, more false positives
+
+**Example:**
+
+```bash
+wss://api.deepgram.com/v2/listen?model=flux-general-en&eot_threshold=0.8
+```
+
+***
+
+### `eager_eot_threshold`
+
+Confidence threshold for triggering `EagerEndOfTurn` events, enabling early LLM response generation.
+
+**Valid Values:** `0.3` to `0.9`
+**Default:** *Not set* (eager mode disabled)
+**Type:** Float (passed as string in URL or SDK)
+
+**Behavior:**
+
+* **When set**: Enables `EagerEndOfTurn` and `TurnResumed` events
+* **Lower values** (e.g., `0.3` - `0.5`) = Earlier triggers, lower latency, more false starts
+* **Higher values** (e.g., `0.6` - `0.8`) = More conservative, fewer cancellations, less latency benefit
+
+**Trade-offs:**
+
+* ✅ Reduces E2E agent latency
+* ❌ Increases LLM calls
+* ❌ Requires handling `EagerEndOfTurn` speculative generation and `TurnResumed` cancellations
+
+**Example:**
+
+```bash
+wss://api.deepgram.com/v2/listen?model=flux-general-en&eager_eot_threshold=0.6&eot_threshold=0.8
+```
+
+<Info>
+  **Important**: The transcript in `EagerEndOfTurn` will **exactly match** the transcript in the subsequent `EndOfTurn` event (if no `TurnResumed` occurs). This guarantees consistency for caching strategies.
+</Info>
+
+***
+
+### `eot_timeout_ms`
+
+Maximum silence duration before forcing an `EndOfTurn`, regardless of confidence.
+
+**Valid Values:** `500` to `10000` (milliseconds)
+**Default:** `5000` (5 seconds)
+**Type:** Integer (passed as string in URL or SDK)
+
+**Behavior:**
+
+* Forces `EndOfTurn` after specified silence duration, even if confidence is below `eot_threshold`
+* Timer resets when new speech is detected
+* **Increase** (e.g., `7000` - `10000`) for users with frequent pauses
+* **Decrease** (e.g., `3000` - `4000`) for rapid-response environments
+
+**Example:**
+
+```bash
+wss://api.deepgram.com/v2/listen?model=flux-general-en&encoding=linear16&sample_rate=16000&eot_timeout_ms=7000
+```
+
+## Parameter Interactions
+
+### Validation Rules
+
+* `eager_eot_threshold` must be **less than or equal to** `eot_threshold` (if both are set)
+* Setting `eager_eot_threshold > eot_threshold` will result in an error
+* All parameters are optional, but their values must be within valid ranges if specified
+
+## Common Configurations
+
+### Simple Mode (Default)
+
+```python
+async with client.listen.v2.connect(
+    model="flux-general-en",
+    eot_threshold="0.7"  # Default value
+) as connection:
+    pass
+```
+
+**Best for:** Basic conversational agents, demos, getting started
+
+***
+
+### Low-Latency Mode
+
+```python
+async with client.listen.v2.connect(
+    model="flux-general-en",
+    eager_eot_threshold="0.4",
+    eot_threshold="0.7",
+    eot_timeout_ms="6000"
+) as connection:
+    pass
+```
+
+**Best for:** High-volume customer service, fast-paced Q\&A, responsiveness over accuracy
+
+***
+
+### High-Reliability Mode
+
+```python
+async with client.listen.v2.connect(
+    model="flux-general-en",
+    eot_threshold="0.85",
+    eot_timeout_ms="8000"
+) as connection:
+    pass
+```
+
+**Best for:** Medical/legal transcription, critical documentation, formal settings
+
+***
+
+### Complex Pipeline Mode
+
+```python
+async with client.listen.v2.connect(
+    model="flux-general-en",
+    eager_eot_threshold="0.4",
+    eot_threshold="0.85",
+    eot_timeout_ms="7000"
+) as connection:
+    pass
+```
+
+**Best for:** RAG systems, tool-calling agents, multi-step reasoning workflows
+
+## Related Resources
+
+* [Getting Started with Flux](/docs/flux/quickstart) - Quickstart guide with basic configuration
+* [Configure Control Message](/docs/flux/configure) - Update configuration mid-stream without reconnecting
+* [Flux State Machine](/docs/flux/state) - Understanding turn events and state transitions
+* [Eager End-of-Turn Optimization](/docs/flux/voice-agent-eager-eot) - Deep dive on eager mode implementation
+* [Build a Voice Agent](/docs/flux/agent) - Complete voice agent implementation guide
+* [Migrating from Nova-3](/docs/flux/nova-3-migration) - Migration guide with configuration examples

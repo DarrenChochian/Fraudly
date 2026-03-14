@@ -1,0 +1,53 @@
+***
+
+title: Agent Errors
+subtitle: Receive errors from the server if an issue has occurred.
+slug: docs/voice-agent-errors
+-----------------------------
+
+<div class="flex flex-row gap-2">
+  <span class="dg-badge">
+    <span><Icon icon="headset" /> Voice Agent</span>
+  </span>
+</div>
+
+A notification from the server something has triggered an error.
+
+## Purpose
+
+The `Error` message is sent by the server to inform the client that an issue has occurred. It includes a descriptive message explaining the nature of the error, enabling the client to diagnose and address the problem. This ensures better error handling and more robust communication between the client and server.
+
+## Example Payload
+
+The server will send an `Error` message to notify the client that something has gone wrong.
+
+<CodeGroup>
+  ```json JSON
+  {
+    "type": "Error",
+    "description": "A description of what went wrong",
+    "code": "The error code"
+  }
+  ```
+</CodeGroup>
+
+## Types of Errors
+
+| Error                                  | Message                                                                                                  | Recommended Resolution                                                                                                                                                                         |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `INTERNAL_SERVER_ERROR`                | An internal server error occurred while processing the request.                                          | Retry the connection. If the issue persists, contact Deepgram Support with your `request_id`.                                                                                                  |
+| `CLIENT_MESSAGE_TIMEOUT`               | The server waited too long for a WebSocket message from the client.                                      | Ensure your client is sending messages (such as audio or keep-alive) within the expected timeframe. Check your WebSocket connection for network issues.                                        |
+| `UNPARSABLE_CLIENT_MESSAGE`            | A message from the client could not be deserialized according to the expected schema.                    | Verify that all messages sent to the server conform to the [Voice Agent API schema](/docs/voice-agent-api-guide). Check for malformed JSON or incorrect message types.                         |
+| `NON_SETTINGS_MESSAGE_BEFORE_SETTINGS` | The client sent a message on the WebSocket before sending a `Settings` message.                          | Always send a `Settings` message as the first message after establishing the WebSocket connection before sending any other messages.                                                           |
+| `SETTINGS_ALREADY_APPLIED`             | A `Settings` message was received when settings were already established.                                | Only send one `Settings` message per session. If you need to update settings, close the current connection and open a new one.                                                                 |
+| `INVALID_SETTINGS`                     | The `Settings` message was parsed successfully but contained invalid values.                             | Review the settings in your `Settings` message and ensure all fields have valid values. Refer to the [Settings Configuration](/docs/voice-agent-settings) documentation.                       |
+| `FAILED_TO_START_LISTENING`            | Failed to open the `listen` (speech-to-text) connection.                                                 | Retry the connection. If the issue persists, verify your account has access to Deepgram's speech-to-text service and contact Deepgram Support.                                                 |
+| `ASR_CONNECTION_CLOSED`                | The speech-to-text connection closed unexpectedly.                                                       | Retry the connection. This may indicate a transient issue. If it persists, contact Deepgram Support with your `request_id`.                                                                    |
+| `ASR_DRIVER_TIMEOUT`                   | No speech-to-text transcript was received within the expected timeout.                                   | Check that you are sending valid audio data in the correct format. Retry the connection if the issue persists.                                                                                 |
+| `USER_AUDIO_FORMAT`                    | The user audio received was not in the format specified.                                                 | Ensure the audio encoding and sample rate in your `Settings` message match the audio data being sent. Review the [Media Inputs & Outputs](/docs/voice-agent-media-input-output) documentation. |
+| `FAILED_TO_SPEAK`                      | The agent was not able to speak a message after attempting all applicable retries and fallbacks.         | Review your `speak` provider configuration and error messages. Always specify a fallback `speak` provider to be robust to individual provider outages.                                         |
+| `SERVER_GOING_AWAY`                    | The server running this agent session is being shut down.                                                | Reconnect to establish a new session. This is typically caused by routine server maintenance.                                                                                                  |
+| `NON_EXISTENT_FUNCTION_CALLED`         | A function was called that does not exist.                                                               | Verify that all functions referenced in your agent configuration are correctly defined and registered.                                                                                         |
+| `AGENT_ID_NOT_SUPPORTED`               | Agent ID is not supported in the current server configuration.                                           | Ensure your project is properly authenticated. If using self-hosted builds, note that Agent ID is not supported in un-authenticated mode.                                                      |
+| `INVALID_AGENT_ID`                     | The specified Agent ID is invalid.                                                                       | Verify that the Agent ID exists and is correctly formatted. Check your Deepgram console for valid Agent IDs.                                                                                   |
+| `FAILED_TO_THINK`                      | The agent was not able to produce an LLM response after attempting all applicable retries and fallbacks. | Review your `think` provider configuration and error messages. Always specify a fallback `think` provider to be robust to individual provider outages.                                         |
