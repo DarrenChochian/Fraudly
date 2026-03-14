@@ -4,6 +4,5 @@ release
 *.local
 .DS_Store
 .env
-.env.*
 *.log
 npm-debug.log*
