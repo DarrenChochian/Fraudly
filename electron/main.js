@@ -7,13 +7,15 @@ const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 let mainWindow
 
 function createWindow() {
-  const work = screen.getPrimaryDisplay().workArea
+  const display = screen.getPrimaryDisplay()
+  const useDisplayBounds = process.platform === 'win32'
+  const initialRect = useDisplayBounds ? display.bounds : display.workArea
 
   mainWindow = new BrowserWindow({
-    x: bounds.x,
-    y: bounds.y,
-    width: bounds.width,
-    height: bounds.height,
+    x: initialRect.x,
+    y: initialRect.y,
+    width: initialRect.width,
+    height: initialRect.height,
     frame: false,
     transparent: true,
     backgroundColor: '#00000000',
@@ -33,9 +35,11 @@ function createWindow() {
   // Click-through by default; renderer will opt-in interactive regions.
   mainWindow.setIgnoreMouseEvents(true, { forward: true })
 
-  // Force display metrics recalculation (fixes Windows workArea/bounds caching issues)
+  // Re-apply display metrics after first paint for platform-specific reliability.
   mainWindow.once('ready-to-show', () => {
-    const { width, height, x, y } = screen.getPrimaryDisplay().bounds
+    const nextDisplay = screen.getPrimaryDisplay()
+    const nextRect = useDisplayBounds ? nextDisplay.bounds : nextDisplay.workArea
+    const { width, height, x, y } = nextRect
     if (width > 100 && height > 100) {
       mainWindow.setBounds({ x, y, width, height })
     }
