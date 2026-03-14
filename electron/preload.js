@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   platform: process.platform,
   setOverlayInteractivity: (interactive) => ipcRenderer.send('overlay:set-interactive', interactive),
   initializeResearchChats: (chatIds) => ipcRenderer.invoke('research:initialize-chats', { chatIds }),
+  resetResearchThread: (chatId) => ipcRenderer.invoke('research:reset-thread', { chatId }),
   runResearch: (payload) => ipcRenderer.invoke('research:run', payload),
   onResearchEvent: (callback) => {
     const listener = (_, payload) => callback(payload)
@@ -23,6 +24,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     const listener = () => callback()
     ipcRenderer.on('main-panel:open', listener)
     return () => ipcRenderer.removeListener('main-panel:open', listener)
+  },
+  onSuspiciousScanTrigger: (callback) => {
+    const listener = () => callback()
+    ipcRenderer.on('suspicious-scan:trigger', listener)
+    return () => ipcRenderer.removeListener('suspicious-scan:trigger', listener)
   },
   onHotkeyRegistrationResult: (callback) => {
     const listener = (_, payload) => callback(payload)

@@ -2,7 +2,7 @@ const RESEARCH_TOOLS = [
   {
     type: 'function',
     function: {
-      name: 'websearch',
+      name: 'webseach',
       description: 'Run web search using Jina AI for one or more research queries.',
       parameters: {
         type: 'object',
@@ -19,6 +19,7 @@ const RESEARCH_TOOLS = [
             },
           },
         },
+        required: ['query'],
       },
     },
   },

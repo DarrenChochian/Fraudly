@@ -318,11 +318,18 @@ function registerAllHotkeys() {
   )
   if (mainPanelResult.ok) currentMainPanelAccelerator = mainPanelResult.registered
 
+  const suspiciousScanResult = tryRegisterWithFallbacks(
+    'Alt+Enter',
+    () => handleHotkey('suspicious-scan:trigger'),
+    ['Alt+Return']
+  )
+
   const notify = () => {
     if (!mainWindow || mainWindow.isDestroyed()) return
     mainWindow.webContents.send('hotkey:registration-result', {
       settings: { accelerator: currentSettingsAccelerator, ok: settingsResult.ok },
       mainPanel: { accelerator: currentMainPanelAccelerator, ok: mainPanelResult.ok },
+      suspiciousScan: { accelerator: 'Alt+Enter', ok: suspiciousScanResult.ok },
     })
   }
 

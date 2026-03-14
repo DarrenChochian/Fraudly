@@ -73,9 +73,11 @@ const CHAT_DEFINITIONS = [
   { id: '1', title: 'Chat 1' },
   { id: '2', title: 'Chat 2' },
   { id: '3', title: 'Chat 3' },
+  { id: 'suspicious-scan', title: 'Suspicious Scan' },
 ]
 
 const CHAT_IDS = CHAT_DEFINITIONS.map((chat) => chat.id)
+const SUSPICIOUS_SCAN_CHAT_ID = 'suspicious-scan'
 const AUDIO_CHUNK_MS = 250
 const AUDIO_MIME_CANDIDATES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus']
 
@@ -270,6 +272,39 @@ function buildInitialChatMessages() {
   return Object.fromEntries(CHAT_DEFINITIONS.map((chat) => [chat.id, initialMessagesForChat(chat.id)]))
 }
 
+function buildSuspiciousScanPrompt({ screenshotResult, callerTranscript, userTranscript }) {
+  const caller = String(callerTranscript || '').trim() || '(no caller transcript yet)'
+  const user = String(userTranscript || '').trim() || '(no user transcript yet)'
+  const capturedAt = new Date().toISOString()
+  const screenshotName = String(screenshotResult?.filePath || '')
+    .split(/[/\\]/)
+    .filter(Boolean)
+    .pop() || 'screenshot.png'
+
+  return [
+    'Analyze this interaction for scam risk.',
+    'A screenshot image is attached to this message. Use it as primary evidence.',
+    `Screenshot captured at: ${capturedAt}`,
+    `Attached screenshot filename: ${screenshotName}`,
+    `Screenshot size: ${screenshotResult.width}x${screenshotResult.height}`,
+    '',
+    'Focus on signs such as:',
+    '- Requests for personal information (DOB, SSN, card/account details, PIN, OTP, passwords)',
+    '- Untrusted or mismatched domains/links',
+    '- Urgency/threat language or pressure tactics',
+    '- Requests for payment, gift cards, crypto, wire transfer, or remote-access tools',
+    '',
+    'Transcript context:',
+    `- Caller: ${caller}`,
+    `- User: ${user}`,
+    '',
+    'Return:',
+    '1) Risk level (low/medium/high)',
+    '2) Red flags found (if any)',
+    '3) Immediate next steps for the user',
+  ].join('\n')
+}
+
 function statusStyles(status) {
   if (status === 'success') {
     return {
@@ -341,6 +376,9 @@ export default function App() {
   const [lastScreenshotAt, setLastScreenshotAt] = useState('')
   const interactiveHoverCountRef = useRef(0)
   const callerSilentSinceRef = useRef(null)
+  const runningByChatRef = useRef({})
+  const latestTranscriptsRef = useRef({ caller: '', user: '' })
+  const suspiciousScanHandlerRef = useRef(async () => {})
   const mediaCaptureRef = useRef({
     micStream: null,
     desktopStream: null,
@@ -722,20 +760,111 @@ export default function App() {
       if (!result?.ok) {
         setScreenshotStatus('error')
         setTranscriptionError(result?.error || 'Failed to capture screenshot.')
-        return
+        return null
       }
 
       setScreenshotStatus('captured')
       setLastScreenshotAt(new Date().toLocaleTimeString())
+      return result
     } catch {
       setScreenshotStatus('error')
       setTranscriptionError('Failed to capture screenshot.')
+      return null
     }
   }
+
+  const runResearchPrompt = async ({ chatId, text, resetThread = false, replaceChatMessages = false, attachmentFilePaths = [] }) => {
+    const normalizedChatId = String(chatId || '').trim()
+    const prompt = String(text || '').trim()
+    if (!normalizedChatId || !prompt || runningByChatRef.current[normalizedChatId]) return false
+
+    if (replaceChatMessages) {
+      setChatMessages((prev) => ({
+        ...prev,
+        [normalizedChatId]: initialMessagesForChat(normalizedChatId),
+      }))
+    }
+
+    appendMessage(normalizedChatId, {
+      id: createMessageId('user'),
+      type: 'text',
+      role: 'user',
+      text: prompt,
+    })
+
+    if (!window.electronAPI?.runResearch) {
+      appendMessage(normalizedChatId, {
+        id: createMessageId('error'),
+        type: 'text',
+        role: 'assistant',
+        text: 'Research backend is unavailable.',
+      })
+      return false
+    }
+
+    setRunningByChat((prev) => ({
+      ...prev,
+      [normalizedChatId]: true,
+    }))
+
+    try {
+      if (resetThread) {
+        await window.electronAPI?.resetResearchThread?.(normalizedChatId)
+      }
+
+      await window.electronAPI.runResearch({
+        chatId: normalizedChatId,
+        prompt,
+        attachmentFilePaths,
+      })
+      return true
+    } catch {
+      setRunningByChat((prev) => {
+        const next = { ...prev }
+        delete next[normalizedChatId]
+        return next
+      })
+      return false
+    }
+  }
+
+  const handleSuspiciousScanHotkey = async () => {
+    if (runningByChatRef.current[SUSPICIOUS_SCAN_CHAT_ID]) return
+
+    setModalOpen(true)
+    setSelectedChatId(SUSPICIOUS_SCAN_CHAT_ID)
+
+    const screenshotResult = await captureScreenshot()
+    if (!screenshotResult?.ok) return
+
+    const prompt = buildSuspiciousScanPrompt({
+      screenshotResult,
+      callerTranscript: latestTranscriptsRef.current.caller,
+      userTranscript: latestTranscriptsRef.current.user,
+    })
+
+    await runResearchPrompt({
+      chatId: SUSPICIOUS_SCAN_CHAT_ID,
+      text: prompt,
+      resetThread: true,
+      replaceChatMessages: true,
+      attachmentFilePaths: [screenshotResult.filePath],
+    })
+  }
+
+  suspiciousScanHandlerRef.current = handleSuspiciousScanHotkey
 
   useEffect(() => {
     refreshPermissionStatus()
   }, [])
+
+  useEffect(() => {
+    runningByChatRef.current = runningByChat
+  }, [runningByChat])
+
+  useEffect(() => {
+    latestTranscriptsRef.current = latestTranscripts
+  }, [latestTranscripts])
 
   useEffect(() => {
     if (!isListening) {
@@ -800,6 +929,12 @@ export default function App() {
         return !prev
       })
     })
+    const unsubSuspiciousScan = window.electronAPI?.onSuspiciousScanTrigger?.(() => {
+      console.log('[renderer] suspicious-scan:trigger received')
+      suspiciousScanHandlerRef.current?.().catch((error) => {
+        console.error('Suspicious scan hotkey failed:', error)
+      })
+    })
     const unsubRegistration = window.electronAPI?.onHotkeyRegistrationResult?.((result) => {
       console.log('[renderer] hotkey:registration-result', result)
       if (result?.settings) {
@@ -814,6 +949,7 @@ export default function App() {
     return () => {
       unsubSettings?.()
       unsubMainPanel?.()
+      unsubSuspiciousScan?.()
       unsubRegistration?.()
     }
   }, [])
@@ -999,43 +1135,10 @@ export default function App() {
 
     const chatId = selectedChatId
     const text = input.trim()
-    if (!chatId || !text || runningByChat[chatId]) return
+    if (!chatId || !text || runningByChatRef.current[chatId]) return
 
     setInput('')
-    appendMessage(chatId, {
-      id: createMessageId('user'),
-      type: 'text',
-      role: 'user',
-      text,
-    })
-
-    if (!window.electronAPI?.runResearch) {
-      appendMessage(chatId, {
-        id: createMessageId('error'),
-        type: 'text',
-        role: 'assistant',
-        text: 'Research backend is unavailable.',
-      })
-      return
-    }
-
-    setRunningByChat((prev) => ({
-      ...prev,
-      [chatId]: true,
-    }))
-
-    try {
-      await window.electronAPI.runResearch({
-        chatId,
-        prompt: text,
-      })
-    } catch {
-      setRunningByChat((prev) => {
-        const next = { ...prev }
-        delete next[chatId]
-        return next
-      })
-    }
+    await runResearchPrompt({ chatId, text })
   }
 
   const historyWithPreview = CHAT_DEFINITIONS.map((chat) => {

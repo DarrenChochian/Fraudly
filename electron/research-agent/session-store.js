@@ -8,6 +8,7 @@ function createSessionStore({ userDataPath }) {
     if (!raw || typeof raw !== 'object') {
       return {
         assistantId: null,
+        assistantFingerprint: null,
         threadsByChatId: {},
       }
     }
@@ -28,6 +29,10 @@ function createSessionStore({ userDataPath }) {
 
     return {
       assistantId: typeof raw.assistantId === 'string' && raw.assistantId ? raw.assistantId : null,
+      assistantFingerprint:
+        typeof raw.assistantFingerprint === 'string' && raw.assistantFingerprint
+          ? raw.assistantFingerprint
+          : null,
       threadsByChatId,
     }
   }
@@ -43,10 +48,11 @@ function createSessionStore({ userDataPath }) {
     }
   }
 
-  function save({ assistantId, threadsByChatId }) {
-    const normalized = normalizeSession({ assistantId, threadsByChatId })
+  function save({ assistantId, assistantFingerprint, threadsByChatId }) {
+    const normalized = normalizeSession({ assistantId, assistantFingerprint, threadsByChatId })
     const payload = {
       assistantId: normalized.assistantId,
+      assistantFingerprint: normalized.assistantFingerprint,
       threadsByChatId: normalized.threadsByChatId,
       updatedAt: new Date().toISOString(),
     }

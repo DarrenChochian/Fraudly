@@ -68,7 +68,7 @@ async function executeWebsearch(args, jinaClient) {
   }
 
   if (queries.length === 0) {
-    throw new Error('websearch requires query or queries')
+    throw new Error('webseach requires query or queries')
   }
 
   const results = await Promise.all(queries.map((query) => jinaClient.websearch(query)))
@@ -96,7 +96,7 @@ async function executeSingleToolCall(toolCall, context) {
       throw new Error('Tool call id is missing')
     }
 
-    if (toolName === 'websearch') {
+    if (toolName === 'webseach' || toolName === 'search_web' || toolName === 'websearch') {
       const result = await executeWebsearch(args, context.jinaClient)
       const output = JSON.stringify(result)
       if (typeof context.onToolLifecycle === 'function') {

@@ -1,3 +1,6 @@
+const fs = require('fs/promises')
+const path = require('path')
+
 function toSnakeCaseToolOutputs(toolOutputs) {
   return toolOutputs.map((item) => ({
     tool_call_id: item.tool_call_id || item.toolCallId,
@@ -76,14 +79,24 @@ function createBackboardClient({ apiKey, baseUrl }) {
       })
     },
 
-    addMessage({ threadId, content, llmProvider, modelName }) {
+    async addMessage({ threadId, content, llmProvider, modelName, attachmentFilePaths = [] }) {
       const formData = new FormData()
-      formData.set('content', content)
+      if (typeof content === 'string' && content.length > 0) {
+        formData.set('content', content)
+      }
       formData.set('stream', 'false')
       formData.set('memory', 'off')
       formData.set('web_search', 'off')
       formData.set('llm_provider', llmProvider)
       formData.set('model_name', modelName)
+
+      for (const rawFilePath of Array.isArray(attachmentFilePaths) ? attachmentFilePaths : []) {
+        const filePath = String(rawFilePath || '').trim()
+        if (!filePath) continue
+
+        const buffer = await fs.readFile(filePath)
+        formData.append('files', new Blob([buffer]), path.basename(filePath) || 'attachment')
+      }
 
       return request(`/threads/${threadId}/messages`, {
         method: 'POST',

@@ -41,9 +41,21 @@ function registerResearchAgentIpc({ ipcMain, projectRoot, userDataPath }) {
     })
   })
 
+  ipcMain.handle('research:reset-thread', async (_, payload) => {
+    const chatId = String(payload?.chatId || '').trim()
+    if (!chatId) {
+      throw new Error('chatId is required')
+    }
+
+    return getServices().researchLoop.resetThread(chatId)
+  })
+
   ipcMain.handle('research:run', async (event, payload) => {
     const prompt = payload?.prompt
     const chatId = String(payload?.chatId || '').trim()
+    const attachmentFilePaths = Array.isArray(payload?.attachmentFilePaths)
+      ? payload.attachmentFilePaths.map((value) => String(value || '').trim()).filter(Boolean)
+      : []
     if (!prompt || typeof prompt !== 'string') {
       throw new Error('Prompt is required')
     }
@@ -69,6 +81,7 @@ function registerResearchAgentIpc({ ipcMain, projectRoot, userDataPath }) {
         prompt,
         runId,
         onEvent: sendEvent,
+        attachmentFilePaths,
       })
 
       sendEvent({ type: 'completed', message: 'Research completed.', summary: result.summary })

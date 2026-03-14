@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const crypto = require('crypto')
 const { RESEARCH_TOOLS } = require('./tool-schema')
 const { executeToolCalls } = require('./tool-executor')
 
@@ -26,6 +27,7 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
     return (
       sessionStore.load() || {
         assistantId: null,
+        assistantFingerprint: null,
         threadsByChatId: {},
       }
     )
@@ -34,8 +36,20 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
   function resetSession() {
     sessionStore.save({
       assistantId: null,
+      assistantFingerprint: null,
       threadsByChatId: {},
     })
+  }
+
+  function buildAssistantFingerprint({ systemPrompt }) {
+    const payload = JSON.stringify({
+      systemPrompt,
+      tools: RESEARCH_TOOLS,
+      provider: config.backboardProvider,
+      model: config.backboardModel,
+    })
+
+    return crypto.createHash('sha256').update(payload).digest('hex')
   }
 
   function clearThreadForChat(chatId) {
@@ -46,13 +60,16 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
     delete nextThreads[chatId]
     sessionStore.save({
       assistantId: session.assistantId,
+      assistantFingerprint: session.assistantFingerprint,
       threadsByChatId: nextThreads,
     })
   }
 
   async function ensureAssistant(onEvent) {
+    const systemPrompt = readSystemPrompt()
+    const assistantFingerprint = buildAssistantFingerprint({ systemPrompt })
     const session = loadSession()
-    if (session.assistantId) {
+    if (session.assistantId && session.assistantFingerprint === assistantFingerprint) {
       return session
     }
 
@@ -61,17 +78,28 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
     }
 
     assistantPromise = (async () => {
-      onEvent({ type: 'progress', message: 'Initializing research assistant...' })
+      const latest = loadSession()
+      if (latest.assistantId && latest.assistantFingerprint === assistantFingerprint) {
+        return latest
+      }
+
+      onEvent({
+        type: 'progress',
+        message: latest.assistantId
+          ? 'Research assistant config changed. Reinitializing...'
+          : 'Initializing research assistant...',
+      })
+
       const assistant = await backboardClient.createAssistant({
         name: 'Research Agent',
-        systemPrompt: readSystemPrompt(),
+        systemPrompt,
         tools: RESEARCH_TOOLS,
       })
 
-      const latest = loadSession()
       const next = {
         assistantId: assistant.assistant_id,
-        threadsByChatId: latest.threadsByChatId || {},
+        assistantFingerprint,
+        threadsByChatId: {},
       }
       sessionStore.save(next)
       return next
@@ -133,6 +161,7 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
       const latest = loadSession()
       const next = {
         assistantId: latest.assistantId || refreshedSession.assistantId,
+        assistantFingerprint: latest.assistantFingerprint || refreshedSession.assistantFingerprint,
         threadsByChatId: {
           ...(latest.threadsByChatId || {}),
           [normalizedChatId]: thread.thread_id,
@@ -178,7 +207,7 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
     }
   }
 
-  async function run({ chatId, prompt, runId, onEvent }) {
+  async function run({ chatId, prompt, runId, onEvent, attachmentFilePaths = [] }) {
     const normalizedChatId = String(chatId || '').trim()
     let session = await ensureThreadForChat({ chatId: normalizedChatId, onEvent })
     onEvent({ type: 'progress', message: 'Submitting prompt to research agent...' })
@@ -191,6 +220,7 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
           content: prompt,
           llmProvider: config.backboardProvider,
           modelName: config.backboardModel,
+          attachmentFilePaths,
         }),
       )
     } catch (error) {
@@ -208,6 +238,7 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
           content: prompt,
           llmProvider: config.backboardProvider,
           modelName: config.backboardModel,
+          attachmentFilePaths,
         }),
       )
     }
@@ -248,9 +279,23 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
     }
   }
 
+  function resetThread(chatId) {
+    const normalizedChatId = String(chatId || '').trim()
+    if (!normalizedChatId) {
+      throw new Error('chatId is required')
+    }
+
+    clearThreadForChat(normalizedChatId)
+    return {
+      ok: true,
+      chatId: normalizedChatId,
+    }
+  }
+
   return {
     initializeChats,
     run,
+    resetThread,
   }
 }
 
