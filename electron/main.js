@@ -202,6 +202,7 @@ function createWindow() {
   const display = screen.getPrimaryDisplay()
   const useDisplayBounds = process.platform === 'win32'
   const initialRect = useDisplayBounds ? display.bounds : display.workArea
+  const canFollowAcrossDesktops = process.platform === 'darwin' || process.platform === 'win32'
 
   mainWindow = new BrowserWindow({
     x: initialRect.x,
@@ -215,6 +216,8 @@ function createWindow() {
     resizable: false,
     skipTaskbar: true,
     hasShadow: false,
+    visibleOnAllWorkspaces: canFollowAcrossDesktops,
+    visibleOnFullScreen: process.platform === 'darwin',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -224,6 +227,12 @@ function createWindow() {
   })
 
   mainWindow.setAlwaysOnTop(true, 'floating')
+  if (canFollowAcrossDesktops) {
+    mainWindow.setVisibleOnAllWorkspaces(true, {
+      visibleOnFullScreen: process.platform === 'darwin',
+      skipTransformProcessType: process.platform === 'darwin',
+    })
+  }
   if (process.platform === 'win32') {
     mainWindow.setContentProtection(true)
   }
