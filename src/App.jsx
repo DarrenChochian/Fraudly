@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import TopBar from './components/TopBar'
 import ChatPanel from './components/ChatPanel'
 import TranscriptionDebug from './components/TranscriptionDebug'
+import Notification from './components/Notification'
 import SettingsPanel from './components/SettingsPanel'
 import { useInteractivity } from './hooks/useInteractivity'
 import { usePermissions } from './hooks/usePermissions'
@@ -20,6 +21,7 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [screenshotStatus, setScreenshotStatus] = useState('idle')
   const [lastScreenshotAt, setLastScreenshotAt] = useState('')
+  const [notifications, setNotifications] = useState([{ id: Date.now(), message: 'Welcome to Fraudly' }])
   const latestTranscriptsRef = useRef({ caller: '', user: '' })
   const suspiciousScanHandlerRef = useRef(async () => {})
   const suspiciousScanInFlightRef = useRef(false)
@@ -330,6 +332,19 @@ export default function App() {
       >
         ⚙
       </button>
+      
+      {/* Notifications container */}
+      <div className="absolute top-[88px] left-0 right-0 z-50 flex flex-col items-center pointer-events-none gap-2">
+        {notifications.map((n) => (
+          <Notification
+            key={n.id}
+            message={n.message}
+            onClose={() => setNotifications((prev) => prev.filter((item) => item.id !== n.id))}
+            onMouseEnter={handleInteractiveEnter}
+            onMouseLeave={handleInteractiveLeave}
+          />
+        ))}
+      </div>
     </div>
   )
 }
