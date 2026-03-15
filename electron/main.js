@@ -31,6 +31,12 @@ let mainWindow
 let transcriptionController = null
 let overlayInteractive = false
 
+function setOverlayWindowInteractivity(enabled) {
+  overlayInteractive = Boolean(enabled)
+  if (!mainWindow || mainWindow.isDestroyed()) return
+  mainWindow.setIgnoreMouseEvents(!overlayInteractive, { forward: true })
+}
+
 function getScreenshotDirectory() {
   return path.resolve(app.getAppPath(), 'imgs')
 }
@@ -290,7 +296,7 @@ function registerAllHotkeys() {
       }
       mainWindow.show()
       mainWindow.focus()
-      mainWindow.setIgnoreMouseEvents(false)
+      setOverlayWindowInteractivity(true)
       mainWindow.webContents.send(channel)
     }
   }
@@ -387,11 +393,7 @@ ipcMain.handle('main-panel:update-hotkey', (_, { accelerator }) => {
 })
 
 ipcMain.on('overlay:set-interactive', (_, interactive) => {
-  if (!mainWindow || mainWindow.isDestroyed()) return
-  const enabled = Boolean(interactive)
-  overlayInteractive = enabled
-  // interactive=true => receive mouse; interactive=false => click-through.
-  mainWindow.setIgnoreMouseEvents(!enabled, { forward: true })
+  setOverlayWindowInteractivity(interactive)
 })
 
 ipcMain.handle('permissions:get-status', () => ({

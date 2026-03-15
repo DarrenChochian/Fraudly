@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import TopBar from './components/TopBar'
 import ChatPanel from './components/ChatPanel'
 import TranscriptionDebug from './components/TranscriptionDebug'
@@ -60,6 +60,14 @@ export default function App() {
   } = useResearch()
 
   const { hiveResult, hiveStatus } = useHiveDetection({ callerStream, isListening })
+
+  const handleChatToggle = useCallback(() => {
+    setChatOpen((v) => {
+      const next = !v
+      if (!next) resetOverlayInteractivity()
+      return next
+    })
+  }, [resetOverlayInteractivity])
 
   useEffect(() => {
     latestTranscriptsRef.current = latestTranscripts
@@ -218,7 +226,7 @@ export default function App() {
     })
     const unsubMainPanel = window.electronAPI?.onMainPanelOpen?.(() => {
       console.log('[renderer] main-panel:open received')
-      setChatOpen((v) => !v)
+      handleChatToggle()
     })
     const unsubSuspiciousScan = window.electronAPI?.onSuspiciousScanTrigger?.(() => {
       console.log('[renderer] suspicious-scan:trigger received')
@@ -231,7 +239,7 @@ export default function App() {
       unsubMainPanel?.()
       unsubSuspiciousScan?.()
     }
-  }, [])
+  }, [handleChatToggle, resetOverlayInteractivity])
 
   useEffect(() => {
     return () => {
@@ -275,7 +283,7 @@ export default function App() {
         onToggleListen={toggleListeningSession}
         transcriptionState={transcriptionSessionState}
         chatOpen={chatOpen}
-        onChatToggle={() => setChatOpen((v) => !v)}
+        onChatToggle={handleChatToggle}
         onMouseEnter={handleInteractiveEnter}
         onMouseLeave={handleInteractiveLeave}
         hiveResult={hiveResult}

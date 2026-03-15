@@ -27,8 +27,17 @@ export function useInteractivity() {
   }
 
   useEffect(() => {
+    const handleWindowBlur = () => {
+      resetOverlayInteractivity()
+    }
+
     setOverlayInteractivity(false)
-    return () => setOverlayInteractivity(false)
+    window.addEventListener('blur', handleWindowBlur)
+
+    return () => {
+      window.removeEventListener('blur', handleWindowBlur)
+      setOverlayInteractivity(false)
+    }
   }, [])
 
   return {

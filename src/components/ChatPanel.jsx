@@ -28,6 +28,13 @@ export default function ChatPanel({
     container.scrollTop = container.scrollHeight
   }, [selectedChatId, messages])
 
+  useEffect(() => {
+    if (!open) return undefined
+    return () => {
+      onMouseLeave?.()
+    }
+  }, [open, onMouseLeave])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const text = input.trim()
