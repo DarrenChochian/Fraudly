@@ -62,6 +62,8 @@ We built Fraudly as a React + Electron app using Vite for fast iteration. The pr
 - https://www.bitdefender.com/en-us/blog/hotforsecurity/bitdefender-scamio-is-now-on-discord (Alina, 2024)
 - https://www.elliptic.co/blog/the-state-of-crypto-scams-2025-keeping-our-industry-safe-with-blockchain-analytics (Elliptic, 2025)
 - https://www.fico.com/blogs/survey-consumers-want-better-scam-prevention-banks (Debbie, 2024)
+- https://www.canada.ca/en/competition-bureau/news/2026/03/fraud-prevention-month-to-bring-hidden-crime-into-the-spotlight.html (Competition Bureau Canada, 2026)
+- https://www.gsma.com/get-involved/gsma-membership/gsma_resources/tns-launches-new-ebook/ (GSMA, 2026)
 
 ## Examples
 
