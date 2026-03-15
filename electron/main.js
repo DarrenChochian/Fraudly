@@ -261,15 +261,7 @@ function createWindow() {
 }
 
 let currentSettingsAccelerator = 'Alt+K'
-// On macOS, Option+L produces the '¬' character and is consumed by the OS before
-// Electron can claim it — even when globalShortcut.register() returns true. Skip
-// it entirely on macOS and use Alt+Shift+L as the platform default instead.
-let currentMainPanelAccelerator = process.platform === 'darwin' ? 'Alt+Shift+L' : 'Alt+L'
-
-const MACOS_FALLBACKS = {
-  'Alt+L': ['Alt+Shift+L', 'Command+Shift+L'],
-  'Alt+Shift+L': ['Command+Shift+L'],
-}
+let currentMainPanelAccelerator = 'Alt+L'
 
 function tryRegister(accelerator, handler) {
   const ok = globalShortcut.register(accelerator, handler)
@@ -309,9 +301,7 @@ function registerAllHotkeys() {
   )
   if (settingsResult.ok) currentSettingsAccelerator = settingsResult.registered
 
-  const macFallbacks = process.platform === 'darwin'
-    ? (MACOS_FALLBACKS[currentMainPanelAccelerator] ?? ['Alt+Shift+L', 'Command+Shift+L'])
-    : []
+  const macFallbacks = []
     
   const mainPanelResult = tryRegisterWithFallbacks(
     currentMainPanelAccelerator,

@@ -448,7 +448,7 @@ export default function SettingsPanel({ currentHotkey: propHotkey = 'Alt+K', onH
         </div>
 
         <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
-          Default: Settings Alt+K · Main Panel Alt+L (Windows) / Alt+Shift+L (macOS)
+          Default: Settings Alt+K · Main Panel Alt+L
         </p>
       </div>
     </div>
