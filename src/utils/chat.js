@@ -55,7 +55,44 @@ export function buildSuspiciousScanPrompt({ screenshotResult, callerTranscript, 
   ].join('\n')
 }
 
-export function buildBackgroundMonitorPrompt({ screenshotResult, callerTranscript, userTranscript, activeIncident }) {
+function formatTranscriptWindowTimestamp(value) {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  return date.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })
+}
+
+export function buildMonitorTranscriptWindow(transcriptWindow, windowMs = 60 * 1000) {
+  const cutoff = Date.now() - windowMs
+  const entries = Array.isArray(transcriptWindow)
+    ? transcriptWindow
+        .filter((entry) => {
+          const ts = Date.parse(entry?.ts || '')
+          return Number.isFinite(ts) && ts >= cutoff && String(entry?.transcript || '').trim()
+        })
+        .sort((a, b) => Date.parse(a.ts) - Date.parse(b.ts))
+    : []
+
+  if (entries.length === 0) {
+    return '- No transcript activity captured in the last 60 seconds.'
+  }
+
+  return entries
+    .map((entry) => {
+      const speaker = entry.source === 'caller' ? 'Caller' : 'User'
+      const liveLabel = entry.isFinal ? '' : ' (live)'
+      const ts = formatTranscriptWindowTimestamp(entry.ts)
+      const prefix = ts ? `[${ts}] ` : ''
+      return `- ${prefix}${speaker}${liveLabel}: ${String(entry.transcript || '').trim()}`
+    })
+    .join('\n')
+}
+
+export function buildBackgroundMonitorPrompt({ screenshotResult, callerTranscript, userTranscript, transcriptWindow, activeIncident }) {
   const caller = String(callerTranscript || '').trim() || '(no caller transcript yet)'
   const user = String(userTranscript || '').trim() || '(no user transcript yet)'
   const capturedAt = new Date().toISOString()
@@ -63,6 +100,7 @@ export function buildBackgroundMonitorPrompt({ screenshotResult, callerTranscrip
     .split(/[/\\]/)
     .filter(Boolean)
     .pop() || 'screenshot.png'
+  const recentTranscriptWindow = buildMonitorTranscriptWindow(transcriptWindow)
 
   const activeIncidentContext = activeIncident
     ? [
@@ -90,6 +128,10 @@ export function buildBackgroundMonitorPrompt({ screenshotResult, callerTranscrip
     activeIncidentContext,
     '',
     'Transcript context:',
+    'Last 60 seconds of interleaved caller/user transcript:',
+    recentTranscriptWindow,
+    '',
+    'Most recent transcript snapshot:',
     `- Caller: ${caller}`,
     `- User: ${user}`,
     '',

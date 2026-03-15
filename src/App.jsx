@@ -40,6 +40,7 @@ export default function App() {
   const [notifications, setNotifications] = useState([{ id: Date.now(), message: 'Welcome to Fraudly' }])
   const [callerStream, setCallerStream] = useState(null)
   const latestTranscriptsRef = useRef({ caller: '', user: '' })
+  const transcriptWindowRef = useRef([])
   const isListeningRef = useRef(false)
   const chatOpenRef = useRef(false)
   const incidentNotificationOpenRef = useRef(false)
@@ -63,6 +64,7 @@ export default function App() {
     setSourceStates,
     sourceChunkCounts,
     latestTranscripts,
+    transcriptWindow,
     transcriptKinds,
     transcriptionError,
     setTranscriptionError,
@@ -99,6 +101,10 @@ export default function App() {
   useEffect(() => {
     latestTranscriptsRef.current = latestTranscripts
   }, [latestTranscripts])
+
+  useEffect(() => {
+    transcriptWindowRef.current = transcriptWindow
+  }, [transcriptWindow])
 
   useEffect(() => {
     isListeningRef.current = isListening
@@ -416,6 +422,7 @@ export default function App() {
         screenshotResult,
         callerTranscript: latestTranscriptsRef.current.caller,
         userTranscript: latestTranscriptsRef.current.user,
+        transcriptWindow: transcriptWindowRef.current,
         activeIncident: activeIncidentRef.current,
       })
       const attachmentFilePaths = [screenshotResult.filePath]

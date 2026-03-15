@@ -1,10 +1,54 @@
 import { useState, useEffect, useRef } from 'react'
 
+const TRANSCRIPT_WINDOW_MS = 60 * 1000
+
+function pruneTranscriptWindow(entries, now = Date.now()) {
+  return entries.filter((entry) => {
+    const ts = Date.parse(entry?.ts || '')
+    return Number.isFinite(ts) && now - ts <= TRANSCRIPT_WINDOW_MS
+  })
+}
+
+function updateTranscriptWindow(entries, payload) {
+  const now = Date.now()
+  const nextEntries = pruneTranscriptWindow(entries, now)
+  const transcript = String(payload?.transcript || '').trim()
+  const source = payload?.source
+
+  if (!source || !transcript || transcript === '(silence)') {
+    return nextEntries
+  }
+
+  const nextEntry = {
+    id: `${source}-${payload?.ts || new Date(now).toISOString()}-${payload?.isFinal ? 'final' : 'live'}`,
+    source,
+    transcript,
+    isFinal: Boolean(payload?.isFinal),
+    ts: payload?.ts || new Date(now).toISOString(),
+  }
+
+  const withoutLiveEntryForSource = nextEntries.filter((entry) => !(entry.source === source && !entry.isFinal))
+  const lastEntry = withoutLiveEntryForSource[withoutLiveEntryForSource.length - 1]
+
+  if (
+    payload?.isFinal
+    && lastEntry
+    && lastEntry.source === source
+    && lastEntry.isFinal
+    && lastEntry.transcript === transcript
+  ) {
+    return withoutLiveEntryForSource
+  }
+
+  return [...withoutLiveEntryForSource, nextEntry]
+}
+
 export function useTranscription({ onStopSession, sourceAudioLevels, isListening }) {
   const [transcriptionSessionState, setTranscriptionSessionState] = useState('idle')
   const [sourceStates, setSourceStates] = useState({ caller: 'idle', user: 'idle' })
   const [sourceChunkCounts, setSourceChunkCounts] = useState({ caller: 0, user: 0 })
   const [latestTranscripts, setLatestTranscripts] = useState({ caller: '', user: '' })
+  const [transcriptWindow, setTranscriptWindow] = useState([])
   const [transcriptKinds, setTranscriptKinds] = useState({ caller: 'none', user: 'none' })
   const [transcriptionError, setTranscriptionError] = useState('')
   const [transcriptionWarning, setTranscriptionWarning] = useState('')
@@ -80,6 +124,7 @@ export function useTranscription({ onStopSession, sourceAudioLevels, isListening
           ...prev,
           [payload.source]: payload.transcript || '(silence)',
         }))
+        setTranscriptWindow((prev) => updateTranscriptWindow(prev, payload))
         setTranscriptKinds((prev) => ({
           ...prev,
           [payload.source]: payload.isFinal ? 'final' : 'interim',
@@ -101,6 +146,7 @@ export function useTranscription({ onStopSession, sourceAudioLevels, isListening
     setSourceStates({ caller: 'connecting', user: 'connecting' })
     setSourceChunkCounts({ caller: 0, user: 0 })
     setLatestTranscripts({ caller: '', user: '' })
+    setTranscriptWindow([])
     setTranscriptKinds({ caller: 'none', user: 'none' })
   }
 
@@ -119,6 +165,7 @@ export function useTranscription({ onStopSession, sourceAudioLevels, isListening
     setSourceStates: updateSourceStates,
     sourceChunkCounts,
     latestTranscripts,
+    transcriptWindow,
     transcriptKinds,
     transcriptionError,
     setTranscriptionError,
