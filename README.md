@@ -78,6 +78,36 @@ And yes, over 70% of our code was written with AI.
 - Add more integrations and deeper real-time risk context.
 - Run larger pilot demos with partners and user groups.
 
+## Setup
 
+```bash
+npm i
+```
+
+## Development
+
+**Web only (browser):**
+```bash
+npm run dev
+```
+
+**Electron (desktop window):**
+```bash
+npm run electron:dev
+```
+Starts the Vite dev server and opens the app in Electron with hot reload.
+
+## Build
+
+**Web:**
+```bash
+npm run build
+```
+
+**Electron (packaged app):**
+```bash
+npm run electron:build
+```
+Output is in the `release/` directory.
 
 
