@@ -205,6 +205,10 @@ export default function App() {
         return !v
       })
     })
+    const unsubMainPanel = window.electronAPI?.onMainPanelOpen?.(() => {
+      console.log('[renderer] main-panel:open received')
+      setChatOpen((v) => !v)
+    })
     const unsubSuspiciousScan = window.electronAPI?.onSuspiciousScanTrigger?.(() => {
       console.log('[renderer] suspicious-scan:trigger received')
       suspiciousScanHandlerRef.current?.().catch((error) => {
@@ -213,6 +217,7 @@ export default function App() {
     })
     return () => {
       unsubSettings?.()
+      unsubMainPanel?.()
       unsubSuspiciousScan?.()
     }
   }, [])
