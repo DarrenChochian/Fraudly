@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { BG_PANEL, BORDER_PINK, GLASS_BACKDROP, NEUTRAL_PANEL_FILL, NEUTRAL_CARD_FILL, PINK_GLOSS_FILL } from '../utils/constants'
+import { BORDER_PINK, NEUTRAL_CARD_FILL, PINK_GLOSS_FILL } from '../utils/constants'
 import MessageBubble from './MessageBubble'
 import ToolCard from './ToolCard'
 import Dither from './art/Dither'
@@ -44,7 +44,7 @@ export default function ChatPanel({
       onMouseLeave={onMouseLeave}
     >
       <div
-        className="w-[28rem] max-h-[32rem] flex flex-col rounded-2xl border-2 overflow-hidden animate-in slide-in-from-top-4 duration-300 relative"
+        className="w-[34rem] max-h-[32rem] flex flex-col rounded-2xl border-2 overflow-hidden animate-in slide-in-from-top-4 duration-300 relative"
         style={{
           background: 'rgba(10, 12, 18, 0.65)',
           backdropFilter: 'blur(24px) saturate(180%)',

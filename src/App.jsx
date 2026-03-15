@@ -20,7 +20,6 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [screenshotStatus, setScreenshotStatus] = useState('idle')
   const [lastScreenshotAt, setLastScreenshotAt] = useState('')
-  const callerSilentSinceRef = useRef(null)
   const latestTranscriptsRef = useRef({ caller: '', user: '' })
   const suspiciousScanHandlerRef = useRef(async () => {})
   const suspiciousScanInFlightRef = useRef(false)
