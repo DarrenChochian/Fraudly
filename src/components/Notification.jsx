@@ -10,11 +10,11 @@ export default function Notification({ message, onClose, onMouseEnter, onMouseLe
     return () => clearTimeout(t)
   }, [])
 
-  const handleClose = () => {
+  const handleClose = (event) => {
+    event?.preventDefault?.()
+    event?.stopPropagation?.()
     setVisible(false)
-    // Decrement interactivity counter immediately to avoid stuck state if mouse doesn't leave before unmount
     onMouseLeave?.()
-    // Wait for exit animation
     setTimeout(onClose, 300)
   }
 
@@ -24,7 +24,9 @@ export default function Notification({ message, onClose, onMouseEnter, onMouseLe
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`pointer-events-auto overlay-interactive transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) transform ${
+      onPointerEnter={onMouseEnter}
+      onPointerLeave={onMouseLeave}
+      className={`pointer-events-auto overlay-interactive relative z-[60] transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) transform ${
         visible ? 'opacity-100 translate-y-0 scale-100 mb-2' : 'opacity-0 -translate-y-4 scale-95 mb-0'
       }`}
       style={{
@@ -45,8 +47,13 @@ export default function Notification({ message, onClose, onMouseEnter, onMouseLe
         <div className="w-2 h-2 rounded-full bg-pink-500 shadow-[0_0_10px_rgba(236,72,153,0.8)] animate-pulse shrink-0" />
         <span className="text-xs font-medium text-pink-50/90 tracking-wide">{message}</span>
         <button
+          type="button"
+          onPointerDown={(event) => {
+            event.preventDefault()
+            event.stopPropagation()
+          }}
           onClick={handleClose}
-          className="ml-1 w-5 h-5 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors text-white/50 hover:text-white shrink-0 cursor-pointer"
+          className="ml-1 w-5 h-5 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors text-white/50 hover:text-white shrink-0 cursor-pointer pointer-events-auto"
         >
           ×
         </button>

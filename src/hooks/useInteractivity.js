@@ -1,29 +1,41 @@
 import { useRef, useEffect } from 'react'
 
 export function useInteractivity() {
-  const interactiveHoverCountRef = useRef(0)
+  const leaveCheckFrameRef = useRef(null)
 
   const setOverlayInteractivity = (interactive) => {
     window.electronAPI?.setOverlayInteractivity?.(interactive)
   }
 
+  const cancelPendingLeaveCheck = () => {
+    if (leaveCheckFrameRef.current !== null) {
+      window.cancelAnimationFrame(leaveCheckFrameRef.current)
+      leaveCheckFrameRef.current = null
+    }
+  }
+
+  const hasHoveredOverlay = () => Boolean(document.querySelector('.overlay-interactive:hover'))
+
   const resetOverlayInteractivity = () => {
-    interactiveHoverCountRef.current = 0
+    cancelPendingLeaveCheck()
     setOverlayInteractivity(false)
   }
 
   const handleInteractiveEnter = () => {
-    interactiveHoverCountRef.current += 1
-    if (interactiveHoverCountRef.current === 1) {
-      setOverlayInteractivity(true)
-    }
+    cancelPendingLeaveCheck()
+    setOverlayInteractivity(true)
   }
 
   const handleInteractiveLeave = () => {
-    interactiveHoverCountRef.current = Math.max(0, interactiveHoverCountRef.current - 1)
-    if (interactiveHoverCountRef.current === 0) {
-      setOverlayInteractivity(false)
-    }
+    cancelPendingLeaveCheck()
+    leaveCheckFrameRef.current = window.requestAnimationFrame(() => {
+      leaveCheckFrameRef.current = window.requestAnimationFrame(() => {
+        leaveCheckFrameRef.current = null
+        if (!hasHoveredOverlay()) {
+          setOverlayInteractivity(false)
+        }
+      })
+    })
   }
 
   useEffect(() => {
@@ -35,6 +47,7 @@ export function useInteractivity() {
     window.addEventListener('blur', handleWindowBlur)
 
     return () => {
+      cancelPendingLeaveCheck()
       window.removeEventListener('blur', handleWindowBlur)
       setOverlayInteractivity(false)
     }
