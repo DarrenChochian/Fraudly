@@ -16,6 +16,7 @@ const { execFile } = require('child_process')
 const { promisify } = require('util')
 const { registerResearchAgentIpc } = require('./research-agent/ipc')
 const { registerTranscriptionIpc } = require('./transcription')
+const { registerHiveVoiceDetectionIpc } = require('./hive-voice-detection')
 
 const execFileAsync = promisify(execFile)
 
@@ -344,6 +345,11 @@ app.whenReady().then(() => {
   })
 
   transcriptionController = registerTranscriptionIpc({
+    ipcMain,
+    projectRoot: app.getAppPath(),
+  })
+
+  registerHiveVoiceDetectionIpc({
     ipcMain,
     projectRoot: app.getAppPath(),
   })

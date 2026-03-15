@@ -21,7 +21,17 @@ export const USER_BUBBLE_SHADOW = PINK_GLOSS_SHADOW
 
 export const SUSPICIOUS_SCAN_CHAT_ID = 'suspicious-scan'
 export const AUDIO_CHUNK_MS = 250
-export const AUDIO_MIME_CANDIDATES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus']
+// Prioritize formats supported by Hive API: .mp3, .m4a, .wav
+// Note: Browser MediaRecorder support is limited. Most browsers support webm/ogg.
+// We'll keep webm but update the backend to convert or use what's available.
+export const AUDIO_MIME_CANDIDATES = [
+  'audio/mp4',           // .m4a format (Safari support)
+  'audio/mpeg',          // .mp3 format (limited browser support)
+  'audio/wav',           // .wav format (limited browser support)
+  'audio/webm;codecs=opus', // Fallback to webm (most common)
+  'audio/webm',
+  'audio/ogg;codecs=opus'
+]
 
 export const BUTTON_WIDTH = 64
 export const BUTTON_HEIGHT = 64

@@ -50,4 +50,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return () => ipcRenderer.removeListener('transcription:event', listener)
   },
   captureScreenshot: () => ipcRenderer.invoke('screen:capture-screenshot'),
+  analyzeHiveAudio: (chunk) => ipcRenderer.invoke('hive:analyze-audio', { chunk }),
 })

@@ -10,6 +10,7 @@ import { useHotkeys } from './hooks/useHotkeys'
 import { useMediaCapture } from './hooks/useMediaCapture'
 import { useTranscription } from './hooks/useTranscription'
 import { useResearch } from './hooks/useResearch'
+import { useHiveDetection } from './hooks/useHiveDetection'
 import { SUSPICIOUS_SCAN_CHAT_ID } from './utils/constants'
 import { buildSuspiciousScanPrompt, truncate, previewForHistory } from './utils/chat'
 
@@ -22,6 +23,7 @@ export default function App() {
   const [screenshotStatus, setScreenshotStatus] = useState('idle')
   const [lastScreenshotAt, setLastScreenshotAt] = useState('')
   const [notifications, setNotifications] = useState([{ id: Date.now(), message: 'Welcome to Fraudly' }])
+  const [callerStream, setCallerStream] = useState(null)
   const latestTranscriptsRef = useRef({ caller: '', user: '' })
   const suspiciousScanHandlerRef = useRef(async () => {})
   const suspiciousScanInFlightRef = useRef(false)
@@ -57,12 +59,15 @@ export default function App() {
     runResearchPrompt,
   } = useResearch()
 
+  const { hiveResult, hiveStatus } = useHiveDetection({ callerStream, isListening })
+
   useEffect(() => {
     latestTranscriptsRef.current = latestTranscripts
   }, [latestTranscripts])
 
   const stopListeningSession = async ({ reason } = {}) => {
     cleanupMediaCapture()
+    setCallerStream(null)
     try {
       await window.electronAPI?.stopTranscription?.()
     } catch {
@@ -109,9 +114,10 @@ export default function App() {
       return
     }
 
-    const { activeSources, callerStream, userStream, recorderFailures } = captureResult
+    const { activeSources, callerStream: capturedCallerStream, userStream, recorderFailures } = captureResult
+    if (capturedCallerStream) setCallerStream(capturedCallerStream)
 
-    if (!callerStream) {
+    if (!capturedCallerStream) {
       setTranscriptionWarning('Desktop audio track is unavailable. Grant screen recording + system audio and retry.')
       setSourceStates((prev) => ({ ...prev, caller: 'no-audio-track' }))
     }
@@ -272,6 +278,8 @@ export default function App() {
         onChatToggle={() => setChatOpen((v) => !v)}
         onMouseEnter={handleInteractiveEnter}
         onMouseLeave={handleInteractiveLeave}
+        hiveResult={hiveResult}
+        hiveStatus={hiveStatus}
       />
 
       <ChatPanel

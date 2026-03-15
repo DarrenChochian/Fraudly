@@ -3,6 +3,40 @@ import FraudlyLogo from './FraudlyLogo'
 import ListenButton from './ListenButton'
 import ChatIcon from './ChatIcon'
 
+function AiVoiceBadge({ hiveResult, hiveStatus }) {
+  if (hiveStatus === 'idle' || !hiveResult) return null
+
+  const score = hiveResult.score
+  if (score === null || score === undefined) return null
+
+  const pct = Math.round(score * 100)
+  let bg, border, text
+  if (score >= 0.9) {
+    bg = 'rgba(239, 68, 68, 0.25)'
+    border = 'rgba(239, 68, 68, 0.6)'
+    text = 'rgb(252, 165, 165)'
+  } else if (score >= 0.5) {
+    bg = 'rgba(234, 179, 8, 0.2)'
+    border = 'rgba(234, 179, 8, 0.5)'
+    text = 'rgb(253, 224, 71)'
+  } else {
+    bg = 'rgba(34, 197, 94, 0.2)'
+    border = 'rgba(34, 197, 94, 0.5)'
+    text = 'rgb(134, 239, 172)'
+  }
+
+  return (
+    <div
+      className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-semibold whitespace-nowrap"
+      style={{ background: bg, border: `1px solid ${border}`, color: text }}
+      title={`AI Voice Confidence: ${pct}%`}
+    >
+      <span>AI</span>
+      <span>{pct}%</span>
+    </div>
+  )
+}
+
 export default function TopBar({
   isListening,
   onToggleListen,
@@ -11,6 +45,8 @@ export default function TopBar({
   onChatToggle,
   onMouseEnter,
   onMouseLeave,
+  hiveResult,
+  hiveStatus,
 }) {
   const [position, setPosition] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -158,6 +194,7 @@ export default function TopBar({
           onClick={onToggleListen}
           disabled={transcriptionState === 'connecting'}
         />
+        {isListening && <AiVoiceBadge hiveResult={hiveResult} hiveStatus={hiveStatus} />}
       </div>
       <div className="relative pointer-events-auto">
         <ChatIcon
