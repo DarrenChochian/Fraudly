@@ -24,7 +24,7 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
   function isToolResultMismatchError(error) {
     if (!(error instanceof Error)) return false
     const message = error.message || ''
-    return /tool_use ids were found without tool_result blocks/i.test(message)
+    return /[`'"]?tool_use[`'"]?\s+ids?.*without\s+[`'"]?tool_result[`'"]?\s+blocks/i.test(message)
   }
 
   function readSystemPrompt() {
@@ -253,39 +253,55 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
         attachmentFilePaths: files,
       }
 
-      try {
-        return backboardClient.normalizeMessageResponse(await backboardClient.addMessage(requestPayload))
-      } catch (error) {
-        if (!isToolResultMismatchError(error)) {
-          throw error
+      let attempt = 0
+      const maxRecoveryAttempts = 3
+
+      while (true) {
+        try {
+          return backboardClient.normalizeMessageResponse(await backboardClient.addMessage(requestPayload))
+        } catch (error) {
+          if (!isToolResultMismatchError(error) || attempt >= maxRecoveryAttempts) {
+            throw error
+          }
+
+          attempt += 1
+          onEvent({
+            type: 'progress',
+            message: `Tool-result mismatch detected (attempt ${attempt}/${maxRecoveryAttempts}). Sending keep alive and continuing...`,
+          })
+
+          let keepAliveResponse
+          try {
+            keepAliveResponse = backboardClient.normalizeMessageResponse(
+              await backboardClient.addMessage({
+                threadId: session.threadId,
+                content: 'keep alive',
+                llmProvider: config.backboardProvider,
+                modelName: config.backboardModel,
+                attachmentFilePaths: [],
+              }),
+            )
+          } catch (keepAliveError) {
+            if (isToolResultMismatchError(keepAliveError) && attempt < maxRecoveryAttempts) {
+              onEvent({
+                type: 'progress',
+                message: 'Keep alive hit the same mismatch. Retrying recovery...',
+              })
+              continue
+            }
+            throw keepAliveError
+          }
+
+          await resolveRequiredActions({
+            initialResponse: keepAliveResponse,
+            onSummary: () => {},
+          })
+
+          onEvent({
+            type: 'progress',
+            message: 'Keep alive processed. Retrying original prompt...',
+          })
         }
-
-        onEvent({
-          type: 'progress',
-          message: 'Tool-result mismatch detected. Sending keep alive and continuing...',
-        })
-
-        const keepAliveResponse = backboardClient.normalizeMessageResponse(
-          await backboardClient.addMessage({
-            threadId: session.threadId,
-            content: 'keep alive',
-            llmProvider: config.backboardProvider,
-            modelName: config.backboardModel,
-            attachmentFilePaths: [],
-          }),
-        )
-
-        await resolveRequiredActions({
-          initialResponse: keepAliveResponse,
-          onSummary: () => {},
-        })
-
-        onEvent({
-          type: 'progress',
-          message: 'Keep alive processed. Retrying original prompt...',
-        })
-
-        return backboardClient.normalizeMessageResponse(await backboardClient.addMessage(requestPayload))
       }
     }
 

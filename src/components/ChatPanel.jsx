@@ -9,6 +9,7 @@ export default function ChatPanel({
   history,
   selectedChatId,
   onSelectChat,
+  onCreateChat,
   messages,
   onSend,
   isRunning,
@@ -33,6 +34,13 @@ export default function ChatPanel({
     if (!text || isRunning) return
     setInput('')
     await onSend(text)
+  }
+
+  const handleInputKeyDown = async (e) => {
+    if (e.key !== 'Enter' || !e.altKey || isRunning) return
+
+    e.preventDefault()
+    await onCreateChat?.()
   }
 
   if (!open) return null
@@ -60,7 +68,18 @@ export default function ChatPanel({
 
         {selectedChatId === null ? (
           <div className="flex-1 overflow-y-auto p-4 space-y-2 min-h-0 relative z-10 flex flex-col">
-            <h3 className="text-pink-300 text-xs font-bold mb-2 px-1 uppercase tracking-wider">Recent Detections</h3>
+            <div className="mb-2 flex items-center justify-between gap-3 px-1">
+              <h3 className="text-pink-300 text-xs font-bold uppercase tracking-wider">Recent Detections</h3>
+              <button
+                type="button"
+                onClick={() => onCreateChat?.()}
+                className="rounded-lg border px-2.5 py-1 text-[11px] font-semibold text-pink-100 transition-colors hover:bg-white/10"
+                style={{ borderColor: 'rgba(255, 132, 198, 0.28)' }}
+                title="New analysis chat (Alt+Enter)"
+              >
+                New Chat
+              </button>
+            </div>
             {history?.map((chat) => (
               <button
                 key={chat.id}
@@ -135,6 +154,7 @@ export default function ChatPanel({
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleInputKeyDown}
                   placeholder={isRunning ? 'Researching...' : 'Type a message...'}
                   disabled={isRunning}
                   className="flex-1 min-w-0 px-4 py-3 text-sm text-white placeholder-zinc-500 bg-transparent border-0 outline-none disabled:opacity-60"

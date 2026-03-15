@@ -10,7 +10,7 @@ import { useHotkeys } from './hooks/useHotkeys'
 import { useMediaCapture } from './hooks/useMediaCapture'
 import { useTranscription } from './hooks/useTranscription'
 import { useResearch } from './hooks/useResearch'
-import { SUSPICIOUS_SCAN_CHAT_ID, CHAT_DEFINITIONS } from './utils/constants'
+import { SUSPICIOUS_SCAN_CHAT_ID } from './utils/constants'
 import { buildSuspiciousScanPrompt, truncate, previewForHistory } from './utils/chat'
 
 export default function App() {
@@ -47,10 +47,13 @@ export default function App() {
   } = useTranscription({ sourceAudioLevels, isListening })
   
   const {
+    chats,
     chatMessages,
     runningByChat,
     runningByChatRef,
     toggleToolCard,
+    ensureChat,
+    createAnalysisChat,
     runResearchPrompt,
   } = useResearch()
 
@@ -172,6 +175,7 @@ export default function App() {
 
     suspiciousScanInFlightRef.current = true
     setChatOpen(true)
+    await ensureChat(SUSPICIOUS_SCAN_CHAT_ID)
     setSelectedChatId(SUSPICIOUS_SCAN_CHAT_ID)
 
     try {
@@ -233,11 +237,19 @@ export default function App() {
     await runResearchPrompt({ chatId: selectedChatId, text })
   }
 
+  const handleCreateAnalysisChat = async () => {
+    const chat = await createAnalysisChat()
+    if (!chat?.id) return
+
+    setChatOpen(true)
+    setSelectedChatId(chat.id)
+  }
+
   const handleToggleTool = (messageId) => {
     toggleToolCard(selectedChatId, messageId)
   }
 
-  const historyWithPreview = CHAT_DEFINITIONS.map((chat) => {
+  const historyWithPreview = chats.map((chat) => {
     const messagesForChat = chatMessages[chat.id] || []
     const lastMessage = messagesForChat[messagesForChat.length - 1]
     return {
@@ -266,6 +278,7 @@ export default function App() {
         history={historyWithPreview}
         selectedChatId={selectedChatId}
         onSelectChat={setSelectedChatId}
+        onCreateChat={handleCreateAnalysisChat}
         messages={messages}
         onSend={handleChatSend}
         isRunning={selectedChatIsRunning}

@@ -42,6 +42,19 @@ function registerResearchAgentIpc({ ipcMain, projectRoot, userDataPath }) {
     return chatHistoryStore.load(chatId)
   })
 
+  ipcMain.handle('research:list-chats', async () => chatHistoryStore.listChats())
+
+  ipcMain.handle('research:ensure-chat', async (_, payload) => {
+    const chatId = String(payload?.chatId || '').trim()
+    if (!chatId) {
+      throw new Error('chatId is required')
+    }
+
+    return chatHistoryStore.ensureChat(chatId)
+  })
+
+  ipcMain.handle('research:create-analysis-chat', async () => chatHistoryStore.createAnalysisChat())
+
   ipcMain.handle('research:initialize-chats', async (_, payload) => {
     const chatIds = Array.isArray(payload?.chatIds) ? payload.chatIds : []
     return getServices().researchLoop.initializeChats({
@@ -74,6 +87,20 @@ function registerResearchAgentIpc({ ipcMain, projectRoot, userDataPath }) {
 
     const runId = crypto.randomUUID()
     const sendEvent = (data) => {
+      if (data?.type === 'tool_call_started' || data?.type === 'tool_call_finished') {
+        chatHistoryStore.recordToolCall({
+          chatId,
+          runId,
+          toolCallId: data.toolCallId,
+          toolName: data.toolName,
+          argsPreview: data.argsPreview,
+          status: data.status,
+          outputPreview: data.outputPreview,
+          error: data.error,
+          ts: data.ts,
+        })
+      }
+
       event.sender.send('research:event', {
         ...data,
         chatId,
@@ -83,6 +110,7 @@ function registerResearchAgentIpc({ ipcMain, projectRoot, userDataPath }) {
     }
 
     sendEvent({ type: 'started', message: 'Research started.' })
+    chatHistoryStore.startRun({ chatId, runId, prompt })
 
     try {
       const result = await getServices().researchLoop.run({
@@ -93,11 +121,12 @@ function registerResearchAgentIpc({ ipcMain, projectRoot, userDataPath }) {
         attachmentFilePaths,
       })
 
-      chatHistoryStore.append({ chatId, prompt, response: result.summary })
+      chatHistoryStore.completeRun({ chatId, runId, response: result.summary })
       sendEvent({ type: 'completed', message: 'Research completed.', summary: result.summary })
       return result
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Research failed'
+      chatHistoryStore.failRun({ chatId, runId, error: message })
       sendEvent({ type: 'error', message })
       throw error
     }

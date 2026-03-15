@@ -19,14 +19,6 @@ export const PINK_GLOSS_SHADOW =
 export const USER_BUBBLE_FILL = PINK_GLOSS_FILL
 export const USER_BUBBLE_SHADOW = PINK_GLOSS_SHADOW
 
-export const CHAT_DEFINITIONS = [
-  { id: '1', title: 'Chat 1' },
-  { id: '2', title: 'Chat 2' },
-  { id: '3', title: 'Chat 3' },
-  { id: 'suspicious-scan', title: 'Suspicious Scan' },
-]
-
-export const CHAT_IDS = CHAT_DEFINITIONS.map((chat) => chat.id)
 export const SUSPICIOUS_SCAN_CHAT_ID = 'suspicious-scan'
 export const AUDIO_CHUNK_MS = 250
 export const AUDIO_MIME_CANDIDATES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus']
