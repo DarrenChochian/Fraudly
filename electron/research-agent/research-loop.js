@@ -87,6 +87,25 @@ function rankResearchUrl(url, eventName) {
   return score
 }
 
+const BACKBOARD_MESSAGE_CHAR_LIMIT = 180000
+const PROMPT_TRUNCATION_NOTE = `\n\n[Additional context truncated to stay under the hardcoded ${BACKBOARD_MESSAGE_CHAR_LIMIT}-character Backboard message cap.]`
+
+function capBackboardMessageContent(content) {
+  const text = String(content || '')
+  if (text.length <= BACKBOARD_MESSAGE_CHAR_LIMIT) {
+    return {
+      content: text,
+      truncated: false,
+    }
+  }
+
+  const sliceLength = Math.max(0, BACKBOARD_MESSAGE_CHAR_LIMIT - PROMPT_TRUNCATION_NOTE.length)
+  return {
+    content: `${text.slice(0, sliceLength)}${PROMPT_TRUNCATION_NOTE}`,
+    truncated: true,
+  }
+}
+
 function createResearchLoop({ config, backboardClient, jinaClient, sessionStore, projectRoot, userDataPath }) {
   const systemPromptPath = path.join(projectRoot, 'electron', 'research-agent', 'system-prompt.md')
   let assistantPromise = null
@@ -544,9 +563,17 @@ function createResearchLoop({ config, backboardClient, jinaClient, sessionStore,
         }
       }
 
+      const cappedPrompt = capBackboardMessageContent(finalPrompt)
+      if (cappedPrompt.truncated) {
+        onEvent({
+          type: 'progress',
+          message: `Prompt exceeded Backboard limits and was truncated to ${BACKBOARD_MESSAGE_CHAR_LIMIT} characters.`,
+        })
+      }
+
       const conversationResult = await runToolEnabledConversation({
         chatId: normalizedChatId,
-        prompt: finalPrompt,
+        prompt: cappedPrompt.content,
         onEvent,
         attachmentFilePaths: shouldInlineAttachmentContext ? [] : attachmentFilePaths,
       })

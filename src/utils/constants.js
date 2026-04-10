@@ -19,7 +19,7 @@ export const PINK_GLOSS_SHADOW =
 export const USER_BUBBLE_FILL = PINK_GLOSS_FILL
 export const USER_BUBBLE_SHADOW = PINK_GLOSS_SHADOW
 
-export const SHOW_TRANSCRIPTION_DEBUG = true
+export const SHOW_TRANSCRIPTION_DEBUG = false
 export const AUDIO_CHUNK_MS = 250
 // Prioritize formats supported by Hive API: .mp3, .m4a, .wav
 // Note: Browser MediaRecorder support is limited. Most browsers support webm/ogg.
